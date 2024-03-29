@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Container, Paper, Grid, Typography, Button, Box, List, ListItem, ListItemIcon, ListItemText, useTheme, Drawer, IconButton } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Container, Grid, Typography, Button, Drawer, Box, List, ListItem, ListItemIcon, ListItemText, IconButton } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BuildIcon from '@mui/icons-material/Build';
 import EventIcon from '@mui/icons-material/Event';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import MenuIcon from '@mui/icons-material/Menu'; // Importing Menu icon for the toggle button
+import Paper from '@mui/material/Paper';
+import styled from '@mui/material/styles/styled';
 import logo from '../assets/logo.PNG';
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -33,33 +34,30 @@ const SidebarItem = styled(ListItem)(({ theme }) => ({
 }));
 
 const HomePage = () => {
-  const [isDrawerOpen, setDrawerOpen] = useState(false); // State to control Drawer
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   const handleDrawerToggle = () => {
-    setDrawerOpen(!isDrawerOpen); // Toggles the state to open/close the Drawer
+    setDrawerOpen(!isDrawerOpen);
   };
 
   return (
     <Container maxWidth="lg">
-      <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: 1 }}>
-        <MenuIcon />
-      </IconButton>
+      <Box display="flex" justifyContent="flex-end">
+        <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: 1 }}>
+          <MenuIcon />
+        </IconButton>
+      </Box>
       <Drawer
+        anchor="right"
         variant="temporary"
         open={isDrawerOpen}
         onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
-        }}
+        ModalProps={{ keepMounted: true }}
         sx={{
-          width: 250,
           '& .MuiDrawer-paper': { width: 250, boxSizing: 'border-box' },
         }}
       >
-        <Box
-          sx={{ width: 250 }}
-          role="presentation"
-        >
+        <Box sx={{ width: 250 }} role="presentation">
           <img src={logo} alt="ResidentMe Logo" style={{ maxWidth: '150px', margin: '16px' }} />
           <List>
             <ListItem button>
@@ -111,25 +109,7 @@ const HomePage = () => {
             Learn More
           </Button>
         </Grid>
-        {/* Example Feature Description */}
-        <Grid item xs={12} md={4}>
-          <Typography variant="h6" gutterBottom>
-            Featured Tools
-          </Typography>
-          <Typography variant="body1" paragraph>
-            <strong>Communication Board:</strong> Share and discover vital information with your neighbors easily.
-          </Typography>
-          <Typography variant="body1" paragraph>
-            <strong>Marketplace:</strong> Buy and sell goods within your community, promoting sustainability.
-          </Typography>
-          <Typography variant="body1" paragraph>
-            <strong>Event Booking:</strong> Organize and participate in community events effortlessly.
-          </Typography>
-          {/* Additional content can go here */}
-        </Grid>
       </Grid>
-
-      {/* Footer or additional components */}
     </Container>
   );
 };
