@@ -7,10 +7,12 @@ import communityImage from '../assets/community.png';
 import marketplaceImage from '../assets/marketplace.png';
 import workOrderImage from '../assets/workorder.png';
 import bookingImage from '../assets/booking.png';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [checked, setChecked] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setChecked(true);
@@ -18,6 +20,16 @@ const HomePage = () => {
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
+  };
+
+  const handleCardClick = (path) => {
+    const isAuthenticated = true;
+
+    if (isAuthenticated) {
+      navigate(path);
+    } else {
+      navigate('/login');
+    }
   };
 
   return (
@@ -52,7 +64,7 @@ const HomePage = () => {
         ].map((feature, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card sx={{ maxWidth: 345, background: 'rgba(255,255,255,0.8)' }}>
-              <CardActionArea>
+              <CardActionArea onClick={() => handleCardClick(feature.path)}>
                 <CardMedia
                   component="img"
                   height="140"
