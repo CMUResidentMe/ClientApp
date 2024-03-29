@@ -1,10 +1,12 @@
-# Getting Started with Create React App
+# Getting Started with ResidentMe Front end
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm install`
+Installs the app dependencies
 
 ### `npm start`
 
