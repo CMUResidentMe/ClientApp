@@ -1,78 +1,118 @@
 import React from 'react';
-import { Box, Container, Typography, Grid, Card, CardActionArea, CardContent, CardMedia } from '@mui/material';
-import ForumIcon from '@mui/icons-material/Forum';
-import StoreIcon from '@mui/icons-material/Store';
+import { Container, Paper, Grid, Typography, Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import HomeIcon from '@mui/icons-material/Home';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BuildIcon from '@mui/icons-material/Build';
 import EventIcon from '@mui/icons-material/Event';
-import './Home.css';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import logo from '../assets/logo.PNG';
 
-function FeatureCard({ title, description, icon: Icon }) {
-  return (
-    <Card>
-      <CardActionArea>
-        <CardContent sx={{ textAlign: 'center' }}>
-          <Icon sx={{ fontSize: 40, color: 'primary.main' }} />
-          <Typography gutterBottom variant="h5" component="div">
-            {title}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
-  );
-}
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fdfbf7',
+  ...theme.typography.body2,
+  padding: theme.spacing(2),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
-function HomePage() {
+const HomePage = () => {
   return (
-    <Container maxWidth="lg" sx={{ my: 4 }}>
-      <Typography variant="h3" align="center" color="textPrimary" gutterBottom>
-        Welcome to ResidentMe
-      </Typography>
-      <Typography variant="h5" align="center" color="textSecondary" paragraph>
-        Your community engagement platform.
-      </Typography>
-      <Box sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        '& > :not(style)': { m: 1 },
-        }}>
-        {/* Feature Cards */}
-        <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={12} sm={6} md={3}>
-            <FeatureCard
-              icon={ForumIcon}
-              title="Communication Board"
-              description="Effortlessly share and access information relevant to your apartment."
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <FeatureCard
-              icon={StoreIcon}
-              title="Marketplace"
-              description="A convenient place to sell and buy second hand goods right in your community."
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <FeatureCard
-              icon={BuildIcon}
-              title="Work Orders"
-              description="Submit and track maintenance issues with ease, no calls necessary."
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <FeatureCard
-              icon={EventIcon}
-              title="Event Booking"
-              description="Browse and book events or rooms for your next meeting or gathering."
-            />
-          </Grid>
+    <Container maxWidth="lg">
+      <Grid container spacing={3}>
+        {/* Vision Statement Section */}
+        <Grid item xs={12}>
+          <Item>
+            <Typography variant="h4" gutterBottom>
+              Welcome to ResidentMe
+            </Typography>
+            <img src={logo} alt="ResidentMe Logo" style={{ maxWidth: '100px', height: 'auto' }} />
+            <Typography variant="subtitle1" gutterBottom>
+              Transforming the resident experience with seamless communication and resource sharing.
+            </Typography>
+          </Item>
         </Grid>
-      </Box>
+
+        {/* Features Section */}
+        <Grid item xs={12} sm={6} md={4}>
+          <Item>
+            <HomeIcon />
+            <Typography variant="h6" gutterBottom>
+              Communication Board
+            </Typography>
+            <Typography variant="body2">
+              Easily post and access information relevant to your apartment.
+            </Typography>
+          </Item>
+        </Grid>
+
+        {/* Feature: Second Hand Goods Marketplace */}
+        <Grid item xs={12} sm={6} md={4}>
+          <Item>
+            <ShoppingCartIcon />
+            <Typography variant="h6" gutterBottom>
+              Second Hand Marketplace
+            </Typography>
+            <Typography variant="body2">
+              A place to connect over shared needs and interests.
+            </Typography>
+          </Item>
+        </Grid>
+
+        {/* Feature: Work Order */}
+        <Grid item xs={12} sm={6} md={4}>
+          <Item>
+            <BuildIcon />
+            <Typography variant="h6" gutterBottom>
+              Work Order
+            </Typography>
+            <Typography variant="body2">
+              Report and track maintenance issues within your apartment.
+            </Typography>
+          </Item>
+        </Grid>
+
+        {/* Feature: Events Booking */}
+        <Grid item xs={12} sm={6} md={4}>
+          <Item>
+            <EventIcon />
+            <Typography variant="h6" gutterBottom>
+              Booking
+            </Typography>
+            <Typography variant="body2">
+              Browse and book events or rooms based on availability.
+            </Typography>
+          </Item>
+        </Grid>
+
+        {/* Feature: Notification Feature */}
+        <Grid item xs={12} sm={6} md={4}>
+          <Item>
+            <NotificationsIcon />
+            <Typography variant="h6" gutterBottom>
+              Notifications
+            </Typography>
+            <Typography variant="body2">
+              Stay updated with real-time notifications for the community.
+            </Typography>
+          </Item>
+        </Grid>
+
+      </Grid>
+
+      <Grid container spacing={3} justifyContent="center" alignItems="center" style={{ marginTop: '20px' }}>
+        <Grid item xs={12} sm={6} style={{ display: 'flex', justifyContent: 'center', padding: '0 10px' }}>
+          <Button variant="outlined" color="primary" style={{ marginRight: '10px' }}>
+            Join Us Now
+          </Button>
+          <Button variant="contained" color="primary" style={{ marginLeft: '10px' }}>
+            Login Here
+          </Button>
+        </Grid>
+      </Grid>
+
     </Container>
   );
-}
+};
 
 export default HomePage;
