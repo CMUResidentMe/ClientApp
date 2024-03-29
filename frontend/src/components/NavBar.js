@@ -45,7 +45,7 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
               <ListItemIcon>
                 <ProfileIcon />
               </ListItemIcon>
-              <ListItemText primary="User" />
+              <ListItemText primary="User Login" />
             </ListItem>
             <ListItem button onClick={() => handleNavItemClick('/community-board')}>
               <ListItemIcon>
