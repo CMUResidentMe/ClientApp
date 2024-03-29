@@ -6,7 +6,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BuildIcon from '@mui/icons-material/Build';
 import EventIcon from '@mui/icons-material/Event';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import logo from '../assets/logo.PNG';
+import logo from '../assets/logo.png';
 import ProfileIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
 
