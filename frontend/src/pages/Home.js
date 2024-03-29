@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Grid, Typography, Button, Box, IconButton, Slide, Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Navbar from '../components/NavBar';
-import backgroundImage from '../assets/bg.jpg';
+import backgroundImage from '../assets/background.jpg';
 import communityImage from '../assets/community.png';
 import marketplaceImage from '../assets/marketplace.png';
 import workOrderImage from '../assets/workorder.png';
@@ -21,7 +21,7 @@ const HomePage = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', overflow: 'hidden' }}>
+    <Box sx={{ flexGrow: 1, backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', overflow: 'hidden' , minHeight: '100vh'}}>
       <Container maxWidth="lg">
         <Box display="flex" justifyContent="flex-end">
           <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: 1 }}>
@@ -30,7 +30,7 @@ const HomePage = () => {
         </Box>
         <Navbar isDrawerOpen={isDrawerOpen} handleDrawerToggle={handleDrawerToggle} />
         <Slide direction="up" in={checked} mountOnEnter unmountOnExit>
-          <Box sx={{ color: '#fff' }}>
+          <Box sx={{ color: '#2B1B17' }}>
             <Typography variant="h2" component="h1" gutterBottom>
               Welcome to ResidentMe
             </Typography>
