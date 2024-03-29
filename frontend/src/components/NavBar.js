@@ -6,6 +6,7 @@ import BuildIcon from '@mui/icons-material/Build';
 import EventIcon from '@mui/icons-material/Event';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import logo from '../assets/logo.PNG';
+import ProfileIcon from '@mui/icons-material/AccountCircle';
 
 const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
   return (
@@ -23,6 +24,12 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
         <Box sx={{ width: 250 }} role="presentation">
           <img src={logo} alt="ResidentMe Logo" style={{ maxWidth: '150px', margin: '16px' }} />
           <List>
+            <ListItem button>
+              <ListItemIcon>
+                <ProfileIcon />
+              </ListItemIcon>
+              <ListItemText primary="User" />
+            </ListItem>
             <ListItem button>
               <ListItemIcon>
                 <HomeIcon />
