@@ -22,15 +22,28 @@ const HomePage = () => {
     setDrawerOpen(!isDrawerOpen);
   };
 
-  const handleCardClick = (path) => {
-    const isAuthenticated = true;
+  // const handleCardClick = (path) => {
+  //   const isAuthenticated = true;
 
-    if (isAuthenticated) {
+  //   if (isAuthenticated) {
+  //     navigate(path);
+  //   } else {
+  //     navigate('/login');
+  //   }
+  // };
+
+  const handleCardClick = (path) => {
       navigate(path);
-    } else {
-      navigate('/login');
-    }
   };
+
+  const handleJoinNowClick = () => {
+    navigate('/register');
+  };
+
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
+
 
   return (
     <Box sx={{ flexGrow: 1, backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', overflow: 'hidden' , minHeight: '100vh'}}>
@@ -57,10 +70,10 @@ const HomePage = () => {
       </Container>
       <Grid container spacing={3} justifyContent="center" sx={{ padding: 4 }}>
         {[
-          { name: "Community Board", description: "A central place for residents to post discussions, share information, and stay connected with their neighbors.", image: communityImage },
-          { name: "Marketplace", description: "An organized platform for buying and selling goods within the community, promoting sustainability and convenience.", image: marketplaceImage },
-          { name: "Work Order", description: "Efficiently report and track maintenance issues within your apartment or building, ensuring quick and effective resolution.", image: workOrderImage },
-          { name: "Booking", description: "Easily browse, book, and manage reservations for community amenities like event spaces, meeting rooms, and more.", image: bookingImage }
+          { name: "Community Board", path: "/community-board", description: "A central place for residents to post discussions, share information, and stay connected with their neighbors.", image: communityImage },
+          { name: "Marketplace", path: "/marketplace", description: "An organized platform for buying and selling goods within the community, promoting sustainability and convenience.", image: marketplaceImage },
+          { name: "Work Order", path: "/work-order", description: "Efficiently report and track maintenance issues within your apartment or building, ensuring quick and effective resolution.", image: workOrderImage },
+          { name: "Booking", path: "/booking", description: "Easily browse, book, and manage reservations for community amenities like event spaces, meeting rooms, and more.", image: bookingImage }
         ].map((feature, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card sx={{ maxWidth: 345, background: 'rgba(255,255,255,0.8)' }}>
@@ -86,10 +99,10 @@ const HomePage = () => {
       </Grid>
       <Grid container spacing={3} justifyContent="center" alignItems="center" style={{ marginTop: '20px' }}>
         <Grid item xs={12} sm={6} style={{ display: 'flex', justifyContent: 'center', padding: '0 10px' }}>
-          <Button variant="contained" color="primary" style={{ marginRight: '10px' }}>
+          <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={handleJoinNowClick}>
             Join Us Now
           </Button>
-          <Button variant="contained" color="primary" style={{ marginLeft: '10px' }}>
+          <Button variant="contained" color="primary" style={{ marginLeft: '10px' }} onClick={handleLoginClick}>
             Login Here
           </Button>
         </Grid>
