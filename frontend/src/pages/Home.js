@@ -10,29 +10,6 @@ import Paper from '@mui/material/Paper';
 import styled from '@mui/material/styles/styled';
 import logo from '../assets/logo.PNG';
 
-const StyledButton = styled(Button)(({ theme }) => ({
-  margin: theme.spacing(1),
-  color: theme.palette.getContrastText(theme.palette.primary.main),
-}));
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fdfbf7',
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  color: theme.palette.text.secondary,
-}));
-
-const SidebarItem = styled(ListItem)(({ theme }) => ({
-  padding: theme.spacing(2),
-  border: 'none',
-  '& .MuiListItemIcon-root': {
-    minWidth: '40px',
-  },
-  '& .MuiTypography-root': {
-    fontWeight: 'bold',
-  },
-}));
-
 const HomePage = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
