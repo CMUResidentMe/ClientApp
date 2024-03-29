@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Grid, Typography, Button, Box, IconButton, Slide, Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Navbar from '../components/NavBar';
-import backgroundImage from '../assets/background.jpg';
+import backgroundImage from '../assets/background.gif';
 import communityImage from '../assets/community.png';
 import marketplaceImage from '../assets/marketplace.png';
 import workOrderImage from '../assets/workorder.png';
@@ -22,8 +22,8 @@ const HomePage = () => {
 
   return (
     <Box sx={{ flexGrow: 1, backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', overflow: 'hidden' , minHeight: '100vh'}}>
-      <Container maxWidth="lg">
-        <Box display="flex" justifyContent="flex-end">
+      <Container maxWidth="lg" sx={{ boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)', backgroundColor: 'rgba(255, 255, 255, 0.85)', paddingTop: '1rem', paddingBottom: '2rem', paddingLeft: '2rem', paddingRight: '2rem', borderRadius: '8px' }}>
+        <Box display="flex" justifyContent="flex-end" sx={{ marginBottom: '0.5rem' }}>
           <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: 1 }}>
             <MenuIcon />
           </IconButton>
@@ -31,13 +31,13 @@ const HomePage = () => {
         <Navbar isDrawerOpen={isDrawerOpen} handleDrawerToggle={handleDrawerToggle} />
         <Slide direction="up" in={checked} mountOnEnter unmountOnExit>
           <Box sx={{ color: '#2B1B17' }}>
-            <Typography variant="h2" component="h1" gutterBottom>
+            <Typography variant="h2" component="h1" gutterBottom sx={{ fontFamily: 'Merriweather, serif', fontWeight: 'bold', marginTop: '0' }}>
               Welcome to ResidentMe
             </Typography>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom sx={{ fontFamily: 'Roboto, sans-serif' }}>
               Transforming the resident experience with seamless communication and resource sharing.
             </Typography>
-            <Typography variant="body1" paragraph>
+            <Typography variant="body1" paragraph sx={{ fontFamily: 'Open Sans, sans-serif' }}>
               Our platform offers a unified solution to enhance community engagement and streamline resource sharing among residents.
             </Typography>
           </Box>
