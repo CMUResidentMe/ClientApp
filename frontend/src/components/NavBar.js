@@ -33,7 +33,7 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
               <ListItemIcon>
                 <ShoppingCartIcon />
               </ListItemIcon>
-              <ListItemText primary="Second Hand Marketplace" />
+              <ListItemText primary="Marketplace" />
             </ListItem>
             <ListItem button>
               <ListItemIcon>
