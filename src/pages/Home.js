@@ -36,15 +36,6 @@ const HomePage = () => {
       navigate(path);
   };
 
-  const handleJoinNowClick = () => {
-    navigate('/register');
-  };
-
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-
-
   return (
     <Box sx={{ flexGrow: 1, backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', overflow: 'hidden' , minHeight: '100vh'}}>
       <Container maxWidth="lg" sx={{ boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)', backgroundColor: 'rgba(255, 255, 255, 0.85)', paddingTop: '1rem', paddingBottom: '2rem', paddingLeft: '2rem', paddingRight: '2rem', borderRadius: '8px' }}>
@@ -96,16 +87,6 @@ const HomePage = () => {
             </Card>
           </Grid>
         ))}
-      </Grid>
-      <Grid container spacing={3} justifyContent="center" alignItems="center" style={{ marginTop: '20px' }}>
-        <Grid item xs={12} sm={6} style={{ display: 'flex', justifyContent: 'center', padding: '0 10px' }}>
-          <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={handleJoinNowClick}>
-            Join Us Now
-          </Button>
-          <Button variant="contained" color="primary" style={{ marginLeft: '10px' }} onClick={handleLoginClick}>
-            Login Here
-          </Button>
-        </Grid>
       </Grid>
     </Box>
   );
