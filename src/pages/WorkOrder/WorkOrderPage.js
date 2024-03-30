@@ -16,7 +16,7 @@ const WorkOrderPage = () => {
     <Container maxWidth="lg" sx={{ boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)', backgroundColor: 'rgba(255, 255, 255, 0.85)', paddingTop: '1rem', paddingBottom: '2rem', paddingLeft: '2rem', paddingRight: '2rem', borderRadius: '8px' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ marginBottom: '0.5rem' }}>
         <Typography variant="h3" component="h1" sx={{ flexGrow: 1 }}>
-          Here is NotificationPage Page
+          Here is Work order Page
         </Typography>
         <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: 1 }}>
           <MenuIcon />
