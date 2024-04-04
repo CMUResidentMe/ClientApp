@@ -40,7 +40,14 @@ const LoginPage = () => {
         password: loginData.password,
       });
       localStorage.setItem("token", data.login.token); // Save the token
-      history("/home");
+      if (data.login.privilege == "resident") {
+        history("/home");
+      } else if (data.login.privilege == "manager") {
+        history("/manager-home");
+      } else if (data.login.privilege == "staff") {
+        console.log("I AM STAFF");
+        // staf home!!
+      }
     } catch (error) {
       // Log the full error
       const errorMessage =
