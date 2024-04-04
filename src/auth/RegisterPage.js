@@ -1,31 +1,71 @@
 import React, { useState } from "react";
+import { gql, request } from "graphql-request";
 import ResidentMeLogo from "../ResidentMeLogo.PNG";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+const REGISTER_MUTATION = gql`
+  mutation Register(
+    $username: String!
+    $password: String!
+    $firstName: String!
+    $lastName: String!
+    $roomNumber: Int!
+  ) {
+    register(
+      username: $username
+      password: $password
+      firstName: $firstName
+      lastName: $lastName
+      roomNumber: $roomNumber
+    )
+  }
+`;
+
+const graphqlAPI = "http://localhost:8000/graphql";
 
 const RegisterPage = () => {
-  // State to hold form values
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
+    password: "",
     firstName: "",
     lastName: "",
     roomNumber: "",
-    email: "",
   });
+  const [error, setError] = useState("");
 
-  // Handle change in form inputs
   const handleChange = (e) => {
-    const { name, value } = e.target; // Get the name and value from the event target
+    const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value, // Use the name to update the correct state
+      [name]: value,
     }));
   };
 
-  // Handle form submission!!!
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission
-    console.log("Form data submitted:", formData);
-    // For send the form data to your server via an API call!!!
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const variables = {
+      username: formData.username,
+      password: formData.password,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      roomNumber: parseInt(formData.roomNumber, 10),
+    };
+
+    try {
+      const data = await request(graphqlAPI, REGISTER_MUTATION, variables);
+      // If the registration is successful, data should contain the success message
+      navigate("/"); // Redirect to login page after successful registration
+    } catch (error) {
+      // Extract the specific error message from the GraphQL error response
+      const errorMessage =
+        error?.response?.errors?.[0]?.message ||
+        "An unexpected error occurred during registration.";
+      setError(errorMessage);
+    }
   };
 
   return (
@@ -35,12 +75,21 @@ const RegisterPage = () => {
       </div>
       <form style={styles.form} onSubmit={handleSubmit}>
         <h1 style={styles.heading}>ResidentMe</h1>
+        {error && <div style={styles.errorContainer}>{error}</div>}
         <input
           type="text"
           name="username"
           value={formData.username}
           onChange={handleChange}
           placeholder="Username"
+          style={styles.input}
+        />
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
           style={styles.input}
         />
         <input
@@ -97,6 +146,17 @@ const styles = {
     justifyContent: "center",
     minHeight: "100vh",
     backgroundColor: "#f7f7f7",
+  },
+  errorContainer: {
+    color: "#ff3860",
+    backgroundColor: "#ffe5e7",
+    padding: "10px",
+    borderRadius: "5px",
+    margin: "10px 0",
+    border: "1px solid #ff3860",
+    textAlign: "center",
+    width: "100%",
+    boxSizing: "border-box",
   },
   form: {
     display: "flex",
