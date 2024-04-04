@@ -1,38 +1,102 @@
-import React from "react";
+import React, { useState } from "react";
+import { gql, request } from "graphql-request";
 import ResidentMeLogo from "../ResidentMeLogo.PNG";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const LoginPage = () => (
-  <div style={styles.container}>
-    <div style={styles.logoContainer}>
-      <img src={ResidentMeLogo} style={styles.logo} alt="ResidentMe Logo" />
+const LOGIN_MUTATION = gql`
+  mutation Login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      token
+      privilege
+    }
+  }
+`;
+
+const graphqlAPI = "http://localhost:8000/graphql";
+
+const LoginPage = () => {
+  const history = useNavigate();
+  const [loginData, setLoginData] = useState({
+    username: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+
+  const handleLoginChange = (e) => {
+    const { name, value } = e.target;
+    setLoginData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const data = await request(graphqlAPI, LOGIN_MUTATION, {
+        username: loginData.username,
+        password: loginData.password,
+      });
+      localStorage.setItem("token", data.login.token); // Save the token
+      history("/home");
+    } catch (error) {
+      // Log the full error
+      const errorMessage =
+        error?.response?.errors?.[0]?.message ||
+        "An error occurred while trying to log in.";
+      setError(errorMessage);
+    }
+  };
+
+  return (
+    <div style={styles.container}>
+      <div style={styles.logoContainer}>
+        <img src={ResidentMeLogo} style={styles.logo} alt="ResidentMe Logo" />
+      </div>
+      <form style={styles.form} onSubmit={handleLoginSubmit}>
+        <h1 style={styles.heading}>ResidentMe</h1>
+        {error && <div style={styles.error}>{error}</div>}
+        <div style={styles.inputGroup}>
+          <label htmlFor="username" style={styles.label}>
+            Username
+          </label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            value={loginData.username}
+            onChange={handleLoginChange}
+            style={styles.input}
+          />
+        </div>
+        <div style={styles.inputGroup}>
+          <label htmlFor="password" style={styles.label}>
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            value={loginData.password}
+            onChange={handleLoginChange}
+            style={styles.input}
+          />
+        </div>
+        <button type="submit" style={styles.loginButton}>
+          Log In
+        </button>
+        <p style={styles.registerPrompt}>
+          Don't have an account?{" "}
+          <Link to="/register" style={styles.registerLink}>
+            Register here
+          </Link>
+        </p>
+      </form>
     </div>
-    <form style={styles.form}>
-      <h1 style={styles.heading}>ResidentMe</h1>
-      <div style={styles.inputGroup}>
-        <label htmlFor="username" style={styles.label}>
-          Username
-        </label>
-        <input id="username" type="text" style={styles.input} />
-      </div>
-      <div style={styles.inputGroup}>
-        <label htmlFor="password" style={styles.label}>
-          Password
-        </label>
-        <input id="password" type="password" style={styles.input} />
-      </div>
-      <button type="submit" style={styles.loginButton}>
-        Log In
-      </button>
-      <p style={styles.registerPrompt}>
-        Don't have an account?{" "}
-        <Link to="/register" style={styles.registerLink}>
-          Register here
-        </Link>
-      </p>
-    </form>
-  </div>
-);
+  );
+};
 
 // Styles
 const styles = {
@@ -93,6 +157,17 @@ const styles = {
   registerLink: {
     color: "#526473",
     textDecoration: "none",
+  },
+  error: {
+    color: "#ff3860",
+    backgroundColor: "#ffe5e7",
+    padding: "10px",
+    borderRadius: "5px",
+    margin: "10px 0",
+    border: "1px solid #ff3860",
+    textAlign: "center",
+    width: "100%",
+    boxSizing: "border-box",
   },
 };
 
