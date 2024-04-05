@@ -7,11 +7,16 @@ import BuildIcon from '@mui/icons-material/Build';
 import EventIcon from '@mui/icons-material/Event';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import logo from '../assets/logo.png';
-import ProfileIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate('/');
+  };
 
   // const handleNavItemClick = (path) => {
   //   const isAuthenticated = true; 
@@ -24,8 +29,13 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
   // };
 
   const handleNavItemClick = (path) => {
+    if (path === '/logout') {
+      handleLogout();
+    } else {
       navigate(path);
+    }
   };
+
   return (
     <>
       <Drawer
@@ -41,12 +51,6 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
         <Box sx={{ width: 250 }} role="presentation">
           <img src={logo} alt="ResidentMe Logo" style={{ maxWidth: '150px', margin: '16px' }} />
           <List>
-          <ListItem button onClick={() => handleNavItemClick('/login')}>
-              <ListItemIcon>
-                <ProfileIcon />
-              </ListItemIcon>
-              <ListItemText primary="User Login" />
-            </ListItem>
             <ListItem button onClick={() => handleNavItemClick('/community-board')}>
               <ListItemIcon>
                 <HomeIcon />
@@ -82,6 +86,12 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
                 <CottageIcon />
               </ListItemIcon>
               <ListItemText primary="Home Page" />
+            </ListItem>
+            <ListItem button onClick={() => handleNavItemClick('/logout')}>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
             </ListItem>
           </List>
         </Box>
