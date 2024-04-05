@@ -77,7 +77,7 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
               </ListItemIcon>
               <ListItemText primary="Notifications" />
             </ListItem>
-            <ListItem button onClick={() => handleNavItemClick('/')}>
+            <ListItem button onClick={() => handleNavItemClick('/home')}>
               <ListItemIcon>
                 <CottageIcon />
               </ListItemIcon>
