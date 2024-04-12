@@ -1,37 +1,83 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import bookingManagerIcon from "../assets/bookingManager.png";
 import commBoardIcon from "../assets/commBoard.png";
 import managerToolsIcon from "../assets/managerTools.png";
 import marketPlaceManagerIcon from "../assets/marketPlaceManager.png";
 import ResidentMeLogo from "../assets/logo.png";
 
-const ManagerHome = () => {
-  return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <img src={ResidentMeLogo} style={styles.logo} alt="ResidentMe Logo" />
-        <h1 style={styles.appName}>ResidentMe</h1>
-        <h2 style={styles.greeting}>Welcome, Manager</h2>
-      </div>
+import styled from '@emotion/styled';
+import { Link } from "react-router-dom";
 
-      <div style={styles.serviceContainer}>
-        {services.map((service, index) => (
-          <Link to={service.link} style={styles.service} key={index}>
-            <div style={styles.iconContainer}>
-              <img
-                src={service.icon}
-                style={styles.icon}
-                alt={service.altText}
-              />
-            </div>
-            <div style={styles.serviceText}>{service.text}</div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-};
+const StyledServiceLink = styled(Link)`
+  text-align: center;
+  padding: 1rem;
+  text-decoration: none;
+  color: black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: ${({ bgColor }) => bgColor};
+  width: calc(50% - 40px);
+  margin: 20px 0;
+  padding: 40px;
+  font-size: 1.2rem;
+  min-height: 200px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease-in-out;
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const Container = styled.div`
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 20px;
+  width: 100%;
+  background-color: #f2efea;
+  color: #746352;
+`;
+
+const Logo = styled.img`
+  height: 80px;
+`;
+
+const AppName = styled.h1`
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 15px;
+`;
+
+const Greeting = styled.h2`
+  font-size: 1.5rem;
+  font-weight: normal;
+  margin-right: 15px;
+  flex: 1;
+  text-align: right;
+`;
+
+const ServiceContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 20px;
+`;
 
 const services = [
   {
@@ -64,84 +110,26 @@ const services = [
   },
 ];
 
-// Styles
-const styles = {
-  container: {
-    fontFamily: "Arial, sans-serif",
-    backgroundColor: "#f5f5f5", // Light gray background for the whole page
-    minHeight: "100vh",
-    padding: "2rem",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  header: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-around",
-    padding: "20px",
-    width: "100%",
-    backgroundColor: "#f2efea",
-    color: "#746352",
-  },
-  logo: {
-    height: "80px",
-  },
-  appName: {
-    fontSize: "1.5rem",
-    fontWeight: "bold",
-    marginLeft: "15px",
-  },
-  greeting: {
-    fontSize: "1.5rem",
-    fontWeight: "normal",
-    marginRight: "15px",
-    flex: 1,
-    textAlign: "right",
-  },
-  serviceContainer: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-between", // This spreads out the cards to use the available space
-    gap: "40px", // This adds space between the rows and columns
-    maxWidth: "1200px", // Controls the maximum width of the service container
-    margin: "auto", // Centers the container in the parent
-    padding: "0 20px", // Add horizontal padding if needed
-  },
-  service: {
-    textAlign: "center",
-    padding: "1rem",
-    textDecoration: "none",
-    color: "black",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    borderRadius: "10px",
-    backgroundColor: "#fff", // White background for each service card
-    width: "calc(50% - 40px)", // Take up half of the container width minus half of total gap
-    margin: "20px 0", // Add vertical margin
-    padding: "40px", // Increase padding inside the service cards
-    fontSize: "1.2rem", // Increase font size for the service text if needed
-    // Increase the size of the icons if they are background-images
-    backgroundSize: "80px 80px", // Or set appropriate size
-    backgroundPosition: "center 20px", // Or set appropriate position
-    minHeight: "200px", // Or set to a height that looks good with your content
-    boxSizing: "border-box", // Make sure padding doesn't affect the total width
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    transition: "transform 0.2s ease-in-out",
-    ":hover": {
-      transform: "scale(1.05)", // Slightly enlarge the card on hover
-    },
-  },
-  icon: {
-    width: "80px", // Increased size of the icon
-    height: "80px", // Maintain aspect ratio if square
-    marginBottom: "16px", // Space between icon and service title
-  },
-  serviceText: {
-    fontSize: "1rem",
-    fontWeight: "600",
-  },
+const ManagerHome = () => {
+  return (
+    <Container>
+      <Header>
+        <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
+        <AppName>ResidentMe</AppName>
+        <Greeting>Welcome, Manager</Greeting>
+      </Header>
+      <ServiceContainer>
+        {services.map((service, index) => (
+          <StyledServiceLink to={service.link} key={index} bgColor={service.bgColor}>
+            <div>
+              <img src={service.icon} alt={service.altText} style={{ width: '80px', height: '80px', marginBottom: '16px' }} />
+            </div>
+            <div>{service.text}</div>
+          </StyledServiceLink>
+        ))}
+      </ServiceContainer>
+    </Container>
+  );
 };
 
 export default ManagerHome;
