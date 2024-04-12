@@ -1,13 +1,13 @@
 import React from 'react';
 import { Drawer, Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import CottageIcon from '@mui/icons-material/Cottage';
-import HomeIcon from '@mui/icons-material/Home';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BuildIcon from '@mui/icons-material/Build';
-import EventIcon from '@mui/icons-material/Event';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import CottageIcon from '@mui/icons-material/Cottage.js';
+import HomeIcon from '@mui/icons-material/Home.js';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart.js';
+import BuildIcon from '@mui/icons-material/Build.js';
+import EventIcon from '@mui/icons-material/Event.js';
+import NotificationsIcon from '@mui/icons-material/Notifications.js';
 import logo from '../assets/logo.png';
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from '@mui/icons-material/Logout.js';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {

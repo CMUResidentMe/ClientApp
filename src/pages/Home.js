@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Grid, Typography, Button, Box, IconButton, Slide, Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import Navbar from '../components/NavBar';
+import MenuIcon from '@mui/icons-material/Menu.js';
+import Navbar from '../components/NavBar.js';
 import backgroundImage from '../assets/background.gif';
 import communityImage from '../assets/community.png';
 import marketplaceImage from '../assets/marketplace.png';

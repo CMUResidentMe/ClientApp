@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Container, Box, IconButton } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import Navbar from "../../components/NavBar";
+import MenuIcon from "@mui/icons-material/Menu.js";
+import Navbar from "../../components/NavBar.js";
 import { useNavigate } from "react-router-dom";
-import Typography from "@mui/material/Typography";
+import Typography from '@mui/material/Typography/index.js';
 
 const BookingManager = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
