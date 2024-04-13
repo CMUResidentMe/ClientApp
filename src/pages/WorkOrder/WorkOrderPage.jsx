@@ -28,8 +28,8 @@ const WorkOrderPage = () => {
     <div style={styles.container}>
       <Box sx={{ display: 'grid', gridTemplateRows: 'repeat(1, 1fr)', gridAutoFlow: 'row', gap: 5,}}>
         <h1 style={styles.heading}>Work Order</h1>
-        <WorkOrderTable message={notiCnt}/>
-        <WorkOrderForm />
+        <WorkOrderTable privilege={localStorage.getItem("privilege")} message={notiCnt}/>
+        <WorkOrderForm privilege={localStorage.getItem("privilege")} />
         <NotificationBar notifications={notifications}/>
       </Box>  
     </div>

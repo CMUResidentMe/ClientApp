@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { gql, request } from "graphql-request";
 import ResidentMeLogo from "../ResidentMeLogo.PNG";
 import { Link, useNavigate } from "react-router-dom";
+import staticInitObject from '../config/AllStaticConfig.js';
+//connect sock io after login sucess
+import { socketManager } from "../notification/socketManager.js";
 
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
@@ -12,7 +15,7 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-const graphqlAPI = "http://localhost:8000/graphql";
+const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 
 const LoginPage = () => {
   const history = useNavigate();
@@ -40,6 +43,9 @@ const LoginPage = () => {
         password: loginData.password,
       });
       localStorage.setItem("token", data.login.token); // Save the token
+      localStorage.setItem("privilege", data.login.privilege);
+      socketManager.connect(data.login.token);
+
       if (data.login.privilege == "resident") {
         history("/home");
       } else if (data.login.privilege == "manager") {
