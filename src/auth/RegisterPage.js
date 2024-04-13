@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { gql, request } from "graphql-request";
 import ResidentMeLogo from "../ResidentMeLogo.PNG";
 import { Link, useNavigate } from "react-router-dom";
+import staticInitObject from '../config/AllStaticConfig.js';
 
 const REGISTER_MUTATION = gql`
   mutation Register(
@@ -21,7 +22,7 @@ const REGISTER_MUTATION = gql`
   }
 `;
 
-const graphqlAPI = "http://localhost:8000/graphql";
+const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -109,7 +110,7 @@ const RegisterPage = () => {
           style={styles.input}
         />
         <input
-          type="text"
+          type="number"
           name="roomNumber"
           value={formData.roomNumber}
           onChange={handleChange}

@@ -44,7 +44,7 @@ const WorkOrderForm = () => {
     const { name, value } = e.target;
     setWorkOrderData((prevData) => ({
       ...prevData,
-      [name]: parseFloat(value),
+      [name]: parseInt(value),
     }));
   };
 

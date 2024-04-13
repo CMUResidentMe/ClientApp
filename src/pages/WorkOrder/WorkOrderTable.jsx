@@ -23,7 +23,6 @@ query workOrdersByOwner {
     accessInstruction
     preferredTime
     entryPermission
-    images
   }
 }
 `;
