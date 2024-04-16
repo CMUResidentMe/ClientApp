@@ -44,7 +44,7 @@ const LoginPage = () => {
       });
       localStorage.setItem("token", data.login.token); // Save the token
       localStorage.setItem("privilege", data.login.privilege);
-      socketManager.connect(data.login.token);
+      socketManager.connect(localStorage.getItem("token"));
 
       if (data.login.privilege == "resident") {
         history("/home");
@@ -52,7 +52,7 @@ const LoginPage = () => {
         history("/manager-home");
       } else if (data.login.privilege == "staff") {
         console.log("I AM STAFF");
-        // staf home!!
+        history("/home");
       }
     } catch (error) {
       // Log the full error

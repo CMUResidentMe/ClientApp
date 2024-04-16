@@ -103,9 +103,9 @@ const services = [
   },
   {
     icon: managerToolsIcon,
-    text: "Work Orders",
-    link: "/work-order",
-    altText: "Work Orders",
+    text: "Register staff",
+    link: "/staff-register",
+    altText: "Register staff",
     bgColor: "#f3a4a4", // Soft Red Background
   },
 ];

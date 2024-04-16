@@ -3,6 +3,7 @@ import { gql, request } from "graphql-request";
 import ResidentMeLogo from "../ResidentMeLogo.PNG";
 import { Link, useNavigate } from "react-router-dom";
 import staticInitObject from '../config/AllStaticConfig.js';
+import { PrivilegeType } from '../data/userData.js';
 
 const REGISTER_MUTATION = gql`
   mutation Register(
@@ -10,7 +11,8 @@ const REGISTER_MUTATION = gql`
     $password: String!
     $firstName: String!
     $lastName: String!
-    $roomNumber: Int!
+    $roomNumber: Int
+    $privilege: PrivilegeType
   ) {
     register(
       username: $username
@@ -18,13 +20,14 @@ const REGISTER_MUTATION = gql`
       firstName: $firstName
       lastName: $lastName
       roomNumber: $roomNumber
+      privilege: $privilege
     )
   }
 `;
 
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 
-const RegisterPage = () => {
+const RegisterPage = (props) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -32,12 +35,25 @@ const RegisterPage = () => {
     password: "",
     firstName: "",
     lastName: "",
-    roomNumber: "",
+    roomNumber: 0,
   });
   const [error, setError] = useState("");
+  let title = "ResidentMe";
+  let isResident = true;
+  if(props.privilege === "admin"){
+    title = "Staff";
+    isResident = false;
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if(name === "username" && value === "admin"){
+      alert("cannot register admin");
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: "",
+      }));
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -54,8 +70,11 @@ const RegisterPage = () => {
       firstName: formData.firstName,
       lastName: formData.lastName,
       roomNumber: parseInt(formData.roomNumber, 10),
+      privilege: PrivilegeType.resident,
     };
-
+    if(!isResident){
+      variables.privilege = PrivilegeType.staff;
+    }
     try {
       const data = await request(graphqlAPI, REGISTER_MUTATION, variables);
       // If the registration is successful, data should contain the success message
@@ -75,7 +94,7 @@ const RegisterPage = () => {
         <img src={ResidentMeLogo} style={styles.logo} alt="ResidentMe Logo" />
       </div>
       <form style={styles.form} onSubmit={handleSubmit}>
-        <h1 style={styles.heading}>ResidentMe</h1>
+        <h1 style={styles.heading}>{title}</h1>
         {error && <div style={styles.errorContainer}>{error}</div>}
         <input
           type="text"
@@ -109,6 +128,7 @@ const RegisterPage = () => {
           placeholder="Last Name"
           style={styles.input}
         />
+        {isResident && 
         <input
           type="number"
           name="roomNumber"
@@ -116,7 +136,7 @@ const RegisterPage = () => {
           onChange={handleChange}
           placeholder="Room Number"
           style={styles.input}
-        />
+        />}
         <input
           type="email"
           name="email"

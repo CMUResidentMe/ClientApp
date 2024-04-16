@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Grid, Typography, Button, Box, IconButton, Slide, Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu.js';
+import { MenuBookOutlined } from '@mui/icons-material';
 import Navbar from '../components/NavBar.js';
 import backgroundImage from '../assets/background.gif';
 import communityImage from '../assets/community.png';
@@ -41,7 +41,7 @@ const HomePage = () => {
       <Container maxWidth="lg" sx={{ boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)', backgroundColor: 'rgba(255, 255, 255, 0.85)', paddingTop: '1rem', paddingBottom: '2rem', paddingLeft: '2rem', paddingRight: '2rem', borderRadius: '8px' }}>
         <Box display="flex" justifyContent="flex-end" sx={{ marginBottom: '0.5rem' }}>
           <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: 1 }}>
-            <MenuIcon />
+            <MenuBookOutlined />
           </IconButton>
         </Box>
         <Navbar isDrawerOpen={isDrawerOpen} handleDrawerToggle={handleDrawerToggle} />
