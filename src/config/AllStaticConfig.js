@@ -3,6 +3,6 @@ const staticInitObject = {
     APIGATEWAY_SERVER_URL: "http://localhost:2009/graphql/",
     workorderCreated: "workorderCreated",
     workorderChanged: "workorderChanged",
-    workorderimageChanged: "workorderimageChanged",
+    workorderDeleted: "workorderDeleted",
 };
 export default staticInitObject;

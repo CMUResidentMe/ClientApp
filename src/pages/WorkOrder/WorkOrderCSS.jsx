@@ -44,6 +44,13 @@ const styles = {
       border: "1px solid #ddd", // Light grey border
       width: "100%", // Full-width inputs
     },
+    inputArea: {
+      padding: "0.5rem",
+      borderRadius: "3px",
+      border: "1px solid #ddd", // Light grey border
+      width: "100%", // Full-width inputs
+      height: "100px",
+    },
     ActionButton: {
       backgroundColor: "#746352",
       color: "white",

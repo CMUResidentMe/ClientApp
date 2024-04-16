@@ -16,12 +16,13 @@ import BookingManager from "./pages/Booking/BookingManager.js";
 
 const AppRouter = () => {
   return (
-    <Router>
+    <Router basename="/">
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/manager-home" element={<ManagerHome />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register" element={<RegisterPage privilege="resident"/>} />
+        <Route path="/staff-register" element={<RegisterPage privilege="admin"/>} />
         <Route path="/community-board" element={<CommunityBoardPage />} />
         <Route path="/marketplace" element={<MarketplacePage />} />
         <Route path="/work-order" element={<WorkOrderPage />} />

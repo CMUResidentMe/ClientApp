@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Notification.css'
 
 const NotificationBar = (props) => {
@@ -9,7 +9,7 @@ const NotificationBar = (props) => {
      "workType":"fix5544","priority":0,"detail":"fix 56 chair","status":"OPEN"}}
     */
     return props.notifications.map(({ msgType, workOrder }) => (
-      <div className="message-bar">{msgType}: {workOrder.workType}</div>
+      <div className="message-bar" key="{msgType}{workOrder.uuid}">{msgType}: {workOrder.workType}</div>
     ));
   }
 

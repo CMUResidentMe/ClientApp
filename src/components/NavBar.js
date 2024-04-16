@@ -1,13 +1,7 @@
 import React from 'react';
 import { Drawer, Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import CottageIcon from '@mui/icons-material/Cottage.js';
-import HomeIcon from '@mui/icons-material/Home.js';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart.js';
-import BuildIcon from '@mui/icons-material/Build.js';
-import EventIcon from '@mui/icons-material/Event.js';
-import NotificationsIcon from '@mui/icons-material/Notifications.js';
+import { LogoutOutlined, CottageOutlined, HomeOutlined, ShoppingCartOutlined, BuildOutlined, EventOutlined, NotificationsOutlined, AccountCircleOutlined} from '@mui/icons-material';
 import logo from '../assets/logo.png';
-import LogoutIcon from '@mui/icons-material/Logout.js';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
@@ -51,45 +45,51 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
         <Box sx={{ width: 250 }} role="presentation">
           <img src={logo} alt="ResidentMe Logo" style={{ maxWidth: '150px', margin: '16px' }} />
           <List>
-            <ListItem button onClick={() => handleNavItemClick('/community-board')}>
+          <ListItem onClick={() => handleNavItemClick('/login')}>
               <ListItemIcon>
-                <HomeIcon />
+                <AccountCircleOutlined />
+              </ListItemIcon>
+              <ListItemText primary="User Login" />
+            </ListItem>
+            <ListItem onClick={() => handleNavItemClick('/community-board')}>
+              <ListItemIcon>
+                <HomeOutlined />
               </ListItemIcon>
               <ListItemText primary="Communication Board" />
             </ListItem>
-            <ListItem button onClick={() => handleNavItemClick('/marketplace')}>
+            <ListItem onClick={() => handleNavItemClick('/marketplace')}>
               <ListItemIcon>
-                <ShoppingCartIcon />
+                <ShoppingCartOutlined />
               </ListItemIcon>
               <ListItemText primary="Marketplace" />
             </ListItem>
-            <ListItem button onClick={() => handleNavItemClick('/work-order')}>
+            <ListItem onClick={() => handleNavItemClick('/work-order')}>
               <ListItemIcon>
-                <BuildIcon />
+                <BuildOutlined />
               </ListItemIcon>
               <ListItemText primary="Work Order" />
             </ListItem>
-            <ListItem button onClick={() => handleNavItemClick('/booking')}>
+            <ListItem onClick={() => handleNavItemClick('/booking')}>
               <ListItemIcon>
-                <EventIcon />
+                <EventOutlined />
               </ListItemIcon>
               <ListItemText primary="Booking" />
             </ListItem>
-            <ListItem button onClick={() => handleNavItemClick('/notification')}>
+            <ListItem onClick={() => handleNavItemClick('/notification')}>
               <ListItemIcon>
-                <NotificationsIcon />
+                <NotificationsOutlined />
               </ListItemIcon>
               <ListItemText primary="Notifications" />
             </ListItem>
-            <ListItem button onClick={() => handleNavItemClick('/home')}>
+            <ListItem onClick={() => handleNavItemClick('/home')}>
               <ListItemIcon>
-                <CottageIcon />
+                <CottageOutlined />
               </ListItemIcon>
               <ListItemText primary="Home Page" />
             </ListItem>
-            <ListItem button onClick={() => handleNavItemClick('/logout')}>
+            <ListItem onClick={() => handleNavItemClick('/logout')}>
               <ListItemIcon>
-                <LogoutIcon />
+                <LogoutOutlined />
               </ListItemIcon>
               <ListItemText primary="Logout" />
             </ListItem>

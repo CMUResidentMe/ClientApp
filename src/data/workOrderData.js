@@ -12,4 +12,10 @@ const EntryPermission = {
     ALL_PERMISSIONS: 'ALL_PERMISSIONS',
 }
 
-export { WorkStatus, EntryPermission };
+const Priority = {
+    High: 'High',
+    Medium: 'Medium',
+    Low: 'Low',
+}
+
+export { WorkStatus, EntryPermission, Priority };
