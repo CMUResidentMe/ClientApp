@@ -60,9 +60,9 @@ const MarketplacePage = () => {
         borderRadius: '8px'
       }}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h3" component="h1">
-            Marketplace
-          </Typography>
+            <Typography variant="h4" component="h1" gutterBottom sx={{ fontFamily: 'Merriweather, serif', fontWeight: 'bold', marginTop: '0' }}>
+              Welcome to MarketPlace
+            </Typography>
           <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle}>
             <MenuBookOutlined />
           </IconButton>
