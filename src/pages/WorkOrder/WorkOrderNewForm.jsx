@@ -161,9 +161,9 @@ const WorkOrderNewForm = ({ onSubmissionSuccess }) => {
             <select id="entryPermission" name="entryPermission"
               value={workOrderData.entryPermission}
               onChange={handleChange} style={styles.input}>
-              <option value="ALL_PERMISSIONS">{EntryPermission.ALL_PERMISSIONS}</option>
-              <option value="CALLCONFIRM">{EntryPermission.CALLCONFIRM}</option>
-              <option value="KNOCKDOOR">{EntryPermission.KNOCKDOOR}</option>
+              <option value="ALL_PERMISSIONS">All Permissions</option>
+              <option value="CALLCONFIRM">Call Confirm</option>
+              <option value="KNOCKDOOR">Knock Door</option>
             </select>
           </div>
           <div style={styles.inputGroup}>
