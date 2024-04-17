@@ -30,8 +30,8 @@ query workOrdersByAssignedStaff {
 }
 `;
 
-const queryWorkOrdersUnassined = gql`
-query workOrdersUnassined {
+const queryWorkOrdersUnassigned = gql`
+query workOrdersUnassigned {
   workOrdersByOwner{
     uuid
     owner
@@ -101,7 +101,7 @@ const StaffWKPage = () => {
           <TabPanel value="2">
           <Grid container>
               <Grid item xs={6}>
-                <WorkOrderTable graphQLStr={queryWorkOrdersUnassined}/>
+                <WorkOrderTable graphQLStr={queryWorkOrdersUnassigned}/>
               </Grid>
               <Grid item xs={6}>
                 <WorkOrderForm />
