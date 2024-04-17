@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Box, IconButton} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu.js';
+import { MenuBookOutlined } from '@mui/icons-material';
 import Navbar from '../../components/NavBar.js';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography/index.js';
@@ -19,7 +19,7 @@ const BookingPage = () => {
           Here is booking page
         </Typography>
         <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: 1 }}>
-          <MenuIcon />
+          <MenuBookOutlined />
         </IconButton>
       </Box>
       <Navbar isDrawerOpen={isDrawerOpen} handleDrawerToggle={handleDrawerToggle} />
