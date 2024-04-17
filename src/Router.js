@@ -7,7 +7,7 @@ import ManagerHome from "./pages/ManagerHome.js";
 import LoginPage from "./auth/LoginPage.js";
 import RegisterPage from "./auth/RegisterPage.js";
 import CommunityBoardPage from "./pages/CommunityBoard/CommunityBoardPage.js";
-import MarketplacePage from "./pages/MarketPlace/MarketplacePage.js";
+import MarketplacePage from "./pages/MarketPlace/MarketplacePage.jsx";
 import WorkOrderPage from "./pages/WorkOrder/WorkOrderPage.jsx";
 import BookingPage from "./pages/Booking/BookingPage.js";
 import NotificationPage from "./pages/Notification/NotificationBar.jsx";
