@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { Container, Box, IconButton, Typography } from "@mui/material";
 import { MenuBookOutlined } from "@mui/icons-material";
 import Navbar from "../../components/NavBar.js";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css"; // Import calendar styles
+
 import partyRoomImage from "../../assets/partyroom.jpeg";
 import studyRoomImage from "../../assets/studyroom.png";
 import hangoutRoomImage from "../../assets/hangoutroom.jpeg";
-import ResidentMeLogo from "../../assets/logo.png"; // Import your logo here
+import ResidentMeLogo from "../../assets/logo.png";
 
 const BookingPage = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [roomType, setRoomType] = useState("");
+  const [date, setDate] = useState(new Date());
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
@@ -63,7 +67,7 @@ const BookingPage = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        sx={{ marginBottom: "1rem" }} // Adjust this as needed
+        sx={{ marginBottom: "1rem" }}
       >
         <img
           src={ResidentMeLogo}
@@ -76,14 +80,14 @@ const BookingPage = () => {
         sx={{
           boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.25)",
           backgroundColor: "rgba(255, 255, 255, 0.85)",
-          p: 4, // padding on all sides
+          p: 4,
           borderRadius: "8px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           gap: 2,
-          marginTop: 2, // Added space between the logo and container
+          marginTop: 2,
         }}
       >
         <Typography
@@ -117,26 +121,20 @@ const BookingPage = () => {
                 borderRadius: "10px",
                 overflow: "hidden",
                 textAlign: "center",
-                "&:hover": {
-                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
-                },
+                "&:hover": { boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)" },
                 cursor: "pointer",
                 background: "#fff",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                m: 1, // margin for spacing
+                m: 1,
               }}
               onClick={() => setRoomType(option.name)}
             >
               <img
                 src={option.image}
                 alt={option.name}
-                style={{
-                  width: "100%",
-                  height: "200px",
-                  objectFit: "cover",
-                }}
+                style={{ width: "100%", height: "200px", objectFit: "cover" }}
               />
               <Typography variant="h6" sx={{ my: 2 }}>
                 {option.name}
@@ -150,6 +148,18 @@ const BookingPage = () => {
             </Box>
           ))}
         </Box>
+        {roomType && (
+          <Box sx={{ width: "100%", mt: 4 }}>
+            <Typography variant="h5" sx={{ mb: 2 }}>
+              Available Times for {roomType}
+            </Typography>
+            <Calendar onChange={setDate} value={date} />
+            {/* Placeholder to display selected date or available times */}
+            <Typography sx={{ mt: 2 }}>
+              Selected Date: {date.toDateString()}
+            </Typography>
+          </Box>
+        )}
       </Container>
     </div>
   );
