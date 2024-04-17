@@ -17,7 +17,7 @@ const ContentContainer = styled.div`
   min-height: 80vh;
   background-color: "#f7f7f7";
   padding-top: 20px;
-  width: 70%;
+  width: 90%;
 `;
 
 const modalStyle = {

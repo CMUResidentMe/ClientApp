@@ -203,9 +203,9 @@ const WorkOrderForm = ({ currentWK }) => {
             <div style={styles.inputGroup}>
               <label htmlFor="entryPermission" style={styles.label}>Entry Permission</label>
               <select id="entryPermission" disabled={isStaff} name="entryPermission" value={workOrderData.entryPermission} onChange={handleChange} style={styles.input}>
-                <option value="ALL_PERMISSIONS">{EntryPermission.ALL_PERMISSIONS}</option>
-                <option value="CALLCONFIRM">{EntryPermission.CALLCONFIRM}</option>
-                <option value="KNOCKDOOR">{EntryPermission.KNOCKDOOR}</option>
+                <option value="ALL_PERMISSIONS">All Permissions</option>
+                <option value="CALLCONFIRM">Call Confirm</option>
+                <option value="KNOCKDOOR">Knock Door</option>
               </select>
             </div>
             <div style={styles.inputGroup}>

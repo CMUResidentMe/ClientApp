@@ -61,7 +61,7 @@ const Header = styled.div`
 
 // const BackButtonHeight = '20px';
 const BackButtonContainer = styled.div`
-  width: 65%;
+  width: 85%;
   display: flex;
   justify-content: flex-start; // Aligns the button to the left
   position: relative;
