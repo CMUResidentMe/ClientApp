@@ -10,7 +10,7 @@ import CommunityBoardPage from "./pages/CommunityBoard/CommunityBoardPage.js";
 import MarketplacePage from "./pages/MarketPlace/MarketplacePage.js";
 import WorkOrderPage from "./pages/WorkOrder/WorkOrderPage.jsx";
 import BookingPage from "./pages/Booking/BookingPage.js";
-import NotificationPage from "./pages/Notification/NotificationBar.jsx";
+import NotificationPage from "./pages/Notification/NotificationTable.jsx";
 import BookingManager from "./pages/Booking/BookingManager.js";
 //MANAGER
 
