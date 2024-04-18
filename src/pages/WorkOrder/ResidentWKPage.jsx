@@ -5,8 +5,10 @@ import styled from '@emotion/styled';
 import WorkOrderNewForm from './WorkOrderNewForm.jsx';
 import WorkOrderTable from './WorkOrderTable.jsx';
 import DehazeIcon from '@mui/icons-material/Dehaze';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import Navbar from '../../components/NavBar.js';
 import { gql } from '@apollo/client';
+import NotificationTable from '../Notification/NotificationTable.jsx';
 
 
 import newOrderIcon from '../../assets/newWorkOrder.png';
@@ -40,6 +42,7 @@ const ServiceContainer = styled.div`
   justify-content: center;
   gap: 60px;
   align-items: center;
+  margin-top: 100px; // Adjust as needed
 `;
 
 const HeaderHeight = '60px';
@@ -132,6 +135,10 @@ const ResidentWKPage = () => {
     setDrawerOpen(!isDrawerOpen);
   };
 
+  const handleNotificationClick = () => {
+    setView('notifications');
+  };
+
   const services = [
     {
       icon: newOrderIcon,
@@ -149,6 +156,18 @@ const ResidentWKPage = () => {
 
   const renderContent = () => {
     switch (view) {
+      case 'notifications':
+        return (
+          <>
+            <BackButtonContainer>
+              <IconButton onClick={() => setView('landing')}>
+                <ArrowBack />
+              </IconButton>
+            </BackButtonContainer>
+            <NotificationTable notifications={notifications} />
+          </>
+        );
+
       case 'new':
         return (
           <>
@@ -192,9 +211,12 @@ const ResidentWKPage = () => {
   return (
     <React.Fragment>
       <Header>
-        <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
+        <Logo src={ResidentMeLogo} alt="ResidentMe Logo"/>
         <AppName>Work Order</AppName>
-        <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: 1 }}>
+        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-480px' }}>
+          <NotificationsIcon />
+        </IconButton>
+        <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: '20px' }}>
           <DehazeIcon />
         </IconButton>
         <Navbar isDrawerOpen={isDrawerOpen} handleDrawerToggle={handleDrawerToggle} />

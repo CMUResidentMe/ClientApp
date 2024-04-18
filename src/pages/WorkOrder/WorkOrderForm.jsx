@@ -151,9 +151,10 @@ const WorkOrderForm = ({ currentWK }) => {
     console.log("handleChangeWK");
     e.preventDefault();
     setStateError("");
+    console.log("Sending mutation with data:", workOrderData);
     try {
       workOrderData.uuid = currentWK.uuid;
-      change_mutation({ variables: workOrderData });
+      changeWorkOrder({ variables: workOrderData });
       if (loading) return 'Submitting...';
       if (error) return `Submission error! ${error.message}`;
     } catch (error) {
@@ -164,6 +165,27 @@ const WorkOrderForm = ({ currentWK }) => {
       setStateError(errorMessage);
     }
   };
+
+  // const handleChangeWK = async (e) => {
+  //   console.log("handleChangeWK");
+  //   e.preventDefault();
+  //   setStateError("");
+  //   try {
+  //     const mutationResult = await changeWorkOrder({
+  //       variables: {
+  //         ...workOrderData,
+  //         uuid: currentWK.uuid, // Ensure uuid is included
+  //       }
+  //     });
+  //     console.log("Mutation successful", mutationResult);
+  //     // Optionally handle onSubmissionSuccess or similar here
+  //   } catch (error) {
+  //     console.error("Error in mutation", error);
+  //     const errorMessage = error?.message || "An error occurred while updating the work order.";
+  //     setStateError(errorMessage);
+  //   }
+  // };
+  
 
   function handleUploadEvents(events) {
     let imagesTmp = [];
