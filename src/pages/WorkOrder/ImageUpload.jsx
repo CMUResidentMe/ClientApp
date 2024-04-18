@@ -9,7 +9,7 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-  
+
 const ImageUpload = (props) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -20,13 +20,14 @@ const ImageUpload = (props) => {
       url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
     }*/
   let uid = -1;
-  if(props.images){
+  if (props.images) {
     props.images.map((image) => {
-      let f = {uid: `${uid}`,
-              name: 'image.png',
-              status: 'done',
-              url: image,
-              };
+      let f = {
+        uid: `${uid}`,
+        name: 'image.png',
+        status: 'done',
+        url: image,
+      };
       fList.push(f);
       uid = uid - 1;
     });
@@ -40,12 +41,12 @@ const ImageUpload = (props) => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
-  
+
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
     props.onChange(newFileList);
   }
-  
+
   const uploadButton = (
     <button
       style={{
@@ -64,13 +65,13 @@ const ImageUpload = (props) => {
       </div>
     </button>
   );
-  
+
   return (
     <>
       <Upload
-        disabled = {props.disabled}
+        disabled={props.freezeForStaff}
         action="http://localhost:2009/workorder/upload"
-        headers= {{ authorization: localStorage.getItem('token')}}
+        headers={{ authorization: localStorage.getItem('token') }}
         listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}
@@ -78,7 +79,7 @@ const ImageUpload = (props) => {
       >
         {fileList.length >= 3 ? null : uploadButton}
       </Upload>
-	  
+
       {previewImage && (
         <Image
           wrapperStyle={{
@@ -92,7 +93,7 @@ const ImageUpload = (props) => {
           src={previewImage}
         />
       )}
-	  
+
     </>
   );
 };

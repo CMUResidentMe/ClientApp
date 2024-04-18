@@ -6,7 +6,8 @@ import { gql } from '@apollo/client';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationTable from './../Notification/NotificationTable.jsx';
 import Navbar from '../../components/NavBar.js';
-import WorkOrderTable from './WorkOrderTable.jsx';
+import OpenWorkOrdersStaffTable from './OpenWorkOrdersTableStaff.jsx';
+import AssignedWorkOrdersStaffTable from './AssignedWorkOrdersTableStaff.jsx';
 import { socketManager } from "../../notification/socketManager.js";
 import workOrderListen from '../../notification/workOrderListener.js';
 import ResidentMeLogo from "../../assets/logo.png";
@@ -90,8 +91,9 @@ const AppName = styled.h1`
 
 const queryWKsByAssignedStaff = gql`
 query workOrdersByAssignedStaff {
-  workOrdersByOwner{
+  workOrdersByAssignedStaff{
     uuid
+    semanticId
     owner
     workType
     priority
@@ -102,14 +104,16 @@ query workOrdersByAssignedStaff {
     preferredTime
     entryPermission
     images
+    createTime
   }
 }
 `;
 
 const queryWorkOrdersUnassigned = gql`
 query workOrdersUnassigned {
-  workOrdersByOwner{
+  workOrdersUnassigned{
     uuid
+    semanticId
     owner
     workType
     priority
@@ -120,6 +124,7 @@ query workOrdersUnassigned {
     preferredTime
     entryPermission
     images
+    createTime
   }
 }
 `;
@@ -128,29 +133,18 @@ socketManager.connect(localStorage.getItem("token"));
 
 const StaffWKPage = () => {
   const [view, setView] = useState('landing');
-  const [notiCnt, setNotiCnt] = React.useState(0);
   const [notifications, setNotifications] = React.useState([]);
-  const [staffTabvalue, setStaffTabvalue] = React.useState('1');
   const [isDrawerOpen, setDrawerOpen] = React.useState(false);
 
   const workorderUpdateCB = (event) => {
-    setNotiCnt(notiCnt + 1);
     setNotifications([...notifications, event]);
   };
 
-  const workorderimageChangedCB = (event) => {
-    setNotiCnt(notiCnt + 1);
-  };
-
-  workOrderListen(workorderUpdateCB, workorderimageChangedCB);
+  workOrderListen(workorderUpdateCB);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
   };
-
-  const handleStaffTabChange = (e, newValue) => {
-    setStaffTabvalue(newValue);
-  }
 
   const handleNotificationClick = () => {
     setView('notifications');
@@ -181,7 +175,7 @@ const StaffWKPage = () => {
                 <ArrowBack />
               </IconButton>
             </BackButtonContainer>
-            <WorkOrderTable graphQLStr={queryWorkOrdersUnassigned} />;
+            <OpenWorkOrdersStaffTable graphQLStr={queryWorkOrdersUnassigned} />;
           </>
         );
       case 'my':
@@ -192,7 +186,7 @@ const StaffWKPage = () => {
                 <ArrowBack />
               </IconButton>
             </BackButtonContainer>
-            <WorkOrderTable graphQLStr={queryWKsByAssignedStaff} />;
+            <AssignedWorkOrdersStaffTable graphQLStr={queryWKsByAssignedStaff} />;
           </>
         );
       case 'notifications':

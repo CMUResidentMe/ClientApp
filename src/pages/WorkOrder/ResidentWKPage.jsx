@@ -107,6 +107,7 @@ query workOrdersByOwner {
     preferredTime
     entryPermission
     images
+    createTime
   }
 }
 `;
