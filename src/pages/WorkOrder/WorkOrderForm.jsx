@@ -22,6 +22,7 @@ const change_mutation = gql`
       preferredTime
       entryPermission
       images
+      createTime
     }
   }
   `;
@@ -41,6 +42,7 @@ const assignedStaff_mutation = gql`
       entryPermission
       images
       assignedStaff
+      createTime
     }
   }
   `;
@@ -60,6 +62,7 @@ const unAssignedStaff_mutation = gql`
       entryPermission
       images
       assignedStaff
+      createTime
     }
   }
   `;
@@ -94,6 +97,7 @@ const ContentContainer = styled.div`
 
 const WorkOrderForm = ({ currentWK }) => {
   const [workOrderData, setWorkOrderData] = useState({
+    semanticId: currentWK['semanticId'],
     workType: currentWK['workType'],
     priority: currentWK['priority'],
     detail: currentWK['detail'],
@@ -166,26 +170,6 @@ const WorkOrderForm = ({ currentWK }) => {
     }
   };
 
-  // const handleChangeWK = async (e) => {
-  //   console.log("handleChangeWK");
-  //   e.preventDefault();
-  //   setStateError("");
-  //   try {
-  //     const mutationResult = await changeWorkOrder({
-  //       variables: {
-  //         ...workOrderData,
-  //         uuid: currentWK.uuid, // Ensure uuid is included
-  //       }
-  //     });
-  //     console.log("Mutation successful", mutationResult);
-  //     // Optionally handle onSubmissionSuccess or similar here
-  //   } catch (error) {
-  //     console.error("Error in mutation", error);
-  //     const errorMessage = error?.message || "An error occurred while updating the work order.";
-  //     setStateError(errorMessage);
-  //   }
-  // };
-  
 
   function handleUploadEvents(events) {
     let imagesTmp = [];
@@ -203,44 +187,52 @@ const WorkOrderForm = ({ currentWK }) => {
   return (
     <ContentContainer>
       <form style={styles.form} onSubmit={handleChangeWK}>
-          <div style={styles.formColumn}>
-            <div style={styles.inputGroup}>
-              <label htmlFor="workType" style={styles.label}>Work Type</label>
-              <input id="workType" disabled={isStaff} name="workType" type="text" value={workOrderData.workType} onChange={handleChange} style={styles.input} />
-            </div>
-            <div style={styles.inputGroup}>
-              <label htmlFor="priority" style={styles.label}>Priority</label>
-              <select id="priority" disabled={isStaff} name="priority" value={workOrderData.priority} onChange={handleChange} style={styles.input}>
-                <option value="High">{Priority.High}</option>
-                <option value="Medium">{Priority.Medium}</option>
-                <option value="Low">{Priority.Low}</option>
-              </select>
-            </div>
-            <div style={styles.inputGroup}>
-              <label htmlFor="preferredTime" style={styles.label}>Preferred Time</label>
-              <input id="preferredTime" disabled={isStaff} name="preferredTime" type="date" value={workOrderData.preferredTime} onChange={handleChange} style={styles.input} />
-            </div>
+        <div style={styles.formColumn}>
+          <div style={styles.inputGroup}>
+            <label htmlFor="semanticId" style={styles.label}>Work Order Number</label>
+            <input readOnly id="semanticId" name="semanticId" style={{...styles.input, resize: 'none'}} value={currentWK.semanticId}/>
           </div>
-          <div style={styles.formColumn}>
-            <div style={styles.inputGroup}>
-              <label htmlFor="entryPermission" style={styles.label}>Entry Permission</label>
-              <select id="entryPermission" disabled={isStaff} name="entryPermission" value={workOrderData.entryPermission} onChange={handleChange} style={styles.input}>
-                <option value="ALL_PERMISSIONS">All Permissions</option>
-                <option value="CALLCONFIRM">Call Confirm</option>
-                <option value="KNOCKDOOR">Knock Door</option>
-              </select>
-            </div>
-            <div style={styles.inputGroup}>
-              <label htmlFor="accessInstruction" style={styles.label}>Access Instruction</label>
-              <input id="accessInstruction" disabled={isStaff} name="accessInstruction" type="text" value={workOrderData.accessInstruction} onChange={handleChange} style={styles.input} />
-            </div>
-            <div style={styles.inputGroup}>
-              <label htmlFor="detail" style={styles.label}>Detail</label>
-              <textarea id="detail" disabled={isStaff} name="detail" value={workOrderData.detail} onChange={handleChange} style={{ ...styles.inputArea, resize: 'none' }} />
-            </div>
-            <div style={styles.inputGroup}>
+          <div style={styles.inputGroup}>
+            <label htmlFor="workType" style={styles.label}>Work Type</label>
+            <input id="workType" disabled={isStaff} name="workType" type="text" value={workOrderData.workType} onChange={handleChange} style={styles.input} />
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="priority" style={styles.label}>Priority</label>
+            <select id="priority" disabled={isStaff} name="priority" value={workOrderData.priority} onChange={handleChange} style={styles.input}>
+              <option value="High">{Priority.High}</option>
+              <option value="Medium">{Priority.Medium}</option>
+              <option value="Low">{Priority.Low}</option>
+            </select>
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="preferredTime" style={styles.label}>Preferred Time</label>
+            <input id="preferredTime" disabled={isStaff} name="preferredTime" type="date" value={workOrderData.preferredTime} onChange={handleChange} style={styles.input} />
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="assignedStaff" style={styles.label}>Assigned Staff</label>
+            <input readOnly id="assignedStaff" name="assignedStaff" style={{...styles.input, resize: 'none'}} value={currentWK.assignedStaff} placeholder="NA"/>
+          </div>
+        </div>
+        <div style={styles.formColumn}>
+          <div style={styles.inputGroup}>
+            <label htmlFor="entryPermission" style={styles.label}>Entry Permission</label>
+            <select id="entryPermission" disabled={isStaff} name="entryPermission" value={workOrderData.entryPermission} onChange={handleChange} style={styles.input}>
+              <option value="ALL_PERMISSIONS">All Permissions</option>
+              <option value="CALLCONFIRM">Call Confirm</option>
+              <option value="KNOCKDOOR">Knock Door</option>
+            </select>
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="accessInstruction" style={styles.label}>Access Instruction</label>
+            <input id="accessInstruction" disabled={isStaff} name="accessInstruction" type="text" value={workOrderData.accessInstruction} onChange={handleChange} style={styles.input} />
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="detail" style={styles.label}>Detail</label>
+            <textarea id="detail" disabled={isStaff} name="detail" value={workOrderData.detail} onChange={handleChange} style={{ ...styles.inputArea, resize: 'none' }} />
+          </div>
+          <div style={styles.inputGroup}>
             <label htmlFor="images" style={styles.label}>Images</label>
-            <ImageUpload onChange={handleUploadEvents} />
+            <ImageUpload onChange={handleUploadEvents} images={currentWK.images} />
           </div>
         </div>
         <div style={{ width: '100%', textAlign: 'center' }}>

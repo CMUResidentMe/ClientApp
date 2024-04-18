@@ -51,7 +51,7 @@ const createColumns = (handleEditClick) => [
   { field: 'entryPermission', headerName: 'Entry Permission', width: 200, align: 'right', resizable: false, headerAlign: 'center', },
   { field: 'status', headerName: 'Status', minWidth: 100, resizable: false, headerAlign: 'center', },
   { field: 'assignedStaff', headerName: 'Assigned Staff', width: 200, resizable: false, headerAlign: 'center', },
-  { field: 'createTime', headerName: 'Submitted Time', width: 200, resizable: false, cellClassName: 'lastColumnPadding', headerAlign: 'center', },
+  { field: 'createTime', headerName: 'Submitted Time', width: 150, resizable: false, cellClassName: 'lastColumnPadding', headerAlign: 'center', },
 ];
 
 
@@ -77,6 +77,7 @@ const WorkOrderTable = (props) => {
 
   console.log("GraphQL Query:", props.graphQLStr);
   let workOrdersMap = {};
+  // fetch data from api gateway
   const { loading, error, data } = useQuery(props.graphQLStr);
 
   if (loading) console.log('Querying...');
@@ -85,6 +86,7 @@ const WorkOrderTable = (props) => {
   let workOrdersByOwner = [];
   if (data !== undefined && data.workOrdersByOwner !== undefined) {
     data.workOrdersByOwner.forEach((row) => {
+      // console.log("row: " + row);
       let newRow = {};
       columns.forEach((column) => {
         newRow[column.field] = column.field === 'id' ? row['uuid'] : row[column.field];
@@ -143,11 +145,6 @@ const WorkOrderTable = (props) => {
           pageSizeOptions={[10]}
           NoRowsOverlay
           enableRowSelectionOnClick
-          onRowClick={(e) => {
-            console.log(`calling props.setCurrentWK`);
-            //console.log(workOrdersMap[e.id]);
-            props.setCurrentWK(workOrdersMap[e.id]);
-          }}
         />
       }
       {currentWorkOrder && (
@@ -173,7 +170,7 @@ const WorkOrderTable = (props) => {
             onClick={(event) => event.stopPropagation()}
           >
             <WorkOrderForm
-              currentWK={currentWorkOrder}
+              currentWK={workOrdersMap[currentWorkOrder.id]}
               closeModal={closeModal}
               isEditing={isEditing}
             />
