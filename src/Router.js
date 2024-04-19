@@ -7,11 +7,18 @@ import ManagerHome from "./pages/ManagerHome.js";
 import LoginPage from "./auth/LoginPage.js";
 import RegisterPage from "./auth/RegisterPage.js";
 import CommunityBoardPage from "./pages/CommunityBoard/CommunityBoardPage.js";
-import MarketplacePage from "./pages/MarketPlace/MarketplacePage.jsx";
+import MarketplacePage from "./pages/MarketPlace/MarketplacePage.js";
 import WorkOrderPage from "./pages/WorkOrder/WorkOrderPage.jsx";
 import BookingPage from "./pages/Booking/BookingPage.js";
 import NotificationPage from "./pages/Notification/NotificationBar.jsx";
 import BookingManager from "./pages/Booking/BookingManager.js";
+import UserMPDashboard from "./pages/MarketPlace/UserMPDashboard.js";
+import ItemRequests from "./pages/MarketPlace/ItemRequests.js";
+import Detail from "./pages/MarketPlace/ItemDetail.js";
+import AddListItem from "./pages/MarketPlace/NewItemForm.js";
+import ListingCategory from "./pages/MarketPlace/ListingCategories.js";
+import ListedProduct from "./pages/MarketPlace/ListedProduct.js";
+
 //MANAGER
 
 const AppRouter = () => {
@@ -29,6 +36,12 @@ const AppRouter = () => {
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/booking-manager" element={<BookingManager />} />
         <Route path="/notification" element={<NotificationPage />} />
+        <Route path="/UserMPDashboard" element={<UserMPDashboard />} />
+        <Route path="/itemRequests/:id" element={<ItemRequests />}/>
+        <Route path="/products/:id" element={<Detail />} />
+        <Route path="/addListItem" element={<AddListItem />} />
+        <Route path="/categories/:id" element={<ListingCategory />}/>
+        <Route path="/listedproduct/:id" element={<ListedProduct />}/>
       </Routes>
     </Router>
   );
