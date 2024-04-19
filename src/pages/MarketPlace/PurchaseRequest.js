@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { Container, Button, Card, Form }from 'react-bootstrap';
 import Auth from '../../utils/auth.js';
 import { useMutation } from "@apollo/client";
-import { REQUEST_AN_ITEM } from  '../../utils/mutations.js'; 
 
 
 //item id needs to be passed as  a prop currently hard coded for testing
 // user-id from backend - context
 // item id passed as a prop
-// card with drop down menu to select borrow duration and button to submit request
 //graphgl call to create new request
 
 //const listItemId = "6390bb527ad86c7a267b10bd"
@@ -19,7 +17,8 @@ const PurchaseRequest = (props) => {
     
     //console.log(props.product);
 
-    const [ requestAProduct, { error } ] = useMutation(REQUEST_AN_ITEM)   
+    // const [ requestAProduct, { error } ] = useMutation(REQUEST_AN_ITEM)   
+    const [ requestAProduct, { error } ] = useMutation()
     
 
     const setField = (field, value) => {
@@ -43,16 +42,16 @@ const PurchaseRequest = (props) => {
             console.log(form);
             //find category id
 
-            const duration = form.duration;
+            const place = form.place;
             
-            console.log(duration)
+            console.log(place)
             console.log(listingProduct);
 
             try {
                 const { data } = await requestAProduct({
                   variables: {
                     listingProduct,
-                    duration,
+                    place,
                                       
                   },
                 });
@@ -63,7 +62,7 @@ const PurchaseRequest = (props) => {
 
                }
                //reset form fields
-               setForm({duration: ''});
+               setForm({place: ''});
 
         }
         //console.log(token);

@@ -3,14 +3,14 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { MenuBookOutlined } from '@mui/icons-material';
 import Navbar from '../../components/NavBar.js';
 import { useQuery } from "@apollo/client";
-import { QUERY_All_CATEGORIES } from "../../utils/queries.js";
 import CategoryCards from './CategoryCards.js';
 import { Card, Row, Col, Container, Image } from 'react-bootstrap';
 import MarketplaceFooter from './MarketplaceFooter.js';
 import ResidentMeLogo from "../../assets/logo.png";
 
 const MarketplacePage = () => {
-  const { loading, data } = useQuery(QUERY_All_CATEGORIES);
+  // const { loading, data } = useQuery(QUERY_All_CATEGORIES);
+  const { loading, data } = {};
   const categories = data?.getAllListingCategories || [];
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
@@ -22,7 +22,7 @@ const MarketplacePage = () => {
       <Container>
         <Box display="flex" justifyContent="space-between" alignItems="center">
             <Typography variant="h4" component="h1" gutterBottom sx={{ fontFamily: 'Merriweather, serif', fontWeight: 'bold', marginTop: '0' }}>
-              Welcome to MarketPlace
+              Welcome to ResidentMe - MarketPlace
             </Typography>
           <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle}>
             <MenuBookOutlined />

@@ -5,7 +5,6 @@ import { useStoreContext } from '../../utils/GlobalState.js';
 import {
   UPDATE_PRODUCTS,
 } from '../../utils/actions.js';
-import { QUERY_PRODUCTS } from '../../utils/queries.js';
 import { idbPromise } from '../../utils/helpers.js';
 
 function ItemDetail() {
@@ -14,7 +13,8 @@ function ItemDetail() {
 
   const [currentProduct, setCurrentProduct] = useState({});
 
-  const { loading, data } = useQuery(QUERY_PRODUCTS);
+  // const { loading, data } = useQuery(QUERY_PRODUCTS);
+  const { loading, data } = {};
 
   const { products } = state;
 

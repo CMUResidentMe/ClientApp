@@ -3,23 +3,17 @@ import { Container, Row, Form, Button } from 'react-bootstrap';
 import Auth from '../../utils/auth.js';
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import { QUERY_All_CATEGORIES } from  '../../utils/queries.js';
-import { LIST_AN_ITEM } from  '../../utils/mutations.js';
 import MarketplaceFooter from './MarketplaceFooter.js'; 
 
 const ListItemForm = () => {
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});    
 
-    const { data } = useQuery(QUERY_All_CATEGORIES);
+    // const { data } = useQuery(QUERY_All_CATEGORIES);
+    const { data } = {};
     const categories = data?.getAllListingCategories || [];
     
     console.log(categories);
-
-
-    const [ listAProduct ] = useMutation(LIST_AN_ITEM)
-   
-    
 
     const setField = (field, value) => {
         setForm({
@@ -55,7 +49,7 @@ const ListItemForm = () => {
                 console.error(err);
 
                }
-               setForm({name: '', description: '', image:'', category: '', duration: ''});
+               setForm({name: '', description: '', image:'', category: '', place: ''});
 
         }
         if (!token) {

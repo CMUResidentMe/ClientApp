@@ -1,6 +1,5 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { GET_MY_REQUESTED_ITEMS } from "../../utils/queries.js";
 import { Card, Row, Col, Container } from 'react-bootstrap';  
 
 //approve: false, active: true -> request is active - pending approval - default
@@ -9,7 +8,8 @@ import { Card, Row, Col, Container } from 'react-bootstrap';
 
 function RequestedItems({ profileView }) {
  
-  const { loading, data } = useQuery(GET_MY_REQUESTED_ITEMS);
+  // const { loading, data } = useQuery(GET_MY_REQUESTED_ITEMS);
+  const { loading, data } = {};
   const requestedProducts = data?.getRequestsIMade || [];
   console.log(data);
   console.log(requestedProducts);
@@ -60,7 +60,7 @@ function RequestedItems({ profileView }) {
                           className="cardFooter  bg-dark text-white"
                         >
                           Requested on {requestedProduct.dateRequested}
-                          <br /> for {requestedProduct.duration}
+                          <br /> for {requestedProduct.place}
                         </Card.Footer>
                       </Card>
                     </Col>
@@ -98,7 +98,7 @@ function RequestedItems({ profileView }) {
                         </Card.Body>
                         <Card.Footer as="h6" className="text-center">
                           Requested on {requestedProduct.dateRequested}
-                          <br /> for {requestedProduct.duration}
+                          <br /> for {requestedProduct.place}
                         </Card.Footer>
                       </Card>
                     </Col>
@@ -137,7 +137,7 @@ function RequestedItems({ profileView }) {
                         </Card.Body>
                         <Card.Footer as="h6" className="text-center">
                           purchase on {requestedProduct.dateRequested}
-                          <br /> for {requestedProduct.duration}
+                          <br /> for {requestedProduct.place}
                         </Card.Footer>
                       </Card>
                     </Col>

@@ -2,11 +2,11 @@ import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Button, Card }from 'react-bootstrap';
 import { useMutation } from "@apollo/client";
-import { CHANGE_REQUEST_STATUS } from  '../../utils/mutations.js';
 
 function Listed({ requests}) {
 
-    const [ editRequestedProduct ] = useMutation(CHANGE_REQUEST_STATUS)
+    // const [ editRequestedProduct ] = useMutation(CHANGE_REQUEST_STATUS)
+    const [ editRequestedProduct ] = useMutation()
 
     const handleApprove = async (event, listingRequest, listingProduct) => {
       event.preventDefault();

@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_MY_LISTED_PRODUCTS } from "../../utils/queries.js";
 import { Card, Button, Row, Col, Container } from 'react-bootstrap';
 
 function ListedItems({ profileView }) {
-  const { data } = useQuery(GET_MY_LISTED_PRODUCTS);
+  // const { data } = useQuery(GET_MY_LISTED_PRODUCTS);
+  const { data } = {};
   const listedProducts = data?.getMyListedProducts || [];
 
   if (!listedProducts.length) {

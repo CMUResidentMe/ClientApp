@@ -2,7 +2,6 @@ import React from "react";
 import { Container, Col, Row } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
-import { GET_ITEM_REQUESTS } from '../../utils/queries.js';
 import ItemRequestList from "./ItemRequestList.js"; 
 
 const ItemRequests =  () => {
@@ -11,7 +10,8 @@ const ItemRequests =  () => {
     //const listingProduct = '6395e53f0adbc689bdc7f4a3';
     console.log(id);
     const listingProduct = id;
-    const { loading, data } = useQuery(GET_ITEM_REQUESTS, { variables: {  listingProduct }, });
+    // const { loading, data } = useQuery(GET_ITEM_REQUESTS, { variables: {  listingProduct }, });
+    const { loading, data } = {};
     console.log(data);
     const requestData = data?.getRequestsForProductIListed||{};
     if (!requestData.length) {

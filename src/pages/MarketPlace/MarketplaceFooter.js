@@ -76,7 +76,7 @@ const Footer = () => {
         </div>
       </nav>
         <div className="container text-center mb-5">
-          <h4>&copy; {new Date().getFullYear()} - ResidentMe</h4>
+          <h7>&copy; {new Date().getFullYear()} - ResidentMe</h7>
         </div>
       </footer>
     );
