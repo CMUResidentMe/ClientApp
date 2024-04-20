@@ -137,14 +137,14 @@ const RegisterPage = (props) => {
           placeholder="Room Number"
           style={styles.input}
         />}
-        <input
+        {/* <input
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
           placeholder="Email"
           style={styles.input}
-        />
+        /> */}
         <button type="submit" style={styles.registerButton}>
           Register
         </button>
