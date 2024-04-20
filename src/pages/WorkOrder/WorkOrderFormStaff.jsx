@@ -243,7 +243,13 @@ const WorkOrderFormStaff = ({ currentWK, isAssign, closeModal }) => {
                     </div>
                     <div style={styles.inputGroup}>
                         <label htmlFor="assignedStaff" style={styles.label}>Assigned Staff</label>
-                        <input readOnly id="assignedStaff" name="assignedStaff" style={{ ...styles.input, resize: 'none' }} value={workOrderData.assignedStaff} placeholder="NA" />
+                        <input 
+                            readOnly 
+                            id="assignedStaff" 
+                            name="assignedStaff" 
+                            style={{ ...styles.input, resize: 'none' }} 
+                            value={currentWK.staffInfo ? `${currentWK.staffInfo.firstName || ''} ${currentWK.staffInfo.lastName || ''}`.trim() : 'NA'}  
+                        />
                     </div>
                 </div>
                 <div style={styles.formColumn}>

@@ -22,10 +22,10 @@ const ContentContainer = styled.div`
   notificationID: 4
 }*/
 const columns = [
-  { field: 'id', headerName: 'ID', width: 100, resizable: false, },
+  { field: 'id', headerName: 'ID', width: 100, resizable: false, cellClassName: 'firstColumnPadding',},
   { field: 'notificationType', headerName: 'Type', width: 150, resizable: false, },
-  { field: 'eventTime', headerName: 'Time', width: 200 },
-  { field: 'message', headerName: 'Message', width: 850 },
+  { field: 'eventTime', headerName: 'Time', width: 150 },
+  { field: 'message', headerName: 'Message', width: 850, cellClassName: 'lastColumnPadding', },
 ];
 
 var notiSet = new Set();
