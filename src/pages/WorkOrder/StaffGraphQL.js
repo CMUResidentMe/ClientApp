@@ -6,11 +6,23 @@ query workOrdersByAssignedStaff {
     uuid
     semanticId
     owner
+    ownerInfo { 
+      firstName
+      lastName
+      username
+      roomNumber
+    }
     workType
     priority
     status
     detail
     assignedStaff
+    staffInfo {
+      firstName
+      lastName
+      username
+      roomNumber
+    }
     accessInstruction
     preferredTime
     entryPermission
@@ -26,11 +38,21 @@ query workOrdersByStatus($status: WorkStatus!) {
     uuid
     semanticId
     owner
+    ownerInfo { 
+      firstName
+      lastName
+      username
+    }
     workType
     priority
     status
     detail
     assignedStaff
+    staffInfo {
+      firstName
+      lastName
+      username
+    }
     accessInstruction
     preferredTime
     entryPermission
