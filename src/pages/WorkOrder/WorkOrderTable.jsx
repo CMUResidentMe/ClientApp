@@ -109,7 +109,6 @@ const WorkOrderTable = (props) => {
         if (column.field === 'id') {
           newRow[column.field] = row['uuid'];
         } else if (column.field === 'assignedStaff') {
-          console.log("staffInfo: " + row['staffInfo']['firstName']);
           if (row['staffInfo'] && row['staffInfo']['firstName'] && row['staffInfo']['lastName']) {
             newRow[column.field] = `${row['staffInfo']['firstName']} ${row['staffInfo']['lastName']}`;
           } else {
