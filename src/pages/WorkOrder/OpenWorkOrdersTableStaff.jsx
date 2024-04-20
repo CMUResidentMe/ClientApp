@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Backdrop, IconButton, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import WorkOrderFormStaff from './WorkOrderFormStaff.jsx';
+import { workOrdersByStatus } from './StaffGraphQL.js'
 
 const HeaderHeight = '60px';
 
@@ -14,10 +15,10 @@ const ContentContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  min-height: 75vh;
   background-color: "#f7f7f7";
-  padding-top: 20px;
-  width: 90%;
+  padding-top: 10px;
+  width: 70%;
 `;
 
 const modalStyle = {
@@ -52,10 +53,8 @@ const createColumns = (handleAddClick) => [
   { field: 'createTime', headerName: 'Submitted Time', width: 150, resizable: false, cellClassName: 'lastColumnPadding', headerAlign: 'center', },
 ];
 
-
 const OpenWorkOrdersStaffTable = (props) => {
   document.body.style.overflow = 'hidden';
-  console.log("props: " + props);
   const [isFormOpen, setFormOpen] = React.useState(false);
   const [currentWorkOrder, setCurrentWorkOrder] = React.useState(null);
   const [isAdd, setIsAdd] = React.useState(false);
@@ -74,16 +73,15 @@ const OpenWorkOrdersStaffTable = (props) => {
 
   const columns = createColumns(handleAddClick);
 
-  console.log("GraphQL Query:", props.graphQLStr);
   let workOrdersMap = {};
-  const { loading, error, data } = useQuery(props.graphQLStr);
+  const { loading, error, data } = useQuery(workOrdersByStatus, { variables: { status: "OPEN" }});
 
   if (loading) console.log('Querying...');
   if (error) console.log(`Query error! ${error.message}`);
 
   let workOrdersUnassigned = [];
-  if (data !== undefined && data.workOrdersUnassigned !== undefined) {
-    data.workOrdersUnassigned.forEach((row) => {
+  if (data !== undefined && data.workOrdersByStatus !== undefined) {
+    data.workOrdersByStatus.forEach((row) => {
       let newRow = {};
       columns.forEach((column) => {
         newRow[column.field] = column.field === 'id' ? row['uuid'] : row[column.field];
@@ -166,11 +164,13 @@ const OpenWorkOrdersStaffTable = (props) => {
             }}
             onClick={(event) => event.stopPropagation()}
           >
-            <WorkOrderFormStaff
+          {workOrdersMap[currentWorkOrder.id] && 
+          <WorkOrderFormStaff
+              isAssign={true} 
               currentWK={workOrdersMap[currentWorkOrder.id]}
               closeModal={closeModal}
-              isAdd={isAdd}
-            />
+              isAdd={isAdd}/>
+          } 
           </Box>
         </Backdrop>
       )

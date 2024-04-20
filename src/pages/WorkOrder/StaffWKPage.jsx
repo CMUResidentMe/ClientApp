@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import { IconButton, Box, Grid } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
-import { gql } from '@apollo/client';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationTable from './../Notification/NotificationTable.jsx';
 import Navbar from '../../components/NavBar.js';
 import OpenWorkOrdersStaffTable from './OpenWorkOrdersTableStaff.jsx';
 import AssignedWorkOrdersStaffTable from './AssignedWorkOrdersTableStaff.jsx';
 import { socketManager } from "../../notification/socketManager.js";
-import workOrderListen from '../../notification/workOrderListener.js';
 import ResidentMeLogo from "../../assets/logo.png";
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import newOrderIcon from '../../assets/newWorkOrder.png';
 import currentOrdersIcon from '../../assets/currentWorkOrder.png';
+import NotificationListener from '../../notification/NotificationListener.js';
 
 const StyledServiceLink = styled('div')`
   display: flex;
@@ -65,7 +64,7 @@ const BackButtonContainer = styled.div`
   display: flex;
   justify-content: flex-start; // Aligns the button to the left
   position: relative;
-  z-index: 10000;
+  z-index: 2;
   padding-top: 8rem;
 `;
 
@@ -76,7 +75,7 @@ const ContentContainer = styled.div`
   align-items: center;
   min-height: calc(100vh - ${HeaderHeight});
   background-color: "#f7f7f7";
-  padding-top: ${HeaderHeight};
+  padding-top: 20px;
 `;
 
 const Logo = styled.img`
@@ -87,46 +86,6 @@ const AppName = styled.h1`
   font-size: 1.5rem;
   font-weight: bold;
   margin-left: 15px;
-`;
-
-const queryWKsByAssignedStaff = gql`
-query workOrdersByAssignedStaff {
-  workOrdersByAssignedStaff{
-    uuid
-    semanticId
-    owner
-    workType
-    priority
-    status
-    detail
-    assignedStaff
-    accessInstruction
-    preferredTime
-    entryPermission
-    images
-    createTime
-  }
-}
-`;
-
-const queryWorkOrdersUnassigned = gql`
-query workOrdersUnassigned {
-  workOrdersUnassigned{
-    uuid
-    semanticId
-    owner
-    workType
-    priority
-    status
-    detail
-    assignedStaff
-    accessInstruction
-    preferredTime
-    entryPermission
-    images
-    createTime
-  }
-}
 `;
 
 socketManager.connect(localStorage.getItem("token"));
@@ -140,7 +99,7 @@ const StaffWKPage = () => {
     setNotifications([...notifications, event]);
   };
 
-  workOrderListen(workorderUpdateCB);
+  NotificationListener(workorderUpdateCB);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
@@ -175,7 +134,7 @@ const StaffWKPage = () => {
                 <ArrowBack />
               </IconButton>
             </BackButtonContainer>
-            <OpenWorkOrdersStaffTable graphQLStr={queryWorkOrdersUnassigned} />;
+            <OpenWorkOrdersStaffTable />;
           </>
         );
       case 'my':
@@ -186,7 +145,7 @@ const StaffWKPage = () => {
                 <ArrowBack />
               </IconButton>
             </BackButtonContainer>
-            <AssignedWorkOrdersStaffTable graphQLStr={queryWKsByAssignedStaff} />;
+            <AssignedWorkOrdersStaffTable />;
           </>
         );
       case 'notifications':
@@ -197,7 +156,9 @@ const StaffWKPage = () => {
                 <ArrowBack />
               </IconButton>
             </BackButtonContainer>
-            <NotificationTable notifications={notifications} />
+            <NotificationTable
+              notifications={notifications}
+            />
           </>
         );
       default:
@@ -206,9 +167,9 @@ const StaffWKPage = () => {
             <ServiceContainer>
               {services.map((service, index) => (
                 <StyledServiceLink key={index} bgColor={service.bgColor} onClick={service.onClick}>
-                <img src={service.icon} alt={service.text} style={{ width: '80px', height: '80px', marginBottom: '16px' }} />
-                <div>{service.text}</div>
-              </StyledServiceLink>
+                  <img src={service.icon} alt={service.text} style={{ width: '80px', height: '80px', marginBottom: '16px' }} />
+                  <div>{service.text}</div>
+                </StyledServiceLink>
               ))}
             </ServiceContainer>
           </ContentContainer>
@@ -230,7 +191,10 @@ const StaffWKPage = () => {
         </IconButton>
         <Navbar isDrawerOpen={isDrawerOpen} handleDrawerToggle={handleDrawerToggle} />
       </Header>
-      {renderContent()}
+      <ContentContainer>
+        {renderContent()}
+      </ContentContainer>
+
     </React.Fragment>
   );
 };
