@@ -22,10 +22,10 @@ const ContentContainer = styled.div`
   notificationID: 4
 }*/
 const columns = [
-  { field: 'id', headerName: 'Notification ID', width: 0, resizable: false, headerAlign: 'center', },
-  { field: 'notificationType', headerName: 'Type', width: 0, resizable: false, headerAlign: 'center', },
-  { field: 'eventTime', headerName: 'Time', width: 150 },
-  { field: 'message', headerName: 'Message', width: 800 },
+  { field: 'id', headerName: 'ID', width: 100, resizable: false, },
+  { field: 'notificationType', headerName: 'Type', width: 150, resizable: false, },
+  { field: 'eventTime', headerName: 'Time', width: 200 },
+  { field: 'message', headerName: 'Message', width: 850 },
 ];
 
 var notiSet = new Set();
@@ -57,7 +57,7 @@ const NotificationTable = ({ notifications }) => {
         getRowId={(row) => row.id}
         sx={{
           height: '60%',
-          width: '60%',
+          width: '80%',
           '& .MuiDataGrid-row': {
             maxHeight: '70px',
           },
