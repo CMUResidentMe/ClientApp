@@ -14,17 +14,37 @@ const ContentContainer = styled.div`
   width: 90%;
 `;
 
+/*{
+  notificationType: 'workorderChanged',
+  eventTime: '04-21 01:34',
+  owner: '661bff26a8293a3ed2fd06ee',
+  message: 'semanticId:WO-66, workType change from bbbvvvccc to vvv, ',
+  notificationID: 4
+}*/
 const columns = [
-  { field: 'eventTime', headerName: 'Time', width: 150 },
-  { field: 'message', headerName: 'Message', width: 800 },
+  { field: 'id', headerName: 'ID', width: 100, resizable: false, },
+  { field: 'notificationType', headerName: 'Type', width: 150, resizable: false, },
+  { field: 'eventTime', headerName: 'Time', width: 200 },
+  { field: 'message', headerName: 'Message', width: 850 },
 ];
 
-const NotificationTable = ({ notifications, formatNotification }) => {
-  const rows = notifications.map((notification, index) => ({
-    id: index,
-    eventTime: notification.eventTime,
-    message: formatNotification(notification),
-  }));
+var notiSet = new Set();
+
+const NotificationTable = ({ notifications }) => {
+
+  const rows = notifications.filter(noti => {
+    if(!(noti.notificationID in notiSet)){
+      notiSet.add(noti.notificationID);
+      return noti;
+    }
+  }).map((notification) => (
+    {
+      id: notification.notificationID,
+      notificationType: notification.notificationType,
+      eventTime: notification.eventTime,
+      message: notification.message,
+    }
+  ));
 
   return (
     <ContentContainer>
@@ -37,7 +57,7 @@ const NotificationTable = ({ notifications, formatNotification }) => {
         getRowId={(row) => row.id}
         sx={{
           height: '60%',
-          width: '60%',
+          width: '80%',
           '& .MuiDataGrid-row': {
             maxHeight: '70px',
           },
