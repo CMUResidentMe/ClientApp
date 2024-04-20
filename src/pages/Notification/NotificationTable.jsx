@@ -1,6 +1,8 @@
 import React from 'react';
 import './Notification.css'
 import styled from '@emotion/styled';
+import { DataGrid } from '@mui/x-data-grid';
+//import { createHash } from 'crypto';
 
 const HeaderHeight = '60px';
 
@@ -24,10 +26,16 @@ const ContentContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - ${HeaderHeight});
+  min-height: 70vh;
   background-color: "#f7f7f7";
-  padding-top: ${HeaderHeight};
+  padding-top: 20px;
+  width: 90%;
 `;
+
+const columns = [
+  { field: 'id', headerName: 'ID', width: 0, resizable: false },
+  { field: 'changeDescription', headerName: 'Notification Message', width: 900, resizable: false, },
+]
 
 const NotificationTable = (props) => {
 
@@ -36,15 +44,44 @@ const NotificationTable = (props) => {
     {"msgType":"workorderCreated","workOrder":{"uuid":"661836ed9a724618afd79054","owner":"admin",
      "workType":"fix5544","priority":0,"detail":"fix 56 chair","status":"OPEN"}}
     */
-    return props.notifications.map(({ msgType, workOrder }) => (
-      <div className="message-bar" key="{msgType}{workOrder.uuid}">{msgType}: {workOrder.workType}</div>
-    ));
+    const rows = props.notifications.map(({ msgType, workOrder }) => ({
+      id: workOrder.uuid,
+      changeDescription: workOrder.changeDescription,
+    }));
+
+    return (
+      <ContentContainer>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[10]}
+          autoHeight
+          NoRowsOverlay
+          sx={{
+            height: '60%',
+            width: '70%',
+            '& .MuiDataGrid-row': {
+              maxHeight: '70px',
+            },
+            '& .MuiDataGrid-cell': {
+              display: 'flex',
+              alignItems: 'center', // Vertically center align
+              justifyContent: 'center' // Horizontally center align
+            },
+            '& .MuiDataGrid-columnSeparator': {
+              visibility: 'visible', // Ensure separators are visible
+              color: 'rgba(224, 224, 224, 1)', // You can change the color to match your design
+            },
+
+          }}
+        />
+      </ContentContainer>
+    )
   }
 
   return (
-    <ContentContainer>
-      <AllNotifications/>
-    </ContentContainer>
+    <AllNotifications />
   );
 };
 
