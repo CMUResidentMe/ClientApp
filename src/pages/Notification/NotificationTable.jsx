@@ -63,8 +63,6 @@ const NotificationTable = ({ notifications }) => {
           },
           '& .MuiDataGrid-cell': {
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
           },
           '& .firstColumnPadding': {
             paddingLeft: '16px',
