@@ -28,7 +28,7 @@ const styles = {
       justifyContent: "space-between", // Distribute space between columns
       width: "100%", // Use 100% if you want it to be responsive or set a max-width
       maxWidth: "800px",
-      marginTop: "-15rem",
+      marginTop: "-10rem",
     },
     formColumn: {
       display: "flex",

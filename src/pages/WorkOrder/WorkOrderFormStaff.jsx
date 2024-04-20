@@ -6,7 +6,8 @@ import styles from './WorkOrderCSS.jsx';
 import ImageUpload from './ImageUpload.jsx'
 import { PrivilegeType } from '../../data/userData.js';
 import styled from '@emotion/styled';
-
+import { Modal, Box, Typography, Button } from '@mui/material';
+import { queryWKsByAssignedStaff, workOrdersByStatus } from './StaffGraphQL.js'
 
 const assignedStaff_mutation = gql`
   mutation assignWorkOrderStaff($uuid: String!) {
@@ -76,20 +77,61 @@ const ContentContainer = styled.div`
   width: 100%;
   `;
 
-const WorkOrderFormStaff = ({ currentWK, isAssign }) => {
+const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
+
+const WorkOrderFormStaff = ({ currentWK, isAssign, closeModal }) => {
     const [workOrderData, setWorkOrderData] = useState({
-        workType: currentWK['workType'],
-        priority: currentWK['priority'],
-        detail: currentWK['detail'] === null ? "NA" : currentWK['detail'],
-        preferredTime: currentWK['preferredTime'],
-        entryPermission: currentWK['entryPermission'] === null ? "NA" : currentWK['entryPermission'],
-        accessInstruction: currentWK['accessInstruction'] === null ? "NA" : currentWK['accessInstruction'],
-        images: currentWK['images'] === null ? [] : currentWK['images'],
-        assignedStaff: currentWK['assignedStaff'] === null ? "NA" : currentWK['assignedStaff'],
+        workType: currentWK ? currentWK['workType'] : "",
+        priority: currentWK ? currentWK['priority'] : "",
+        detail: currentWK ? currentWK['detail'] : "",
+        preferredTime: (currentWK && currentWK['preferredTime'] !== null) ? currentWK['preferredTime'] : "",
+        entryPermission: (currentWK && currentWK['entryPermission'] !== null) ? currentWK['entryPermission'] : "NA",
+        accessInstruction: (currentWK && currentWK['accessInstruction'] !== null) ? currentWK['accessInstruction'] : "NA",
+        images: (currentWK && currentWK['images'] !== null) ? currentWK['images'] : [],
+        assignedStaff: (currentWK && currentWK['assignedStaff'] !== null) ? currentWK['assignedStaff'] : "NA",
     });
+
     const [stateError, setStateError] = useState("");
-    const [assignedStaffMutation, { dataAssign, loadingAssign, errorAssign }] = useMutation(assignedStaff_mutation);
-    const [unAssignedStaffMtation, { dataunAssign, loadingunAssign, errorunAssign }] = useMutation(unAssignedStaff_mutation);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [assignedStaffMutation, { dataAssign, loadingAssign, errorAssign }] = useMutation(assignedStaff_mutation,
+        {
+            refetchQueries: [
+                {query: queryWKsByAssignedStaff}, // DocumentNode object parsed with gql 
+                {
+                    query: workOrdersByStatus,
+                    variables: { 
+                        status: "OPEN"
+                    },
+                },
+            ],
+        }
+    );
+    const [unAssignedStaffMtation, { dataunAssign, loadingunAssign, errorunAssign }] = useMutation(unAssignedStaff_mutation,
+        {
+            refetchQueries: [
+                {query: queryWKsByAssignedStaff}, // DocumentNode object parsed with gql 
+                {
+                    query: workOrdersByStatus,
+                    variables: { 
+                        status: "OPEN"
+                    },
+                },
+            ],
+        }
+    );
+
+    if (!currentWK) {
+        return <></>;
+    }
 
     const isStaff = (localStorage.getItem("privilege") === PrivilegeType.staff);
 
@@ -101,44 +143,20 @@ const WorkOrderFormStaff = ({ currentWK, isAssign }) => {
         }));
     };
 
-    const assignTome = (e) => {
-        if (currentWK == undefined) {
-            return;
-        }
-        if (e.target.checked) {
-            try {
-                assignedStaffMutation({ variables: { uuid: currentWK.uuid } });
-                if (loadingAssign) stateError('Submitting...');
-                if (errorAssign) stateError(errorAssign.message);
-            } catch (error) {
-                const errorMessage =
-                    error?.response?.errors?.[0]?.message ||
-                    "An error occurred while trying to create work order.";
-                setStateError(errorMessage);
-            }
-        } else {
-            try {
-                unAssignedStaffMtation({ variables: { uuid: currentWK.uuid } });
-                if (loadingunAssign) stateError('Submitting...');
-                if (errorunAssign) stateError(errorunAssign.message);
-            } catch (error) {
-                const errorMessage =
-                    error?.response?.errors?.[0]?.message ||
-                    "An error occurred while trying to create work order.";
-                setStateError(errorMessage);
-            }
-        }
-    };
-
     const handleTakeWK = async (e) => {
         e.preventDefault();
         setStateError("");
         console.log("handleTakeWK called")
-        if( isAssign) {
+        if (isAssign) {
             try {
                 assignedStaffMutation({ variables: { uuid: currentWK.uuid } });
                 if (loadingAssign) stateError('Submitting...');
                 if (errorAssign) stateError(errorAssign.message);
+                setModalOpen(true);
+                setTimeout(() => {
+                    setModalOpen(false);
+                    // onSubmissionSuccess();
+                }, 4000);
             } catch (error) {
                 const errorMessage =
                     error?.response?.errors?.[0]?.message ||
@@ -150,6 +168,11 @@ const WorkOrderFormStaff = ({ currentWK, isAssign }) => {
                 unAssignedStaffMtation({ variables: { uuid: currentWK.uuid } });
                 if (loadingunAssign) stateError('Submitting...');
                 if (errorunAssign) stateError(errorunAssign.message);
+                setModalOpen(true);
+                setTimeout(() => {
+                    setModalOpen(false);
+                    // onSubmissionSuccess();
+                }, 4000);
             } catch (error) {
                 const errorMessage =
                     error?.response?.errors?.[0]?.message ||
@@ -157,15 +180,50 @@ const WorkOrderFormStaff = ({ currentWK, isAssign }) => {
                 setStateError(errorMessage);
             }
         }
+        closeModal();
     };
 
     return (
         <ContentContainer>
+            {isAssign &&
+                <Modal
+                    open={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                >
+                    <Box sx={modalStyle}>
+                        <Typography id="modal-title" variant="h6" component="h2">
+                            Successful
+                        </Typography>
+                        <Typography id="modal-description" sx={{ mt: 2 }}>
+                            You've successfully taken this order. The work order owner is noticed.
+                        </Typography>
+                    </Box>
+                </Modal>
+            }
+            {!isAssign &&
+                <Modal
+                    open={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                >
+                    <Box sx={modalStyle}>
+                        <Typography id="modal-title" variant="h6" component="h2">
+                            Successful
+                        </Typography>
+                        <Typography id="modal-description" sx={{ mt: 2 }}>
+                            You are not taking this work order anymore. The work order owner is noticed.
+                        </Typography>
+                    </Box>
+                </Modal>
+            }
             <form style={styles.form} onSubmit={handleTakeWK}>
                 <div style={styles.formColumn}>
                     <div style={styles.inputGroup}>
                         <label htmlFor="semanticId" style={styles.label}>Work Order Number</label>
-                        <input readOnly id="semanticId" name="semanticId" style={{ ...styles.input, resize: 'none' }} value={currentWK.semanticId} />
+                        <input readOnly id="semanticId" name="semanticId" style={{ ...styles.input, resize: 'none' }} value={currentWK && currentWK.semanticId} />
                     </div>
                     <div style={styles.inputGroup}>
                         <label htmlFor="workType" style={styles.label}>Work Type</label>
@@ -207,7 +265,7 @@ const WorkOrderFormStaff = ({ currentWK, isAssign }) => {
                     </div>
                     <div style={styles.inputGroup}>
                         <label htmlFor="images" style={styles.label}>Images</label>
-                        <ImageUpload images={currentWK.images} freezeForStaff={isStaff} />
+                        <ImageUpload images={currentWK && currentWK.images} freezeForStaff={isStaff} />
                     </div>
                 </div>
                 {isAssign &&

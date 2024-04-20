@@ -14,17 +14,37 @@ const ContentContainer = styled.div`
   width: 90%;
 `;
 
+/*{
+  notificationType: 'workorderChanged',
+  eventTime: '04-21 01:34',
+  owner: '661bff26a8293a3ed2fd06ee',
+  message: 'semanticId:WO-66, workType change from bbbvvvccc to vvv, ',
+  notificationID: 4
+}*/
 const columns = [
+  { field: 'id', headerName: 'Notification ID', width: 0, resizable: false, headerAlign: 'center', },
+  { field: 'notificationType', headerName: 'Type', width: 0, resizable: false, headerAlign: 'center', },
   { field: 'eventTime', headerName: 'Time', width: 150 },
   { field: 'message', headerName: 'Message', width: 800 },
 ];
 
-const NotificationTable = ({ notifications, formatNotification }) => {
-  const rows = notifications.map((notification, index) => ({
-    id: index,
-    eventTime: notification.eventTime,
-    message: formatNotification(notification),
-  }));
+var notiSet = new Set();
+
+const NotificationTable = ({ notifications }) => {
+
+  const rows = notifications.filter(noti => {
+    if(!(noti.notificationID in notiSet)){
+      notiSet.add(noti.notificationID);
+      return noti;
+    }
+  }).map((notification) => (
+    {
+      id: notification.notificationID,
+      notificationType: notification.notificationType,
+      eventTime: notification.eventTime,
+      message: notification.message,
+    }
+  ));
 
   return (
     <ContentContainer>

@@ -6,6 +6,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Backdrop, IconButton, Box } from '@mui/material';
 import WorkOrderFormStaff from './WorkOrderFormStaff';
 import { ArrowBack } from '@mui/icons-material';
+import { queryWKsByAssignedStaff } from './StaffGraphQL.js'
 
 const HeaderHeight = '60px';
 
@@ -14,10 +15,10 @@ const ContentContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  min-height: 75vh;
   background-color: "#f7f7f7";
-  padding-top: 20px;
-  width: 90%;
+  padding-top: 10px;
+  width: 70%;
 `;
 
 const modalStyle = {
@@ -52,7 +53,6 @@ const createColumns = (handleDeleteClick) => [
   { field: 'createTime', headerName: 'Submitted Time', width: 150, resizable: false, cellClassName: 'lastColumnPadding', headerAlign: 'center', },
 ];
 
-
 const AssignedWorkOrdersStaffTable = (props) => {
   document.body.style.overflow = 'hidden';
 
@@ -73,9 +73,8 @@ const AssignedWorkOrdersStaffTable = (props) => {
 
   const columns = createColumns(handleDeleteClick);
 
-  console.log("GraphQL Query:", props.graphQLStr);
   let workOrdersMap = {};
-  const { loading, error, data } = useQuery(props.graphQLStr);
+  const { loading, error, data } = useQuery(queryWKsByAssignedStaff);
 
   if (loading) console.log('Querying...');
   if (error) console.log(`Query error! ${error.message}`);
@@ -165,11 +164,14 @@ const AssignedWorkOrdersStaffTable = (props) => {
             }}
             onClick={(event) => event.stopPropagation()}
           >
-            <WorkOrderFormStaff
+            {workOrdersMap[currentWorkOrder.id] && 
+              <WorkOrderFormStaff
+              isAssign={false}
               currentWK={workOrdersMap[currentWorkOrder.id]}
               closeModal={closeModal}
               isDelete={isDelete}
             />
+            }
           </Box>
         </Backdrop>
       )

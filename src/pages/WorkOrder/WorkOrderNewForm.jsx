@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import PropTypes from 'prop-types';
 import { EntryPermission, Priority } from '../../data/workOrderData.js';
 import { gql, useMutation } from '@apollo/client';
 import styles from './WorkOrderCSS.jsx';
 import ImageUpload from './ImageUpload.jsx'
 import styled from '@emotion/styled';
 import { Modal, Box, Typography, Button } from '@mui/material';
-
+import { queryWorkOrdersByOwner } from './ResidentGraphQL.js';
 
 const HeaderHeight = '60px';
 
@@ -38,6 +37,7 @@ const create_mutation = gql`
     createWorkOrder(workType: $workType, priority: $priority, detail: $detail, accessInstruction: $accessInstruction, preferredTime: $preferredTime, entryPermission: $entryPermission, images: $images){
       uuid
       semanticId
+      createTime
       owner
       workType
       priority
@@ -62,8 +62,14 @@ const WorkOrderNewForm = ({ onSubmissionSuccess }) => {
     accessInstruction: "",
     images: [],
   });
-  const [stateError, setStateError] = useState("");
-  const [createMutation, { data, loading, error }] = useMutation(create_mutation);
+
+  const [createMutation, { data, loading, error }] = useMutation(create_mutation, 
+    {
+      refetchQueries: [
+          {query: queryWorkOrdersByOwner}, 
+      ],
+    }
+  );
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleChange = (e) => {
@@ -75,9 +81,19 @@ const WorkOrderNewForm = ({ onSubmissionSuccess }) => {
   };
 
   const handleCreate = async (e) => {
+    console.log("handleCreate");
     e.preventDefault();
-    setStateError("");
     try {
+      createMutation({ variables: workOrderData });
+      if (loading) return 'Submitting...';
+      if (error) return `Submission error! ${error.message}`;
+      console.log(data);
+      setModalOpen(true);
+      setTimeout(() => {
+        setModalOpen(false);
+        onSubmissionSuccess();
+      }, 4000);
+      /*
       await createMutation({
         variables: workOrderData,
         onCompleted: (data) => {
@@ -90,15 +106,12 @@ const WorkOrderNewForm = ({ onSubmissionSuccess }) => {
         },
         onError: (error) => {
           console.error("Submission error", error);
-          setStateError(error.message || "An error occurred while trying to create the work order.");
         }
-      });
+      });*/
     } catch (error) {
       console.error("Error in submission", error);
-      setStateError("Failed to submit the work order.");
     }
   };
-
 
   function handleUploadEvents(events) {
     let imagesTmp = [];

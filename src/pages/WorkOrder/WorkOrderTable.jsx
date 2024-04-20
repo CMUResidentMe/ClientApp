@@ -5,9 +5,8 @@ import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { Backdrop, IconButton, Box } from '@mui/material';
 import WorkOrderForm from './WorkOrderForm';
-import { ArrowBack } from '@mui/icons-material';
-
-const HeaderHeight = '60px';
+import { ArrowBack } from '@mui/icons-material'; 
+import { queryWorkOrdersByOwner } from './ResidentGraphQL.js'
 
 const ContentContainer = styled.div`
   display: flex;
@@ -16,7 +15,7 @@ const ContentContainer = styled.div`
   align-items: center;
   min-height: 80vh;
   background-color: "#f7f7f7";
-  padding-top: 20px;
+  padding-top: 10px;
   width: 90%;
 `;
 
@@ -75,10 +74,9 @@ const WorkOrderTable = (props) => {
 
   const columns = createColumns(handleEditClick);
 
-  console.log("GraphQL Query:", props.graphQLStr);
   let workOrdersMap = {};
   // fetch data from api gateway
-  const { loading, error, data } = useQuery(props.graphQLStr);
+  const { loading, error, data } = useQuery(queryWorkOrdersByOwner);
 
   if (loading) console.log('Querying...');
   if (error) console.log(`Query error! ${error.message}`);
@@ -95,7 +93,6 @@ const WorkOrderTable = (props) => {
       workOrdersMap[row['uuid']] = row;
     });
   };
-
 
   function ShowWorkOrders() {
     return <ContentContainer>
