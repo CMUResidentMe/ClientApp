@@ -9,8 +9,10 @@ import RegisterPage from "./auth/RegisterPage.js";
 import CommunityBoardPage from "./pages/CommunityBoard/CommunityBoardPage.js";
 import WorkOrderPage from "./pages/WorkOrder/WorkOrderPage.jsx";
 import BookingPage from "./pages/Booking/BookingPage.js";
-import NotificationPage from "./pages/Notification/NotificationBar.jsx";
+import NotificationPage from "./pages/Notification/NotificationTable.jsx";
 import BookingManager from "./pages/Booking/BookingManager.js";
+import ResidentWKPage from './pages/WorkOrder/ResidentWKPage.jsx';
+import StaffWKPage from './pages/WorkOrder/StaffWKPage.jsx'
 import MarketPlaceLayout from "./pages/MarketPlace/subpages/MarketPlaceLayout.jsx";
 import MarketPlaceHomePage from "./pages/MarketPlace/subpages/MarketPlaceHomePage.jsx";
 import MarketPlacePublishPage from "./pages/MarketPlace/subpages/MarketPlacePublishPage.jsx";
@@ -32,6 +34,8 @@ const AppRouter = () => {
         <Route path="/register" element={<RegisterPage privilege="resident"/>} />
         <Route path="/staff-register" element={<RegisterPage privilege="admin"/>} />
         <Route path="/community-board" element={<CommunityBoardPage />} />
+        <Route path="/work-order" element={<ResidentWKPage />} />
+        <Route path="/staff-work-order" element={<StaffWKPage />} />
         <Route path="/marketplace" element={<MarketPlaceLayout />} >
           <Route path={''} index element={<MarketPlaceIndexPage />} />
           <Route path={'playground'} element={<MarketPlaceHomePage />} />

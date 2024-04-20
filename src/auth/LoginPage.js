@@ -52,7 +52,7 @@ const LoginPage = () => {
         history("/manager-home");
       } else if (data.login.privilege == "staff") {
         console.log("I AM STAFF");
-        history("/home");
+        history("/staff-work-order");
       }
     } catch (error) {
       // Log the full error

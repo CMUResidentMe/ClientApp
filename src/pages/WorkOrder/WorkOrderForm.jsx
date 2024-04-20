@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { Alert } from '@mui/material';
 import PropTypes from 'prop-types';
 import { EntryPermission, Priority } from '../../data/workOrderData.js';
 import { gql, useMutation } from '@apollo/client';
-import { CheckCircleOutlineOutlined } from '@mui/icons-material';
 import styles from './WorkOrderCSS.jsx';
 import ImageUpload from './ImageUpload.jsx'
 import { PrivilegeType } from '../../data/userData.js';
+import styled from '@emotion/styled';
 
-//         changeWorkOrder(uuid: String!, workType: String, priority: Priority, detail: String, accessInstruction: String, preferredTime: String, entryPermission: EntryPermission, images: [String!]): DetailedWorkOrder
+
 const change_mutation = gql`
   mutation changeWorkOrder($uuid: String!, $workType: String!, $priority: Priority!, $detail: String, $accessInstruction: String, $preferredTime: String, $entryPermission: EntryPermission, $images: [String!]) {
     changeWorkOrder(uuid: $uuid, workType: $workType, priority: $priority, detail: $detail, accessInstruction: $accessInstruction, preferredTime: $preferredTime, entryPermission: $entryPermission, images: $images) {
       uuid
+      semanticId
       owner
       workType
       priority
@@ -22,6 +22,7 @@ const change_mutation = gql`
       preferredTime
       entryPermission
       images
+      createTime
     }
   }
   `;
@@ -30,6 +31,7 @@ const assignedStaff_mutation = gql`
   mutation assignedStaff($uuid: String!) {
     assignedStaff(uuid: $uuid){
       uuid
+      semanticId
       owner
       workType
       priority
@@ -40,6 +42,7 @@ const assignedStaff_mutation = gql`
       entryPermission
       images
       assignedStaff
+      createTime
     }
   }
   `;
@@ -48,6 +51,7 @@ const unAssignedStaff_mutation = gql`
   mutation unAssignedStaff($uuid: String!) {
     unAssignedStaff(uuid: $uuid){
       uuid
+      semanticId
       owner
       workType
       priority
@@ -58,12 +62,42 @@ const unAssignedStaff_mutation = gql`
       entryPermission
       images
       assignedStaff
+      createTime
     }
   }
   `;
 
+const HeaderHeight = '60px';
+
+const Header = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 20px;
+  height: ${HeaderHeight}; // Fixed height
+  background-color: #f2efea;
+  color: #746352;
+  z-index: 1000; // High z-index to ensure it stays on top
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - ${HeaderHeight});
+  background-color: "#f7f7f7";
+  padding-top: 100px;
+  width: 100%;
+  `;
+
 const WorkOrderForm = ({ currentWK }) => {
   const [workOrderData, setWorkOrderData] = useState({
+    semanticId: currentWK['semanticId'],
     workType: currentWK['workType'],
     priority: currentWK['priority'],
     detail: currentWK['detail'],
@@ -73,7 +107,7 @@ const WorkOrderForm = ({ currentWK }) => {
     images: currentWK['images'],
   });
   const [stateError, setStateError] = useState("");
-  const [changeMutation, { data, loading, error }] = useMutation(change_mutation);
+  const [changeWorkOrder, { data, loading, error }] = useMutation(change_mutation);
   const [assignedStaffMutation, { dataAssign, loadingAssign, errorAssign }] = useMutation(assignedStaff_mutation);
   const [unAssignedStaffMtation, { dataunAssign, loadingunAssign, errorunAssign }] = useMutation(unAssignedStaff_mutation);
 
@@ -89,30 +123,30 @@ const WorkOrderForm = ({ currentWK }) => {
   };
 
   const assignTome = (e) => {
-    if(currentWK == undefined){
+    if (currentWK == undefined) {
       return;
     }
-    if(e.target.checked){
-      try { 
-        assignedStaffMutation({variables: {uuid: currentWK.uuid}});
+    if (e.target.checked) {
+      try {
+        assignedStaffMutation({ variables: { uuid: currentWK.uuid } });
         if (loadingAssign) stateError('Submitting...');
         if (errorAssign) stateError(errorAssign.message);
       } catch (error) {
         const errorMessage =
           error?.response?.errors?.[0]?.message ||
-            "An error occurred while trying to create work order.";
-          setStateError(errorMessage);
+          "An error occurred while trying to create work order.";
+        setStateError(errorMessage);
       }
-    }else{
+    } else {
       try {
-        unAssignedStaffMtation({variables: {uuid: currentWK.uuid}});
+        unAssignedStaffMtation({ variables: { uuid: currentWK.uuid } });
         if (loadingunAssign) stateError('Submitting...');
         if (errorunAssign) stateError(errorunAssign.message);
       } catch (error) {
         const errorMessage =
           error?.response?.errors?.[0]?.message ||
           "An error occurred while trying to create work order.";
-          setStateError(errorMessage);
+        setStateError(errorMessage);
       }
     }
   };
@@ -121,9 +155,10 @@ const WorkOrderForm = ({ currentWK }) => {
     console.log("handleChangeWK");
     e.preventDefault();
     setStateError("");
+    console.log("Sending mutation with data:", workOrderData);
     try {
       workOrderData.uuid = currentWK.uuid;
-      changeMutation({variables: workOrderData});
+      changeWorkOrder({ variables: workOrderData });
       if (loading) return 'Submitting...';
       if (error) return `Submission error! ${error.message}`;
     } catch (error) {
@@ -131,14 +166,15 @@ const WorkOrderForm = ({ currentWK }) => {
       const errorMessage =
         error?.response?.errors?.[0]?.message ||
         "An error occurred while trying to create work order.";
-        setStateError(errorMessage);
+      setStateError(errorMessage);
     }
   };
 
+
   function handleUploadEvents(events) {
-    let imagesTmp = []; 
-    events.map( e => {
-      if(e.status === 'done' && 'response' in e){
+    let imagesTmp = [];
+    events.map(e => {
+      if (e.status === 'done' && 'response' in e) {
         imagesTmp.push(e.response.fileURL);
       }
     });
@@ -149,71 +185,66 @@ const WorkOrderForm = ({ currentWK }) => {
   }
 
   return (
-    <div style={styles.container}>
+    <ContentContainer>
       <form style={styles.form} onSubmit={handleChangeWK}>
-        <h3 style={styles.heading}>Work Order</h3>
-        {stateError && <div style={styles.error}>{stateError}</div>}
-        <div style={styles.inputGroup}>
-          <label htmlFor="workType" style={styles.label}>Work Type</label>
-          <input id="workType" disabled={isStaff} name="workType" type="text" 
-            value={workOrderData.workType} 
-            onChange={handleChange} style={styles.input}/>
+        <div style={styles.formColumn}>
+          <div style={styles.inputGroup}>
+            <label htmlFor="semanticId" style={styles.label}>Work Order Number</label>
+            <input readOnly id="semanticId" name="semanticId" style={{...styles.input, resize: 'none'}} value={currentWK.semanticId}/>
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="workType" style={styles.label}>Work Type</label>
+            <input id="workType" disabled={isStaff} name="workType" type="text" value={workOrderData.workType} onChange={handleChange} style={styles.input} />
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="priority" style={styles.label}>Priority</label>
+            <select id="priority" disabled={isStaff} name="priority" value={workOrderData.priority} onChange={handleChange} style={styles.input}>
+              <option value="High">{Priority.High}</option>
+              <option value="Medium">{Priority.Medium}</option>
+              <option value="Low">{Priority.Low}</option>
+            </select>
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="preferredTime" style={styles.label}>Preferred Time</label>
+            <input id="preferredTime" disabled={isStaff} name="preferredTime" type="date" value={workOrderData.preferredTime} onChange={handleChange} style={styles.input} />
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="assignedStaff" style={styles.label}>Assigned Staff</label>
+            <input readOnly id="assignedStaff" name="assignedStaff" style={{...styles.input, resize: 'none'}} value={currentWK.assignedStaff} placeholder="NA"/>
+          </div>
         </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="priority" style={styles.label}>Priority</label>
-          <select id="priority" disabled={isStaff} name="priority" 
-            value={workOrderData.priority}
-            onChange={handleChange} style={styles.input}>
-            <option value="High">{Priority.High}</option>
-            <option value="Medium">{Priority.Medium}</option>
-            <option value="Low">{Priority.Low}</option>
-          </select>
+        <div style={styles.formColumn}>
+          <div style={styles.inputGroup}>
+            <label htmlFor="entryPermission" style={styles.label}>Entry Permission</label>
+            <select id="entryPermission" disabled={isStaff} name="entryPermission" value={workOrderData.entryPermission} onChange={handleChange} style={styles.input}>
+              <option value="ALL_PERMISSIONS">All Permissions</option>
+              <option value="CALLCONFIRM">Call Confirm</option>
+              <option value="KNOCKDOOR">Knock Door</option>
+            </select>
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="accessInstruction" style={styles.label}>Access Instruction</label>
+            <input id="accessInstruction" disabled={isStaff} name="accessInstruction" type="text" value={workOrderData.accessInstruction} onChange={handleChange} style={styles.input} />
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="detail" style={styles.label}>Detail</label>
+            <textarea id="detail" disabled={isStaff} name="detail" value={workOrderData.detail} onChange={handleChange} style={{ ...styles.inputArea, resize: 'none' }} />
+          </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="images" style={styles.label}>Images</label>
+            <ImageUpload onChange={handleUploadEvents} images={currentWK.images} />
+          </div>
         </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="preferredTime" style={styles.label}>Preferred Time</label>
-          <input id="preferredTime" disabled={isStaff} name="preferredTime" type="datetime-local" 
-            value={workOrderData.preferredTime}
-            onChange={handleChange} style={styles.input}/>
-        </div> 
-        <div style={styles.inputGroup}>
-          <label htmlFor="entryPermission" style={styles.label}>Entry Permission</label>
-          <select id="entryPermission" disabled={isStaff} name="entryPermission" 
-              value={workOrderData.entryPermission}
-              onChange={handleChange} style={styles.input}>
-            <option value="ALL_PERMISSIONS">{EntryPermission.ALL_PERMISSIONS}</option>
-            <option value="CALLCONFIRM">{EntryPermission.CALLCONFIRM}</option>
-            <option value="KNOCKDOOR">{EntryPermission.KNOCKDOOR}</option>
-          </select>
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          <button type="submit" disabled={isStaff} style={styles.ActionButton}>Update WorkOrder</button>
         </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="accessInstruction" style={styles.label}>Access Instruction</label>
-          <input id="accessInstruction" disabled={isStaff} name="accessInstruction" type="text" 
-            value={workOrderData.accessInstruction}
-            onChange={handleChange} style={styles.input}/>
-        </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="detail" disabled={isStaff} style={styles.label}>Detail</label>
-          <input id="detail" disabled={isStaff} name="detail" type="textArea" 
-            value={workOrderData.detail} 
-            onChange={handleChange} style={styles.inputArea}/>
-        </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="images" style={styles.label}>Images</label>
-          <ImageUpload disabled={isStaff} images={workOrderData.images} onChange={handleUploadEvents} />
-        </div>
-          {isStaff && 
-              <div style={styles.inputGroup}>
-                <label htmlFor="assign" style={styles.label}>Asign to me</label>
-                <input id="assign" disabled={currentWK === undefined} name="assign" type="checkBox" value={workOrderData.detail} onChange={assignTome}/>
-              </div>}
-        <button type="submit" disabled={isStaff} style={styles.ActionButton}>Change WorkOrder</button>
       </form>
-    </div>
+    </ContentContainer>
   );
 };
 
 WorkOrderForm.propTypes = {
-  currentWK: PropTypes.object.isRequired, 
+  currentWK: PropTypes.object.isRequired
 };
 
 export default WorkOrderForm;
