@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import styled from '@emotion/styled';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { Backdrop, IconButton, Box } from '@mui/material';
+import { Backdrop, IconButton, Box, MenuItem, FormControl, Select } from '@mui/material';
 import WorkOrderFormStaff from './WorkOrderFormStaff';
 import { ArrowBack } from '@mui/icons-material';
-import { queryWKsByAssignedStaff } from './StaffGraphQL.js'
+import { queryWKsByAssignedStaff, updateWorkOrderStatus } from './StaffGraphQL.js'
+import { WorkStatus } from '../../data/workOrderData.js'
 
 const HeaderHeight = '60px';
 
@@ -17,8 +18,8 @@ const ContentContainer = styled.div`
   align-items: center;
   min-height: 75vh;
   background-color: "#f7f7f7";
-  padding-top: 10px;
-  width: 70%;
+  padding-top: -110px;
+  width: 90%;
 `;
 
 const modalStyle = {
@@ -32,10 +33,10 @@ const modalStyle = {
   p: 4,
 };
 
-const createColumns = (handleDeleteClick) => [
+const createColumns = (handleDeleteClick, handleSelectStatusChange, status) => [
   { field: 'id', headerName: 'ID', width: 0, resizable: false, headerAlign: 'center', },
   {
-    field: 'delete', headerName: 'Delete', sortable: false, filterable: false, width: 70, headerAlign: 'center', cellClassName: 'firstColumnPadding',
+    field: 'delete', headerName: '', sortable: false, filterable: false, width: 70, headerAlign: 'center', cellClassName: 'firstColumnPadding',
     renderCell: (params) => (
       <GridActionsCellItem
         icon={<DeleteForeverIcon />}
@@ -44,6 +45,22 @@ const createColumns = (handleDeleteClick) => [
         color="inherit"
       />
     )
+  },
+  {
+    field: 'workStatus', headerName: 'Status', sortable: false, filterable: false, width: 150, headerAlign: 'center',
+    renderCell: (params) => (
+      <FormControl fullWidth>
+        <Select
+          id={`select-status-${params.row.id}`}
+          value={status[params.row.id]}
+          onChange={(event) => handleSelectStatusChange(params.row.id, event.target.value)}
+          displayEmpty
+        >
+          <MenuItem value={WorkStatus.ASSIGNED}>{WorkStatus.ASSIGNED}</MenuItem>
+          <MenuItem value={WorkStatus.ONGOING}>{WorkStatus.ONGOING}</MenuItem>
+          <MenuItem value={WorkStatus.FINISHED}>{WorkStatus.FINISHED}</MenuItem>
+        </Select>
+      </FormControl>)
   },
   { field: 'semanticId', headerName: 'WorkOrder ID', width: 120, resizable: false, headerAlign: 'center', },
   { field: 'roomNumber', headerName: 'Room Number', width: 120, resizable: false, headerAlign: 'center', },
@@ -60,6 +77,36 @@ const AssignedWorkOrdersStaffTable = (props) => {
   const [isFormOpen, setFormOpen] = React.useState(false);
   const [currentWorkOrder, setCurrentWorkOrder] = React.useState(null);
   const [isDelete, setIsDelete] = React.useState(false);
+  const [status, setStatus] = React.useState({});
+  const [updateStatus] = useMutation(updateWorkOrderStatus);
+
+  const { loading, error, data } = useQuery(queryWKsByAssignedStaff);
+
+  React.useEffect(() => {
+    if (data && data.workOrdersByAssignedStaff) {
+      const statusMap = {};
+      data.workOrdersByAssignedStaff.forEach(workOrder => {
+        console.log("work order status");
+        console.log(workOrder.status);
+        statusMap[workOrder.uuid] = workOrder.status; // Initialize the status map
+      });
+      setStatus(statusMap);
+    }
+  }, [data]);
+
+  const handleSelectStatusChange = (id, newStatus) => {
+    updateStatus({ variables: { uuid: id, status: newStatus } })
+      .then(response => {
+        console.log("Update successful:", response.data.updateWorkOrderStatus);
+        setStatus(prevStatuses => ({
+          ...prevStatuses,
+          [id]: newStatus  // Correctly update the status for the specific work order
+        }));
+      })
+      .catch(error => {
+        console.error("Failed to update status:", error);
+      });
+  };
 
   const handleDeleteClick = (workOrder) => {
     setCurrentWorkOrder(workOrder);
@@ -72,10 +119,9 @@ const AssignedWorkOrdersStaffTable = (props) => {
     setIsDelete(false); // Reset editing state when closing the form
   };
 
-  const columns = createColumns(handleDeleteClick);
+  const columns = createColumns(handleDeleteClick, handleSelectStatusChange, status);
 
   let workOrdersMap = {};
-  const { loading, error, data } = useQuery(queryWKsByAssignedStaff);
 
   if (loading) console.log('Querying...');
   if (error) console.log(`Query error! ${error.message}`);
@@ -85,9 +131,9 @@ const AssignedWorkOrdersStaffTable = (props) => {
     data.workOrdersByAssignedStaff.forEach((row) => {
       let newRow = {};
       columns.forEach((column) => {
-        if(column.field === 'id') {
+        if (column.field === 'id') {
           newRow[column.field] = row['uuid'];
-        } else if(column.field === 'roomNumber') {
+        } else if (column.field === 'roomNumber') {
           newRow[column.field] = row['ownerInfo']['roomNumber'];
         } else {
           newRow[column.field] = row[column.field];
@@ -171,13 +217,13 @@ const AssignedWorkOrdersStaffTable = (props) => {
             }}
             onClick={(event) => event.stopPropagation()}
           >
-            {workOrdersMap[currentWorkOrder.id] && 
+            {workOrdersMap[currentWorkOrder.id] &&
               <WorkOrderFormStaff
-              isAssign={false}
-              currentWK={workOrdersMap[currentWorkOrder.id]}
-              closeModal={closeModal}
-              isDelete={isDelete}
-            />
+                isAssign={false}
+                currentWK={workOrdersMap[currentWorkOrder.id]}
+                closeModal={closeModal}
+                isDelete={isDelete}
+              />
             }
           </Box>
         </Backdrop>

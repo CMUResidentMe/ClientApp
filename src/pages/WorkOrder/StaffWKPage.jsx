@@ -188,7 +188,7 @@ const StaffWKPage = () => {
       <Header>
         <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
         <AppName>Work Order</AppName>
-        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-480px' }}>
+        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-300px' }}>
           <Badge badgeContent={notificationCount} color="warning">
             <NotificationsIcon />
           </Badge>
