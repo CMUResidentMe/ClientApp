@@ -12,7 +12,7 @@ import PostList from "./PostList.js";
 import NotificationTable from "../Notification/NotificationTable.jsx";
 import ResidentMeLogo from "../../assets/logo.png";
 
-const HeaderHeight = "60px";
+const HeaderHeight = "100px";
 
 const Header = styled.div`
   position: fixed;
