@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 //CLIENT
-import HomePage from "./pages/Home.js";
+import HomePage from "./pages/Home.jsx";
 import ManagerHome from "./pages/ManagerHome.js";
 import LoginPage from "./auth/LoginPage.js";
 import RegisterPage from "./auth/RegisterPage.js";

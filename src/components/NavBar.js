@@ -12,16 +12,6 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
     navigate('/');
   };
 
-  // const handleNavItemClick = (path) => {
-  //   const isAuthenticated = true; 
-
-  //   if (isAuthenticated) {
-  //     navigate(path);
-  //   } else {
-  //     navigate('/login');
-  //   }
-  // };
-
   const handleNavItemClick = (path) => {
     if (path === '/logout') {
       handleLogout();

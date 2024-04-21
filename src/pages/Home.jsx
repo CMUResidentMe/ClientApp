@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Typography, Button, Box, IconButton, Slide, Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
+import { Container, Grid, Typography, Button, Box, IconButton, Slide, Card, CardContent, CardMedia, CardActionArea, Badge } from '@mui/material';
 import { MenuBookOutlined } from '@mui/icons-material';
 import Navbar from '../components/NavBar.js';
 import backgroundImage from '../assets/background.gif';
 import communityImage from '../assets/community.png';
 import marketplaceImage from '../assets/marketplace.png';
 import workOrderImage from '../assets/workorder.png';
+import { ArrowBack } from '@mui/icons-material';
 import bookingImage from '../assets/booking.png';
 import { useNavigate } from 'react-router-dom';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationTable from './Notification/NotificationTable.jsx';
+import useNotificationListener from '../notification/NotificationListener.js';
+import { socketManager } from "../notification/socketManager.js";
+import styled from '@emotion/styled';
 
 const HomePage = () => {
+  const [view, setView] = useState('/home');
+  const [notifications, setNotifications] = React.useState([]);
+  const [notificationCount, setNotificationCount] = useState(0);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
@@ -26,10 +35,58 @@ const HomePage = () => {
       navigate(path);
   };
 
+  const workorderUpdateCB = (event) => {
+    console.log("Received notification:", event);
+    setNotifications(prevNotifications => [...prevNotifications, event]);
+    setNotificationCount(prevCount => prevCount + 1);
+  };
+
+  useNotificationListener(workorderUpdateCB);
+
+  const handleNotificationClick = () => {
+    setView('notifications');
+    setNotificationCount(0);
+  };
+
+  const renderContent = () => {
+        return (
+          <>
+            <BackButtonContainer>
+              <IconButton onClick={() => setView('landing')}>
+                <ArrowBack />
+              </IconButton>
+            </BackButtonContainer>
+            <NotificationTable
+              notifications={notifications}
+            />
+          </>
+        );
+  }
+
+// const BackButtonHeight = '20px';
+const BackButtonContainer = styled.div`
+  width: 85%;
+  display: flex;
+  justify-content: flex-start; // Aligns the button to the left
+  position: relative;
+  z-index: 2;
+  padding-top: 8rem;
+`;
+
+  socketManager.connect(localStorage.getItem("token"));
+
+
+
   return (
     <Box sx={{ flexGrow: 1, backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', overflow: 'hidden' , minHeight: '100vh'}}>
       <Container maxWidth="lg" sx={{ boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)', backgroundColor: 'rgba(255, 255, 255, 0.85)', paddingTop: '1rem', paddingBottom: '2rem', paddingLeft: '2rem', paddingRight: '2rem', borderRadius: '8px' }}>
         <Box display="flex" justifyContent="flex-end" sx={{ marginBottom: '0.5rem' }}>
+        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-400px' }}>
+          <Badge badgeContent={notificationCount} color="warning">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <NotificationsIcon />
           <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: 1 }}>
             <MenuBookOutlined />
           </IconButton>
