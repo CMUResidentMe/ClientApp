@@ -22,16 +22,6 @@ const HomePage = () => {
     setDrawerOpen(!isDrawerOpen);
   };
 
-  // const handleCardClick = (path) => {
-  //   const isAuthenticated = true;
-
-  //   if (isAuthenticated) {
-  //     navigate(path);
-  //   } else {
-  //     navigate('/login');
-  //   }
-  // };
-
   const handleCardClick = (path) => {
       navigate(path);
   };

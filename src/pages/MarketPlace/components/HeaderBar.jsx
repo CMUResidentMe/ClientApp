@@ -14,7 +14,18 @@ const HeaderBar = () => {
         <AppBar position="static" sx={{ backgroundColor: '#d2b48c' }}>
             <Toolbar>
                 <img onClick={() => navigate('/marketplace')} className={'me-2'} width={40} src={MarketIcon}/>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                <Typography 
+                variant="h6" 
+                    component="div" 
+                    sx={{ 
+                        flexGrow: 1,
+                        fontFamily: "'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif",
+                        fontSize: '1.25rem',
+                        fontWeight: 'bold',
+                        color: '#8B4513',
+                        letterSpacing: '0.1em'
+                    }}
+                    >
                     ResidentMe - MarketPlace
                 </Typography>
                 <MarketPlaceNav />

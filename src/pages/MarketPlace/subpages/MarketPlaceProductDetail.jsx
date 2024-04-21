@@ -151,7 +151,7 @@ const MarketPlaceProductDetailPage = () => {
                     </Typography>
                     <Typography variant="body1" gutterBottom>
                         Status: <span className="badge bg-success">
-                        {status}
+                        {status === 'sold' ? 'Pending Sold' : status}
                     </span>
                     </Typography>
                     {!isOwner && status !== 'sold' && (
