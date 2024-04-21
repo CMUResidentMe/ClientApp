@@ -1,16 +1,19 @@
-import {useQuery} from "@apollo/client";
+import {useMutation, useQuery} from "@apollo/client";
 import {GET_GOODS_OF_USER} from "../graphql/queries.js";
 import React, {useEffect, useState} from "react";
-import {Empty} from "antd";
+import {Empty, message} from "antd";
 import {IconButton} from "@mui/material";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight.js";
 import {Spinner} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
-
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import {DELETE_GOODS} from "../graphql/mutations.js";
+import {Modal} from 'antd';
 export default function MarketPlaceMyProducts() {
     const navigate = useNavigate();
-    const { loading, error, data = [] } = useQuery(GET_GOODS_OF_USER);
+    const [deleteGoods] = useMutation(DELETE_GOODS);
+    const { refetch, loading, error, data = [] } = useQuery(GET_GOODS_OF_USER);
     const [products, setProducts] = useState([]);
     useEffect(() => {
         if (Array.isArray(data.getGoodsByUser)) {
@@ -18,6 +21,22 @@ export default function MarketPlaceMyProducts() {
             setProducts(data.getGoodsByUser)
         }
     }, [data]);
+
+    const handleClickDelete = async (id) => {
+        Modal.confirm({
+            title: 'Are you sure to delete this product?',
+            content: 'This action cannot be undone',
+            onOk: async () => {
+                await deleteGoods({
+                    variables: {
+                        id: id
+                    }
+                });
+                message.success('Delete success')
+                await refetch();
+            }
+        })
+    }
 
     return (
        <div className={'container mt-5'}>
@@ -62,6 +81,12 @@ export default function MarketPlaceMyProducts() {
                                            onClick={() => navigate('/marketplace/update/' + product.id)}
                                            color={'primary'}>
                                            <EditIcon />
+                                       </IconButton>
+
+                                       <IconButton
+                                           onClick={() => handleClickDelete(product.id)}
+                                           color={'error'}>
+                                           <DeleteForeverIcon />
                                        </IconButton>
                                    </p>
                                </div>

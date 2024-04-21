@@ -35,21 +35,29 @@ const MarketPlaceProductDetailPage = () => {
 
 
     const [contactOfBuyer, setContactOfBuyer] = useState('');
+    const [tradePlace, setTradePlace] = useState('');
 
     const handleOrder = () => {
         if (!contactOfBuyer.trim()) {
             message.warning('Please enter your contact information');
             return
         }
+        if (!tradePlace.trim()) {
+            message.warning('Please enter the trade place');
+            return
+
+        }
         setOpenOrderForm(false);
-        setContactOfBuyer('');
         order({
             variables: {
                 goodsId,
-                contact: contactOfBuyer
+                contact: contactOfBuyer,
+                tradePlace
             }
         }).then(() => {
             message.success('Order placed successfully');
+            setContactOfBuyer('');
+            setTradePlace('');
         })
     };
 
@@ -66,7 +74,6 @@ const MarketPlaceProductDetailPage = () => {
         price,
         image,
         category,
-        tradePlace,
         publishUser,
         contact,
         status,
@@ -92,6 +99,19 @@ const MarketPlaceProductDetailPage = () => {
                         value={contactOfBuyer}
                         onChange={(e) => setContactOfBuyer(e.target.value)}
                         placeholder="Enter email or phone number"
+                    />
+
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="tradePlace"
+                        label="Trade Place"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        value={tradePlace}
+                        onChange={(e) => setTradePlace(e.target.value)}
+                        placeholder="Enter trade place"
                     />
                 </DialogContent>
                 <DialogActions>
@@ -126,9 +146,6 @@ const MarketPlaceProductDetailPage = () => {
                     <Typography variant="body1" gutterBottom>
                         {description}
                     </Typography>
-                    <Typography variant="body1" color="text.secondary">
-                        Trade Place: {tradePlace}
-                    </Typography>
                     <Typography variant="body1" gutterBottom>
                         Contact: {contact}
                     </Typography>
@@ -137,12 +154,17 @@ const MarketPlaceProductDetailPage = () => {
                         {status}
                     </span>
                     </Typography>
-                    {!isOwner && (
+                    {!isOwner && status !== 'sold' && (
                         <Button
                             onClick={() => setOpenOrderForm(true)}
                             startIcon={<ShoppingBasketIcon />}
                             variant="contained" color="primary" className={'mt-5'}>
                             Order
+                        </Button>
+                    )}
+                    {status === 'sold' && (
+                        <Button variant="contained" disabled>
+                            This product has been sold
                         </Button>
                     )}
                 </Col>

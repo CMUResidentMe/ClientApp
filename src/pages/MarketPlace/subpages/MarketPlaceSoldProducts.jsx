@@ -1,21 +1,21 @@
 import {useQuery} from "@apollo/client";
-import {GET_ORDERS_BY_USER} from "../graphql/queries.js";
+import {GET_ORDERS_BY_USER, GET_SOLD_PRODUCTS} from "../graphql/queries.js";
 import {useEffect, useState} from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import {Spinner} from "react-bootstrap";
 import {Empty} from "antd";
 
 
-export default function MarketPlaceMyOrders() {
+export default function MarketPlaceSoldProducts() {
 
-    const { loading, error, data } = useQuery(GET_ORDERS_BY_USER);
+    const { loading, error, data } = useQuery(GET_SOLD_PRODUCTS);
     const [orders, setOrders] = useState([]);
 
 
     useEffect(() => {
         console.log(data)
-        if (data && Array.isArray(data.getOrdersByUser)) {
-            setOrders(data.getOrdersByUser)
+        if (data && Array.isArray(data.getSoldOrdersByUser)) {
+            setOrders(data.getSoldOrdersByUser)
         }
     }, [data]);
 
@@ -30,7 +30,7 @@ export default function MarketPlaceMyOrders() {
 
     return (
         <div className={'container mt-5'}>
-            <h1>My Orders</h1>
+            <h1>My Sold</h1>
             {orders.length === 0 && (
                 <Empty />
             )}

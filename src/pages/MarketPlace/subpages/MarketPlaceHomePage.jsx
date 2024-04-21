@@ -19,7 +19,8 @@ import {CategoryList} from "../data/category.list.js";
 import {Empty} from "antd";
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import {useNavigate} from "react-router-dom";
-
+import { Subject, Subscription } from 'rxjs';
+const dataSource = new Subject();
 const MarketPlaceHomePage = () => {
 
     const { loading, error, data = [] } = useQuery(GET_ALL_GOODS);
@@ -42,6 +43,17 @@ const MarketPlaceHomePage = () => {
             setProducts(data.getAllGoods)
         }
     }, [data]);
+
+     // Observable
+    const [datas, setDatas] = useState('');
+    const [subscription, setSubscription] = useState(null);
+    useEffect(() => {
+
+        const sub = dataSource.subscribe(newData => setDatas(newData));
+        setSubscription(sub);
+
+        return () => sub.unsubscribe();
+    }, []);
 
     return (
         <div className="container mt-5">

@@ -75,6 +75,31 @@ export const GET_ORDERS_BY_USER = gql`
           }
           buyer
           contact
+          tradePlace
+        }
+      }
+      `;
+
+export const GET_SOLD_PRODUCTS = gql`
+      query {
+        getSoldOrdersByUser {
+          id
+          goods {
+                id
+                title
+                description
+                price
+                image
+                category
+                tradePlace
+                publishUser
+                contact
+                status
+                createdAt
+          }
+          buyer
+          contact
+          tradePlace
         }
       }
       `;

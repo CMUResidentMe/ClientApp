@@ -18,6 +18,7 @@ import {useMutation} from "@apollo/client";
 import {PUBLISH_SECOND_HANDLE_GOODS} from "../graphql/mutations.js";
 import {Spinner} from "react-bootstrap";
 import {message} from "antd";
+import {useNavigate} from "react-router-dom";
 
 const validationSchema = Yup.object({
     title: Yup.string().required('Title is required'),
@@ -30,7 +31,7 @@ const validationSchema = Yup.object({
 
 const MarketPlacePublishPage = () => {
     const [publish, { data, loading, error }] = useMutation(PUBLISH_SECOND_HANDLE_GOODS);
-
+    const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
             title: '',
@@ -49,6 +50,7 @@ const MarketPlacePublishPage = () => {
             }).then(r => {
                 message.success('Publish success');
                 formik.resetForm();
+                navigate(-1);
             });
         },
     });
@@ -165,18 +167,6 @@ const MarketPlacePublishPage = () => {
                             </Typography>
                         )}
                     </FormControl>
-                    <TextField
-                        fullWidth
-                        id="tradePlace"
-                        name="tradePlace"
-                        label="Trade Place"
-                        value={formik.values.tradePlace}
-                        onChange={formik.handleChange}
-                        onBlur={handleBlur}
-                        error={formik.touched.tradePlace && Boolean(formik.errors.tradePlace)}
-                        helperText={formik.touched.tradePlace && formik.errors.tradePlace}
-                        margin="normal"
-                    />
                     <TextField
                         fullWidth
                         id="contact"

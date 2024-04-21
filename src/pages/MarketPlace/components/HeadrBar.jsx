@@ -3,28 +3,12 @@ import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, Avatar
 import MenuIcon from '@mui/icons-material/Menu';
 import MarketIcon from '../../../assets/market-logo.png';
 import {useNavigate} from "react-router-dom";
+import MarketPlaceNav from "./MarketPlaceNav.jsx";
+import NavBar from "../../../components/NavBar.js";
+import {MenuBookOutlined} from "@mui/icons-material";
 const HeaderBar = () => {
     const navigate = useNavigate();
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [authed, setAuthed] = useState(Boolean(localStorage.getItem('token')));
-    const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const onLogin = () => {
-        navigate('/');
-    }
-
-    const onLogout = () => {
-        localStorage.removeItem('token');
-        setAuthed(false);
-        navigate('/');
-    }
-
+    const [isDrawerOpen, setDrawerOpen] = useState(false);
     return (
         <AppBar position="static">
             <Toolbar >
@@ -32,51 +16,14 @@ const HeaderBar = () => {
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Market Place
                 </Typography>
-                {authed ? (
-                    <div>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleMenu}
-                            color="inherit"
-                        >
-                            <Avatar  />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={() => {
-                                navigate(`/marketplace/my-goods`)
-                                handleClose();
-                            }}>My Products</MenuItem>
-                            <MenuItem onClick={() => {
-                                navigate(`/marketplace/my-orders`)
-                                handleClose();
-                            }}>My Orders</MenuItem>
-                            <MenuItem onClick={() => {
-                                handleClose();
-                                onLogout();
-                            }}>Log Out</MenuItem>
-                        </Menu>
-                    </div>
-                ) : (
-                    <Button color="inherit" onClick={onLogin}>Login</Button>
-                )}
+                <IconButton color="inherit" aria-label="menu" onClick={() => {
+                    setDrawerOpen(!isDrawerOpen)
+                }}>
+                    <MenuBookOutlined />
+                </IconButton>
+                <NavBar isDrawerOpen={isDrawerOpen} handleDrawerToggle={() => {
+                    setDrawerOpen(!isDrawerOpen);
+                }}/>
             </Toolbar>
         </AppBar>
     );

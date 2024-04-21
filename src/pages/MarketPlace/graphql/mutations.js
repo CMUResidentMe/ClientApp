@@ -18,10 +18,15 @@ export const UPDATE_SECOND_HANDLE_GOODS = gql`
     `;
 
 export const ORDER_GOODS = gql`
-    mutation buyGoods($goodsId: ID!, $contact: String!) {
-        buyGoods(goodsId: $goodsId, contact: $contact) {
+    mutation buyGoods($goodsId: ID!, $contact: String!, $tradePlace: String!) {
+        buyGoods(goodsId: $goodsId, contact: $contact, tradePlace: $tradePlace) {
           id
         }
      }
 `;
 
+export const DELETE_GOODS = gql`
+    mutation deleteGoods($id: ID!) {
+        deleteGoods(id: $id)
+      }
+`

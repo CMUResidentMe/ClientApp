@@ -22,7 +22,7 @@ import {
 } from "../graphql/mutations.js";
 import {Spinner} from "react-bootstrap";
 import {message} from "antd";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {GET_GOODS_BY_ID} from "../graphql/queries.js";
 
 const validationSchema = Yup.object({
@@ -35,7 +35,7 @@ const validationSchema = Yup.object({
 });
 
 const MarketPlaceUpdatePage = () => {
-
+    const navigate = useNavigate();
     const [update, { data: updateResult, loading: updateLoading, error: updateError }] = useMutation(UPDATE_SECOND_HANDLE_GOODS);
 
     const {goodsId} = useParams();
@@ -64,6 +64,7 @@ const MarketPlaceUpdatePage = () => {
                 }
             }).then(() => {
                 message.success('Update success');
+                navigate(-1);
             })
         },
     });
@@ -182,18 +183,6 @@ const MarketPlaceUpdatePage = () => {
                             </Typography>
                         )}
                     </FormControl>
-                    <TextField
-                        fullWidth
-                        id="tradePlace"
-                        name="tradePlace"
-                        label="Trade Place"
-                        value={formik.values.tradePlace}
-                        onChange={formik.handleChange}
-                        onBlur={handleBlur}
-                        error={formik.touched.tradePlace && Boolean(formik.errors.tradePlace)}
-                        helperText={formik.touched.tradePlace && formik.errors.tradePlace}
-                        margin="normal"
-                    />
                     <TextField
                         fullWidth
                         id="contact"

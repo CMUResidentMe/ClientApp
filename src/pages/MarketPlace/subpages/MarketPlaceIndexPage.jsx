@@ -7,6 +7,8 @@ import MarketplaceFooter from "./MarketplaceFooter.jsx";
 import { Card, Row, Col, Container, Image } from 'react-bootstrap';
 import {Box, Button, IconButton, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import NavBar from "../../../components/NavBar.js";
+import MarketPlaceNav from "../components/MarketPlaceNav.jsx";
 function MarketPlaceIndexPage() {
     const { loading, data } = {};
     const categories = data?.getAllListingCategories || [];
@@ -15,6 +17,8 @@ function MarketPlaceIndexPage() {
     const handleDrawerToggle = () => {
         setDrawerOpen(!isDrawerOpen);
     };
+
+
     return (
         <>
             <Container className={'mt-5'}>
@@ -22,9 +26,7 @@ function MarketPlaceIndexPage() {
                     <Typography variant="h4" component="h1" gutterBottom sx={{ fontFamily: 'Merriweather, serif', fontWeight: 'bold', marginTop: '0' }}>
                         Welcome to ResidentMe - MarketPlace
                     </Typography>
-                    <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle}>
-                        <MenuBookOutlined />
-                    </IconButton>
+                    <MarketPlaceNav />
                 </Box>
                 <Row className="px-4 my-4">
                     <Col sm={6}>
