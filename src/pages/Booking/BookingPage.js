@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, navigate } from "react";
 import { GraphQLClient, gql } from "graphql-request";
 import {
   Container,
@@ -25,6 +25,7 @@ import hangoutRoomImage from "../../assets/hangoutroom.jpeg";
 import ResidentMeLogo from "../../assets/logo.png";
 import styled from "@emotion/styled";
 import staticInitObject from "../../config/AllStaticConfig.js";
+import { useNavigate } from "react-router-dom";
 
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 
@@ -163,6 +164,7 @@ const calculateAvailableTimes = (bookedTimes, selectedDate) => {
 };
 
 const BookingPage = () => {
+  const navigate = useNavigate();
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [roomType, setRoomType] = useState("");
   const [date, setDate] = useState(new Date());
@@ -443,6 +445,22 @@ const BookingPage = () => {
             </Button>
           </DialogActions>
         </Dialog>
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#F2EFEA",
+            color: "black",
+            marginTop: 3,
+            padding: "10px 30px",
+            fontSize: "1rem",
+            "&:hover": {
+              backgroundColor: "#e0ded4",
+            },
+          }}
+          onClick={() => navigate("/cancel-booking")}
+        >
+          Cancel My Booking
+        </Button>
       </Container>
     </div>
   );
