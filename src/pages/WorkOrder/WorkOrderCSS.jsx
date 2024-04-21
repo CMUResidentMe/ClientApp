@@ -2,11 +2,11 @@ const styles = {
     container: {
       display: "flex",
       flexDirection: "column",
+      justifyContent: "center", // This centers the children vertically
       alignItems: "center",
-      justifyContent: "center",
-      minHeight: "100vh",
+      minHeight: "calc(100vh - <height_of_header>)", // Adjust the height of the header
       backgroundColor: "#f7f7f7",
-    },
+    },  
     logoContainer: {
       marginBottom: "2rem",
     },
@@ -22,7 +22,20 @@ const styles = {
       display: "flex",
       flexDirection: "column",
       width: "400px",
+      display: "flex",
+      flexDirection: "row", // Align child divs in a row
+      flexWrap: "wrap", // Allow wrapping if the form gets too wide
+      justifyContent: "space-between", // Distribute space between columns
+      width: "100%", // Use 100% if you want it to be responsive or set a max-width
+      maxWidth: "800px",
+      marginTop: "-10rem",
     },
+    formColumn: {
+      display: "flex",
+      flexDirection: "column",
+      flexBasis: "calc(50% - 10px)", // 50% of the form width minus the gap
+      marginBottom: "1rem",
+    },    
     heading: {
       textAlign: "center",
       color: "#333",
@@ -42,7 +55,8 @@ const styles = {
       padding: "0.5rem",
       borderRadius: "3px",
       border: "1px solid #ddd", // Light grey border
-      width: "100%", // Full-width inputs
+      width: "auto", // Let them naturally take up the needed space
+      flexGrow: 1, // Allow them to grow if there is space in the flex container
     },
     inputArea: {
       padding: "0.5rem",
