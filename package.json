@@ -23,11 +23,7 @@
     "formik": "^2.4.5",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
-<<<<<<< HEAD
-    "mui": "^0.0.1",
-=======
     "jwt-decode": "^4.0.0",
->>>>>>> main
     "react": "^18.0.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.0.0",
