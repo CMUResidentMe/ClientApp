@@ -164,7 +164,7 @@ const MarketPlaceProductDetailPage = () => {
                     )}
                     {status === 'sold' && (
                         <Button variant="contained" disabled>
-                            This product has been sold
+                            This product probably has been sold. Please contact the publisher.
                         </Button>
                     )}
                 </Col>
