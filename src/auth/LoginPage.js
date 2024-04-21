@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { gql, request } from "graphql-request";
 import ResidentMeLogo from "../ResidentMeLogo.PNG";
 import { Link, useNavigate } from "react-router-dom";
-import staticInitObject from '../config/AllStaticConfig.js';
+import staticInitObject from "../config/AllStaticConfig.js";
 //connect sock io after login sucess
 import { socketManager } from "../notification/socketManager.js";
 
@@ -10,6 +10,7 @@ const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
       token
+      username
       privilege
     }
   }
@@ -43,6 +44,7 @@ const LoginPage = () => {
         password: loginData.password,
       });
       localStorage.setItem("token", data.login.token); // Save the token
+      localStorage.setItem("username", data.login.username);
       localStorage.setItem("privilege", data.login.privilege);
       socketManager.connect(localStorage.getItem("token"));
 
