@@ -54,24 +54,24 @@ const HomePage = () => {
     setNotificationCount(0);
   };
 
-
-// const BackButtonHeight = '20px';
-const BackButtonContainer = styled.div`
-  width: 85%;
+  const BackButtonContainer = styled.div`
+  width: 100%;
   display: flex;
-  justify-content: flex-start; // Aligns the button to the left
+  justify-content: flex-start;
   position: relative;
   z-index: 2;
-  padding-top: 8rem;
+  padding-top: 1rem;
+  padding-left: 10rem;
 `;
 
+  const NotificationContainer = styled.div`
+    padding-left: 8rem;
+  `;
+
   socketManager.connect(localStorage.getItem("token"));
-
-
-
   return (
     <Box sx={{ flexGrow: 1, backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', overflow: 'hidden', minHeight: '100vh'}}>
-      <Container maxWidth="lg" sx={{ boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)', backgroundColor: 'rgba(255, 255, 255, 0.85)', paddingTop: '1rem', paddingBottom: '2rem', paddingLeft: '2rem', paddingRight: '2rem', borderRadius: '8px' }}>
+      <Container maxWidth="lg" sx={{ boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)', backgroundColor: 'rgba(255, 255, 255, 0.85)', paddingTop: '1rem', paddingBottom: '1rem', paddingLeft: '2rem', paddingRight: '2rem', borderRadius: '8px', marginBottom: '0'}}>
         <Box display="flex" justifyContent="flex-end" sx={{ marginBottom: '0.5rem' }}>
           <IconButton color="inherit" onClick={handleNotificationClick}>
             <Badge badgeContent={notificationCount} color="warning">
@@ -104,10 +104,12 @@ const BackButtonContainer = styled.div`
               <ArrowBack />
             </IconButton>
           </BackButtonContainer>
-          <NotificationTable notifications={notifications} />
+          <NotificationContainer>
+            <NotificationTable notifications={notifications} />
+          </NotificationContainer>
         </>
       ) : (
-        <Grid container spacing={3} justifyContent="center" sx={{ padding: 4 }}>
+        <Grid container spacing={3} justifyContent="center" sx={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
           {[
             { name: "Community Board", path: "/community-board", description: "A central place for residents to post discussions, share information, and stay connected with their neighbors.", image: communityImage },
             { name: "Marketplace", path: "/marketplace", description: "An organized platform for buying and selling goods within the community, promoting sustainability and convenience.", image: marketplaceImage },
@@ -115,7 +117,7 @@ const BackButtonContainer = styled.div`
             { name: "Booking", path: "/booking", description: "Easily browse, book, and manage reservations for community amenities like event spaces, meeting rooms, and more.", image: bookingImage }
           ].map((feature, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card sx={{ maxWidth: 345, background: 'rgba(255,255,255,0.8)' }}>
+              <Card sx={{ maxWidth: 345, background: 'rgba(255,255,255,0.8)', margin: 'auto' }}>
                 <CardActionArea onClick={() => handleCardClick(feature.path)}>
                   <CardMedia component="img" height="140" image={feature.image} alt={feature.name} />
                   <CardContent>
