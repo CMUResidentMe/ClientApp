@@ -10,7 +10,7 @@ import { queryWorkOrdersByOwner } from './ResidentGraphQL.js';
 const HeaderHeight = '60px';
 
 const ContentContainer = styled.div`
-  padding-top: 10px;
+  padding-top: 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;

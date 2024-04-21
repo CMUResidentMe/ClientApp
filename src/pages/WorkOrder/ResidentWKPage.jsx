@@ -75,7 +75,7 @@ const ContentContainer = styled.div`
   align-items: center;
   min-height: calc(100vh - ${HeaderHeight});
   background-color: "#f7f7f7";
-  padding-top: 20px;
+  padding-top: 0px;
 `;
 
 const Logo = styled.img`
@@ -198,7 +198,7 @@ const ResidentWKPage = () => {
       <Header>
         <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
         <AppName>Work Order</AppName>
-        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-400px' }}>
+        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-300px' }}>
           <Badge badgeContent={notificationCount} color="warning">
             <NotificationsIcon />
           </Badge>

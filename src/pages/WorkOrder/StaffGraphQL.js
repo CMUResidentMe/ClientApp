@@ -62,4 +62,13 @@ query workOrdersByStatus($status: WorkStatus!) {
 }
 `;
 
-export {queryWKsByAssignedStaff, workOrdersByStatus};
+const updateWorkOrderStatus = gql`
+mutation updateWorkOrderStatus($uuid: String!, $status: WorkStatus!) {
+  updateWorkOrderStatus(uuid: $uuid, status: $status) {
+    uuid
+    status
+  }
+}
+`;
+
+export {queryWKsByAssignedStaff, workOrdersByStatus, updateWorkOrderStatus};
