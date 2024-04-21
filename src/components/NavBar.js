@@ -12,16 +12,6 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
     navigate('/');
   };
 
-  // const handleNavItemClick = (path) => {
-  //   const isAuthenticated = true; 
-
-  //   if (isAuthenticated) {
-  //     navigate(path);
-  //   } else {
-  //     navigate('/login');
-  //   }
-  // };
-
   const handleNavItemClick = (path) => {
     if (path === '/logout') {
       handleLogout();
@@ -74,12 +64,6 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
                 <EventOutlined />
               </ListItemIcon>
               <ListItemText primary="Booking" />
-            </ListItem>
-            <ListItem onClick={() => handleNavItemClick('/notification')}>
-              <ListItemIcon>
-                <NotificationsOutlined />
-              </ListItemIcon>
-              <ListItemText primary="Notifications" />
             </ListItem>
             <ListItem onClick={() => handleNavItemClick('/home')}>
               <ListItemIcon>
