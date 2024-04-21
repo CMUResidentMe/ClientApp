@@ -55,7 +55,7 @@ const MarketPlaceProductDetailPage = () => {
                 tradePlace
             }
         }).then(() => {
-            message.success('Order placed successfully');
+            message.success('You have express your interest successfully');
             setContactOfBuyer('');
             setTradePlace('');
         })
@@ -83,10 +83,10 @@ const MarketPlaceProductDetailPage = () => {
         <Container className="my-5">
 
             <Dialog open={openOrderForm} fullWidth onClose={() => setOpenOrderForm(false)}>
-                <DialogTitle>Buy Product</DialogTitle>
+                <DialogTitle>Express Interest</DialogTitle>
                 <DialogContent>
                     <Typography gutterBottom>
-                        Fill in your contact information below and click 'Order' to proceed with your purchase.
+                        Fill in your contact information below and click 'Express Interest' to proceed with your purchase.
                     </Typography>
                     <TextField
                         autoFocus
@@ -105,13 +105,13 @@ const MarketPlaceProductDetailPage = () => {
                         autoFocus
                         margin="dense"
                         id="tradePlace"
-                        label="Trade Place"
+                        label="Trade Location"
                         type="text"
                         fullWidth
                         variant="outlined"
                         value={tradePlace}
                         onChange={(e) => setTradePlace(e.target.value)}
-                        placeholder="Enter trade place"
+                        placeholder="Enter Your Ideal Trade Location"
                     />
                 </DialogContent>
                 <DialogActions>
@@ -119,7 +119,7 @@ const MarketPlaceProductDetailPage = () => {
                         Cancel
                     </Button>
                     <Button onClick={handleOrder} color="primary">
-                        Order
+                        Express Interest
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -151,7 +151,7 @@ const MarketPlaceProductDetailPage = () => {
                     </Typography>
                     <Typography variant="body1" gutterBottom>
                         Status: <span className="badge bg-success">
-                        {status}
+                        {status === 'sold' ? 'Sold Probably' : status}
                     </span>
                     </Typography>
                     {!isOwner && status !== 'sold' && (
@@ -159,7 +159,7 @@ const MarketPlaceProductDetailPage = () => {
                             onClick={() => setOpenOrderForm(true)}
                             startIcon={<ShoppingBasketIcon />}
                             variant="contained" color="primary" className={'mt-5'}>
-                            Order
+                            Express Interest
                         </Button>
                     )}
                     {status === 'sold' && (

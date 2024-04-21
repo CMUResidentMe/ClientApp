@@ -30,7 +30,9 @@ export default function MarketPlaceMyOrders() {
 
     return (
         <div className={'container mt-5'}>
-            <h1>My Orders</h1>
+            <h2 style={{ fontFamily: 'Roboto, sans-serif', color: '#A67B5B', fontWeight: '500', fontSize: '28px', textAlign: 'left', marginBottom: '20px' }}>
+                My Orders
+            </h2>
             {orders.length === 0 && (
                 <Empty />
             )}
@@ -43,7 +45,7 @@ export default function MarketPlaceMyOrders() {
                                 <TableCell align="right">Description</TableCell>
                                 <TableCell align="right">Price</TableCell>
                                 <TableCell align="right">Category</TableCell>
-                                <TableCell align="right">Trade Place</TableCell>
+                                <TableCell align="right">Trade Location</TableCell>
                                 <TableCell align="right">Contact</TableCell>
                             </TableRow>
                         </TableHead>
