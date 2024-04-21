@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { GraphQLClient, gql } from "graphql-request";
-import { Container, Box, IconButton, Typography } from "@mui/material";
+import {
+  Container,
+  Box,
+  IconButton,
+  Typography,
+  Button,
+  Dialog,
+  TextField,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import Calendar from "react-calendar";
 import Navbar from "../../components/NavBar.js";
 import {
@@ -58,6 +70,35 @@ const GET_ROOMS_BY_TYPE = gql`
     }
   }
 `;
+
+const CREATE_BOOKING_MUTATION = gql`
+  mutation CreateBooking(
+    $room_id: ID!
+    $date: String!
+    $start_time: String!
+    $end_time: String!
+  ) {
+    createBooking(
+      room_id: $room_id
+      date: $date
+      start_time: $start_time
+      end_time: $end_time
+    ) {
+      id
+      name
+      room_type
+      bookedTimes {
+        date
+        startTime
+        endTime
+        user_id
+        user_name
+        is_confirmed
+      }
+    }
+  }
+`;
+
 const calculateAvailableTimes = (bookedTimes, selectedDate) => {
   // Ensure we are working with the start of the day for comparison to ignore time part
   const dayStart = new Date(selectedDate.setHours(0, 0, 0, 0));
@@ -126,6 +167,10 @@ const BookingPage = () => {
   const [roomType, setRoomType] = useState("");
   const [date, setDate] = useState(new Date());
   const [rooms, setRooms] = useState([]);
+  const [bookingDialogOpen, setBookingDialogOpen] = useState(false);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   useEffect(() => {
     if (!roomType) return;
@@ -139,8 +184,6 @@ const BookingPage = () => {
     client
       .request(GET_ROOMS_BY_TYPE, { room_type: roomType })
       .then((data) => {
-        console.log("Data received from server RAW data:", data);
-        console.log("Data received from server:", data.roomsByType);
         const updatedRooms = data.roomsByType.map((room) => ({
           ...room,
           availableTimes: calculateAvailableTimes(room.bookedTimes, date),
@@ -150,8 +193,26 @@ const BookingPage = () => {
       .catch((error) => console.error("Error fetching rooms:", error));
   }, [roomType, date]);
 
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!isDrawerOpen);
+  const handleCreateBooking = async () => {
+    const token = localStorage.getItem("token");
+    const headers = {
+      authorization: token,
+    };
+    const client = new GraphQLClient(graphqlAPI, { headers });
+    try {
+      await client.request(CREATE_BOOKING_MUTATION, {
+        room_id: selectedRoomId,
+        date: date.toISOString().split("T")[0],
+        start_time: startTime,
+        end_time: endTime,
+      });
+      alert("Booking successful!");
+      setBookingDialogOpen(false);
+      setDate(new Date(date)); // Refresh to show updated times
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      alert("Failed to create booking!");
+    }
   };
 
   const handleRoomTypeSelection = (type) => {
@@ -162,9 +223,19 @@ const BookingPage = () => {
     };
     setRoomType(typeMap[type]);
   };
+
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
+
+  const handleOpenBookingDialog = (room_id, time) => {
+    setSelectedRoomId(room_id);
+    const [start, end] = time.split(" - ");
+    setStartTime(start);
+    setEndTime(end);
+    setBookingDialogOpen(true);
+  };
+
   return (
     <div>
       <Header>
@@ -172,7 +243,7 @@ const BookingPage = () => {
         <AppName>Book Rooms</AppName>
         <IconButton
           color="inherit"
-          onClick={handleDrawerToggle}
+          onClick={() => setDrawerOpen(!isDrawerOpen)}
           sx={{ marginLeft: "auto" }}
         >
           <NotificationsIcon />
@@ -180,14 +251,14 @@ const BookingPage = () => {
         <IconButton
           color="inherit"
           aria-label="menu"
-          onClick={handleDrawerToggle}
+          onClick={() => setDrawerOpen(!isDrawerOpen)}
           sx={{ marginLeft: "20px" }}
         >
           <MenuBookOutlined />
         </IconButton>
         <Navbar
           isDrawerOpen={isDrawerOpen}
-          handleDrawerToggle={handleDrawerToggle}
+          handleDrawerToggle={() => setDrawerOpen(!isDrawerOpen)}
         />
       </Header>
       <Container
@@ -290,7 +361,12 @@ const BookingPage = () => {
                   <Typography variant="h6">{room.name}</Typography>
                   {room.availableTimes.length ? (
                     room.availableTimes.map((time, index) => (
-                      <Typography key={index}>{time} (Available)</Typography>
+                      <Button
+                        key={index}
+                        onClick={() => handleOpenBookingDialog(room.id, time)}
+                      >
+                        {time} (Book Now)
+                      </Button>
                     ))
                   ) : (
                     <Typography>No available times</Typography>
@@ -302,6 +378,49 @@ const BookingPage = () => {
             )}
           </Box>
         )}
+        <Dialog
+          open={bookingDialogOpen}
+          onClose={() => setBookingDialogOpen(false)}
+        >
+          <DialogTitle>Book Your Time</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please confirm your booking times within the selected time slot.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="start_time"
+              label="Start Time"
+              type="time"
+              fullWidth
+              variant="standard"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+            />
+            <TextField
+              margin="dense"
+              id="end_time"
+              label="End Time"
+              type="time"
+              fullWidth
+              variant="standard"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setBookingDialogOpen(false)}>Cancel</Button>
+            <Button
+              onClick={() =>
+                handleCreateBooking(selectedRoomId, startTime, endTime)
+              }
+              color="primary"
+            >
+              Confirm Booking
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </div>
   );
