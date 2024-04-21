@@ -26,7 +26,6 @@ function MarketPlaceIndexPage() {
                     <Typography variant="h4" component="h1" gutterBottom sx={{ fontFamily: 'Merriweather, serif', fontWeight: 'bold', marginTop: '0' }}>
                         Welcome to ResidentMe - MarketPlace
                     </Typography>
-                    <MarketPlaceNav />
                 </Box>
                 <Row className="px-4 my-4">
                     <Col sm={6}>

@@ -57,6 +57,11 @@ export default function MarketPlaceNav() {
                         onClose={handleClose}
                     >
                         <MenuItem onClick={() => {
+                            navigate(`/marketplace/playground`)
+                            handleClose();
+                        }
+                        }>MarketPlace</MenuItem>
+                        <MenuItem onClick={() => {
                             navigate(`/marketplace/my-goods`)
                             handleClose();
                         }}>My Products</MenuItem>
@@ -68,10 +73,15 @@ export default function MarketPlaceNav() {
                             navigate(`/marketplace/my-sold`)
                             handleClose();
                         }}>My Sold</MenuItem>
-                        <MenuItem onClick={() => {
+                        <MenuItem onClick={() => {  
+                            navigate(`/marketplace`)
+                            handleClose();
+                        }
+                        }>About MarketPlace</MenuItem>
+                        {/* <MenuItem onClick={() => {
                             handleClose();
                             onLogout();
-                        }}>Log Out</MenuItem>
+                        }}>Log Out</MenuItem> */}
                     </Menu>
                 </div>
             ) : (

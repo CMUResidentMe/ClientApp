@@ -1,5 +1,5 @@
 import {Outlet} from "react-router-dom";
-import HeaderBar from "../components/HeadrBar.jsx";
+import HeaderBar from "../components/HeaderBar.jsx";
 
 
 const MarketPlaceLayout = () => {

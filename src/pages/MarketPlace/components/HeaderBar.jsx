@@ -14,8 +14,9 @@ const HeaderBar = () => {
             <Toolbar >
                 <img onClick={() => navigate('/marketplace')} className={'me-2'} width={40} src={MarketIcon}/>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Market Place
+                    ResidentMe - MarketPlace
                 </Typography>
+                <MarketPlaceNav />
                 <IconButton color="inherit" aria-label="menu" onClick={() => {
                     setDrawerOpen(!isDrawerOpen)
                 }}>
