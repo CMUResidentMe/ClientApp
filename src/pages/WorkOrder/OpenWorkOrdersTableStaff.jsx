@@ -35,7 +35,7 @@ const modalStyle = {
 const createColumns = (handleAddClick) => [
   { field: 'id', headerName: 'ID', width: 0, resizable: false, headerAlign: 'center', },
   {
-    field: 'add', headerName: 'Assign', sortable: false, filterable: false, width: 100, headerAlign: 'center', cellClassName: 'firstColumnPadding',
+    field: 'add', headerName: 'Assign', sortable: false, filterable: false, width: 70, headerAlign: 'center', cellClassName: 'firstColumnPadding',
     renderCell: (params) => (
       <GridActionsCellItem
         icon={<AddIcon />}
@@ -45,8 +45,9 @@ const createColumns = (handleAddClick) => [
       />
     )
   },
-  { field: 'semanticId', headerName: '#', width: 100, resizable: false, headerAlign: 'center', },
-  { field: 'workType', headerName: 'Work Type', width: 250, resizable: false, headerAlign: 'center', },
+  { field: 'semanticId', headerName: 'Work Order ID', width: 120, resizable: false, headerAlign: 'center', },
+  { field: 'roomNumber', headerName: 'Room Number', width: 120, resizable: false, headerAlign: 'center', },
+  { field: 'workType', headerName: 'Work Type', width: 160, resizable: false, headerAlign: 'center', },
   { field: 'priority', headerName: 'Priority', width: 100, resizable: false, headerAlign: 'center', },
   { field: 'preferredTime', headerName: 'Preferred Time', width: 150, align: 'right', resizable: false, headerAlign: 'center', },
   { field: 'entryPermission', headerName: 'Entry Permission', width: 200, align: 'right', resizable: false, headerAlign: 'center', },
@@ -84,7 +85,13 @@ const OpenWorkOrdersStaffTable = (props) => {
     data.workOrdersByStatus.forEach((row) => {
       let newRow = {};
       columns.forEach((column) => {
-        newRow[column.field] = column.field === 'id' ? row['uuid'] : row[column.field];
+        if (column.field === 'id') {
+          newRow[column.field] = row['uuid'];
+        } else if (column.field === 'roomNumber') {
+          newRow[column.field] = row['ownerInfo']['roomNumber'];
+        } else {
+          newRow[column.field] = row[column.field];
+        }
       });
       workOrdersUnassigned.push(newRow);
       workOrdersMap[row['uuid']] = row;

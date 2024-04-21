@@ -6,11 +6,23 @@ query workOrdersByOwner {
     uuid
     semanticId
     owner
+    ownerInfo { 
+      firstName
+      lastName
+      username
+      roomNumber
+    }
     workType
     priority
     status
     detail
     assignedStaff
+    staffInfo {
+      firstName
+      lastName
+      username
+      roomNumber
+    }
     accessInstruction
     preferredTime
     entryPermission

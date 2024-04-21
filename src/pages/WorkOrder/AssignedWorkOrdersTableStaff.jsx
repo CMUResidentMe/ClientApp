@@ -35,7 +35,7 @@ const modalStyle = {
 const createColumns = (handleDeleteClick) => [
   { field: 'id', headerName: 'ID', width: 0, resizable: false, headerAlign: 'center', },
   {
-    field: 'delete', headerName: 'Delete', sortable: false, filterable: false, width: 100, headerAlign: 'center', cellClassName: 'firstColumnPadding',
+    field: 'delete', headerName: 'Delete', sortable: false, filterable: false, width: 70, headerAlign: 'center', cellClassName: 'firstColumnPadding',
     renderCell: (params) => (
       <GridActionsCellItem
         icon={<DeleteForeverIcon />}
@@ -45,8 +45,9 @@ const createColumns = (handleDeleteClick) => [
       />
     )
   },
-  { field: 'semanticId', headerName: '#', width: 100, resizable: false, headerAlign: 'center', },
-  { field: 'workType', headerName: 'Work Type', width: 250, resizable: false, headerAlign: 'center', },
+  { field: 'semanticId', headerName: 'WorkOrder ID', width: 120, resizable: false, headerAlign: 'center', },
+  { field: 'roomNumber', headerName: 'Room Number', width: 120, resizable: false, headerAlign: 'center', },
+  { field: 'workType', headerName: 'Work Type', width: 160, resizable: false, headerAlign: 'center', },
   { field: 'priority', headerName: 'Priority', width: 100, resizable: false, headerAlign: 'center', },
   { field: 'preferredTime', headerName: 'Preferred Time', width: 150, align: 'right', resizable: false, headerAlign: 'center', },
   { field: 'entryPermission', headerName: 'Entry Permission', width: 200, align: 'right', resizable: false, headerAlign: 'center', },
@@ -84,7 +85,13 @@ const AssignedWorkOrdersStaffTable = (props) => {
     data.workOrdersByAssignedStaff.forEach((row) => {
       let newRow = {};
       columns.forEach((column) => {
-        newRow[column.field] = column.field === 'id' ? row['uuid'] : row[column.field];
+        if(column.field === 'id') {
+          newRow[column.field] = row['uuid'];
+        } else if(column.field === 'roomNumber') {
+          newRow[column.field] = row['ownerInfo']['roomNumber'];
+        } else {
+          newRow[column.field] = row[column.field];
+        }
       });
       workOrdersByAssignedStaff.push(newRow);
       workOrdersMap[row['uuid']] = row;
