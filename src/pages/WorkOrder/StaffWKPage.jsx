@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconButton, Box, Grid } from '@mui/material';
+import { IconButton, Badge } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -12,7 +12,7 @@ import ResidentMeLogo from "../../assets/logo.png";
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import newOrderIcon from '../../assets/newWorkOrder.png';
 import currentOrdersIcon from '../../assets/currentWorkOrder.png';
-import NotificationListener from '../../notification/NotificationListener.js';
+import useNotificationListener from '../../notification/NotificationListener.js';
 
 const StyledServiceLink = styled('div')`
   display: flex;
@@ -41,7 +41,7 @@ const ServiceContainer = styled.div`
   margin-top: 100px; // Adjust as needed
 `;
 
-const HeaderHeight = '60px';
+const HeaderHeight = '100px';
 
 const Header = styled.div`
   position: fixed;
@@ -94,12 +94,16 @@ const StaffWKPage = () => {
   const [view, setView] = useState('landing');
   const [notifications, setNotifications] = React.useState([]);
   const [isDrawerOpen, setDrawerOpen] = React.useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   const workorderUpdateCB = (event) => {
-    setNotifications([...notifications, event]);
+    console.log("Received notification:", event);
+    setNotifications(prevNotifications => [...prevNotifications, event]);
+    setNotificationCount(prevCount => prevCount + 1);
   };
 
-  NotificationListener(workorderUpdateCB);
+
+  useNotificationListener(workorderUpdateCB);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
@@ -107,6 +111,7 @@ const StaffWKPage = () => {
 
   const handleNotificationClick = () => {
     setView('notifications');
+    setNotificationCount(0);
   };
 
   const services = [
@@ -183,8 +188,10 @@ const StaffWKPage = () => {
       <Header>
         <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
         <AppName>Work Order</AppName>
-        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-480px' }}>
-          <NotificationsIcon />
+        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-300px' }}>
+          <Badge badgeContent={notificationCount} color="warning">
+            <NotificationsIcon />
+          </Badge>
         </IconButton>
         <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: '20px' }}>
           <DehazeIcon />

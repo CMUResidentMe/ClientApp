@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconButton } from '@mui/material';
+import { IconButton, Badge } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import WorkOrderNewForm from './WorkOrderNewForm.jsx';
@@ -12,8 +12,7 @@ import newOrderIcon from '../../assets/newWorkOrder.png';
 import currentOrdersIcon from '../../assets/currentWorkOrder.png';
 import ResidentMeLogo from "../../assets/logo.png";
 import { socketManager } from "../../notification/socketManager.js";
-import staticInitObject from '../../config/AllStaticConfig.js';
-import NotificationListener from '../../notification/NotificationListener.js';
+import useNotificationListener from '../../notification/NotificationListener.js';
 
 const StyledServiceLink = styled('div')`
   display: flex;
@@ -42,7 +41,7 @@ const ServiceContainer = styled.div`
   margin-top: 100px; // Adjust as needed
 `;
 
-const HeaderHeight = '60px';
+const HeaderHeight = '100px';
 
 const Header = styled.div`
   position: fixed;
@@ -76,7 +75,7 @@ const ContentContainer = styled.div`
   align-items: center;
   min-height: calc(100vh - ${HeaderHeight});
   background-color: "#f7f7f7";
-  padding-top: 20px;
+  padding-top: 0px;
 `;
 
 const Logo = styled.img`
@@ -96,20 +95,23 @@ const ResidentWKPage = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   const [notifications, setNotifications] = React.useState([]);
-  const handleSuccessfulSubmission = () => {
+  const [notificationCount, setNotificationCount] = useState(0);
 
+  const handleSuccessfulSubmission = () => {
     setView('table');
   };
 
   //selected workOrder
   const [currentWK, setCurrentWK] = React.useState(undefined);
-
-  const workorderUpdateCB = async (event) => {
-    console.log("received notification");
-    console.log(event);
-    notifications.push(event);
+  
+  const workorderUpdateCB = (event) => {
+    console.log("Received notification:", event);
+    setNotifications(prevNotifications => [...prevNotifications, event]);
+    setNotificationCount(prevCount => prevCount + 1);
   };
-  NotificationListener(workorderUpdateCB);
+  
+  useNotificationListener(workorderUpdateCB);
+
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
@@ -117,6 +119,7 @@ const ResidentWKPage = () => {
 
   const handleNotificationClick = () => {
     setView('notifications');
+    setNotificationCount(0);
   };
 
   const services = [
@@ -195,8 +198,10 @@ const ResidentWKPage = () => {
       <Header>
         <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
         <AppName>Work Order</AppName>
-        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-400px' }}>
-          <NotificationsIcon />
+        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-300px' }}>
+          <Badge badgeContent={notificationCount} color="warning">
+            <NotificationsIcon />
+          </Badge>
         </IconButton>
         <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: '20px' }}>
           <DehazeIcon />

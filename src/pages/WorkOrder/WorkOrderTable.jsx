@@ -15,7 +15,7 @@ const ContentContainer = styled.div`
   align-items: center;
   min-height: 80vh;
   background-color: "#f7f7f7";
-  padding-top: 10px;
+  padding-top: -20px;
   width: 90%;
 `;
 
