@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography, IconButton, Button } from "@mui/material";
+import {
+  Container,
+  Typography,
+  IconButton,
+  Button,
+  Paper,
+} from "@mui/material";
 import styled from "@emotion/styled";
 import {
   Notifications as NotificationsIcon,
@@ -35,6 +41,11 @@ const AppName = styled.h1`
   font-size: 1.5rem;
   font-weight: bold;
   margin-left: 15px;
+`;
+
+const StyledPaper = styled(Paper)`
+  margin-bottom: 20px;
+  padding: 20px;
 `;
 
 const CancelBookingPage = () => {
@@ -117,23 +128,24 @@ const CancelBookingPage = () => {
         </IconButton>
         <Navbar />
       </Header>
-      <Container style={{ paddingTop: "120px", marginTop: "100px" }}>
+      <Container style={{ paddingTop: "140px", marginTop: "100px" }}>
         {bookings.length > 0 ? (
           bookings.map((booking) => (
-            <div key={booking.booking_id}>
-              <Typography>
+            <StyledPaper key={booking.booking_id} elevation={3}>
+              <Typography variant="h6">
                 {booking.date} from {booking.startTime} to {booking.endTime} -{" "}
                 {booking.room_name}
               </Typography>
               <Button
+                variant="outlined"
+                color="error"
                 onClick={() =>
                   cancelBooking(booking.room_id, booking.booking_id)
                 }
-                color="error"
               >
                 Cancel Booking
               </Button>
-            </div>
+            </StyledPaper>
           ))
         ) : (
           <Typography>No bookings found</Typography>
