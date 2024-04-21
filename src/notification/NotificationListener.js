@@ -13,11 +13,13 @@ export default function useNotificationListener(workorderUpdateCB) {
         socketManager.getIo().on(staticInitObject.workorderCreated, handleNotification);
         socketManager.getIo().on(staticInitObject.workorderChanged, handleNotification);
         socketManager.getIo().on(staticInitObject.workorderDeleted, handleNotification);
+        // TODO: add more events to listen to.
     
         return () => {
           socketManager.getIo().off(staticInitObject.workorderCreated, handleNotification);
           socketManager.getIo().off(staticInitObject.workorderChanged, handleNotification);
           socketManager.getIo().off(staticInitObject.workorderDeleted, handleNotification);
+          // TODO: add more events to destroy.
         };
       }, [workorderUpdateCB]);
 }
