@@ -6,8 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Backdrop, IconButton, Box } from '@mui/material';
 import WorkOrderForm from './WorkOrderForm';
 import { ArrowBack } from '@mui/icons-material';
-
-const HeaderHeight = '60px';
+import { queryWorkOrdersByOwner } from './ResidentGraphQL.js'
 
 const ContentContainer = styled.div`
   display: flex;
@@ -16,7 +15,7 @@ const ContentContainer = styled.div`
   align-items: center;
   min-height: 80vh;
   background-color: "#f7f7f7";
-  padding-top: 20px;
+  padding-top: 10px;
   width: 90%;
 `;
 
@@ -44,8 +43,8 @@ const createColumns = (handleEditClick) => [
       />
     )
   },
-  { field: 'semanticId', headerName: '#', width: 100, resizable: false, headerAlign: 'center', },
-  { field: 'workType', headerName: 'Work Type', width: 250, resizable: false, headerAlign: 'center', },
+  { field: 'semanticId', headerName: 'Work Order ID', width: 150, resizable: false, headerAlign: 'center', },
+  { field: 'workType', headerName: 'Work Type', width: 200, resizable: false, headerAlign: 'center', },
   { field: 'priority', headerName: 'Priority', width: 100, resizable: false, headerAlign: 'center', },
   { field: 'preferredTime', headerName: 'Preferred Time', width: 150, align: 'right', resizable: false, headerAlign: 'center', },
   { field: 'entryPermission', headerName: 'Entry Permission', width: 200, align: 'right', resizable: false, headerAlign: 'center', },
@@ -75,10 +74,9 @@ const WorkOrderTable = (props) => {
 
   const columns = createColumns(handleEditClick);
 
-  console.log("GraphQL Query:", props.graphQLStr);
   let workOrdersMap = {};
   // fetch data from api gateway
-  const { loading, error, data } = useQuery(props.graphQLStr);
+  const { loading, error, data } = useQuery(queryWorkOrdersByOwner);
 
   if (loading) console.log('Querying...');
   if (error) console.log(`Query error! ${error.message}`);
@@ -89,13 +87,41 @@ const WorkOrderTable = (props) => {
       // console.log("row: " + row);
       let newRow = {};
       columns.forEach((column) => {
-        newRow[column.field] = column.field === 'id' ? row['uuid'] : row[column.field];
+        /*
+               {        
+
+                  "uuid": "6623eb3b8c3dae462674039f",        
+                  "owner": "661bff26a8293a3ed2fd06ee",        
+                  "ownerInfo": {          
+                      "firstName": "r1",          
+                      "lastName": "r1",          
+                      "username": "r1"        },        
+                  "preferredTime": "2024-04-21",        
+                  "priority": "Low",        
+                  "semanticId": "WO-68",        
+                  "staffInfo": {          
+                      "firstName": "s1",          
+                      "lastName": "s1",          
+                      "username": "s1"        },        
+                  "assignedStaff": "661c076da8293a3ed2fd06f4"      
+                }
+        */
+        if (column.field === 'id') {
+          newRow[column.field] = row['uuid'];
+        } else if (column.field === 'assignedStaff') {
+          if (row['staffInfo'] && row['staffInfo']['firstName'] && row['staffInfo']['lastName']) {
+            newRow[column.field] = `${row['staffInfo']['firstName']} ${row['staffInfo']['lastName']}`;
+          } else {
+            newRow[column.field] = '';  // Default or fallback name if staffInfo is incomplete or missing
+          }
+        } else {
+          newRow[column.field] = row[column.field];
+        }
       });
       workOrdersByOwner.push(newRow);
       workOrdersMap[row['uuid']] = row;
     });
   };
-
 
   function ShowWorkOrders() {
     return <ContentContainer>

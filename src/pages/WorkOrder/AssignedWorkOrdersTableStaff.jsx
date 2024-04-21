@@ -6,6 +6,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Backdrop, IconButton, Box } from '@mui/material';
 import WorkOrderFormStaff from './WorkOrderFormStaff';
 import { ArrowBack } from '@mui/icons-material';
+import { queryWKsByAssignedStaff } from './StaffGraphQL.js'
 
 const HeaderHeight = '60px';
 
@@ -14,10 +15,10 @@ const ContentContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  min-height: 75vh;
   background-color: "#f7f7f7";
-  padding-top: 20px;
-  width: 90%;
+  padding-top: 10px;
+  width: 70%;
 `;
 
 const modalStyle = {
@@ -34,7 +35,7 @@ const modalStyle = {
 const createColumns = (handleDeleteClick) => [
   { field: 'id', headerName: 'ID', width: 0, resizable: false, headerAlign: 'center', },
   {
-    field: 'delete', headerName: 'Delete', sortable: false, filterable: false, width: 100, headerAlign: 'center', cellClassName: 'firstColumnPadding',
+    field: 'delete', headerName: 'Delete', sortable: false, filterable: false, width: 70, headerAlign: 'center', cellClassName: 'firstColumnPadding',
     renderCell: (params) => (
       <GridActionsCellItem
         icon={<DeleteForeverIcon />}
@@ -44,14 +45,14 @@ const createColumns = (handleDeleteClick) => [
       />
     )
   },
-  { field: 'semanticId', headerName: '#', width: 100, resizable: false, headerAlign: 'center', },
-  { field: 'workType', headerName: 'Work Type', width: 250, resizable: false, headerAlign: 'center', },
+  { field: 'semanticId', headerName: 'WorkOrder ID', width: 120, resizable: false, headerAlign: 'center', },
+  { field: 'roomNumber', headerName: 'Room Number', width: 120, resizable: false, headerAlign: 'center', },
+  { field: 'workType', headerName: 'Work Type', width: 160, resizable: false, headerAlign: 'center', },
   { field: 'priority', headerName: 'Priority', width: 100, resizable: false, headerAlign: 'center', },
   { field: 'preferredTime', headerName: 'Preferred Time', width: 150, align: 'right', resizable: false, headerAlign: 'center', },
   { field: 'entryPermission', headerName: 'Entry Permission', width: 200, align: 'right', resizable: false, headerAlign: 'center', },
   { field: 'createTime', headerName: 'Submitted Time', width: 150, resizable: false, cellClassName: 'lastColumnPadding', headerAlign: 'center', },
 ];
-
 
 const AssignedWorkOrdersStaffTable = (props) => {
   document.body.style.overflow = 'hidden';
@@ -73,9 +74,8 @@ const AssignedWorkOrdersStaffTable = (props) => {
 
   const columns = createColumns(handleDeleteClick);
 
-  console.log("GraphQL Query:", props.graphQLStr);
   let workOrdersMap = {};
-  const { loading, error, data } = useQuery(props.graphQLStr);
+  const { loading, error, data } = useQuery(queryWKsByAssignedStaff);
 
   if (loading) console.log('Querying...');
   if (error) console.log(`Query error! ${error.message}`);
@@ -85,7 +85,13 @@ const AssignedWorkOrdersStaffTable = (props) => {
     data.workOrdersByAssignedStaff.forEach((row) => {
       let newRow = {};
       columns.forEach((column) => {
-        newRow[column.field] = column.field === 'id' ? row['uuid'] : row[column.field];
+        if(column.field === 'id') {
+          newRow[column.field] = row['uuid'];
+        } else if(column.field === 'roomNumber') {
+          newRow[column.field] = row['ownerInfo']['roomNumber'];
+        } else {
+          newRow[column.field] = row[column.field];
+        }
       });
       workOrdersByAssignedStaff.push(newRow);
       workOrdersMap[row['uuid']] = row;
@@ -165,11 +171,14 @@ const AssignedWorkOrdersStaffTable = (props) => {
             }}
             onClick={(event) => event.stopPropagation()}
           >
-            <WorkOrderFormStaff
+            {workOrdersMap[currentWorkOrder.id] && 
+              <WorkOrderFormStaff
+              isAssign={false}
               currentWK={workOrdersMap[currentWorkOrder.id]}
               closeModal={closeModal}
               isDelete={isDelete}
             />
+            }
           </Box>
         </Backdrop>
       )

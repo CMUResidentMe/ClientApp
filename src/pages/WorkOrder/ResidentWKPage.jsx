@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconButton } from '@mui/material';
+import { IconButton, Badge } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import WorkOrderNewForm from './WorkOrderNewForm.jsx';
@@ -7,15 +7,12 @@ import WorkOrderTable from './WorkOrderTable.jsx';
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Navbar from '../../components/NavBar.js';
-import { gql } from '@apollo/client';
 import NotificationTable from '../Notification/NotificationTable.jsx';
-
-
 import newOrderIcon from '../../assets/newWorkOrder.png';
 import currentOrdersIcon from '../../assets/currentWorkOrder.png';
 import ResidentMeLogo from "../../assets/logo.png";
 import { socketManager } from "../../notification/socketManager.js";
-import workOrderListen from '../../notification/workOrderListener.js';
+import useNotificationListener from '../../notification/NotificationListener.js';
 
 const StyledServiceLink = styled('div')`
   display: flex;
@@ -35,7 +32,6 @@ const StyledServiceLink = styled('div')`
     transform: scale(1.05);
   }
 `;
-
 
 const ServiceContainer = styled.div`
   display: flex;
@@ -68,7 +64,7 @@ const BackButtonContainer = styled.div`
   display: flex;
   justify-content: flex-start; // Aligns the button to the left
   position: relative;
-  z-index: 10000;
+  z-index: 2;
   padding-top: 8rem;
 `;
 
@@ -79,7 +75,7 @@ const ContentContainer = styled.div`
   align-items: center;
   min-height: calc(100vh - ${HeaderHeight});
   background-color: "#f7f7f7";
-  padding-top: ${HeaderHeight};
+  padding-top: 20px;
 `;
 
 const Logo = styled.img`
@@ -92,26 +88,6 @@ const AppName = styled.h1`
   margin-left: 15px;
 `;
 
-const queryWorkOrdersByOwner = gql`
-query workOrdersByOwner {
-  workOrdersByOwner{
-    uuid
-    semanticId
-    owner
-    workType
-    priority
-    status
-    detail
-    assignedStaff
-    accessInstruction
-    preferredTime
-    entryPermission
-    images
-    createTime
-  }
-}
-`;
-
 socketManager.connect(localStorage.getItem("token"));
 
 const ResidentWKPage = () => {
@@ -119,18 +95,23 @@ const ResidentWKPage = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   const [notifications, setNotifications] = React.useState([]);
+  const [notificationCount, setNotificationCount] = useState(0);
+
   const handleSuccessfulSubmission = () => {
     setView('table');
   };
 
   //selected workOrder
   const [currentWK, setCurrentWK] = React.useState(undefined);
-
+  
   const workorderUpdateCB = (event) => {
-    setNotifications([...notifications, event]);
+    console.log("Received notification:", event);
+    setNotifications(prevNotifications => [...prevNotifications, event]);
+    setNotificationCount(prevCount => prevCount + 1);
   };
+  
+  useNotificationListener(workorderUpdateCB);
 
-  workOrderListen(workorderUpdateCB);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
@@ -138,6 +119,7 @@ const ResidentWKPage = () => {
 
   const handleNotificationClick = () => {
     setView('notifications');
+    setNotificationCount(0);
   };
 
   const services = [
@@ -165,10 +147,11 @@ const ResidentWKPage = () => {
                 <ArrowBack />
               </IconButton>
             </BackButtonContainer>
-            <NotificationTable notifications={notifications} />
+            <NotificationTable
+              notifications={notifications}
+            />
           </>
         );
-
       case 'new':
         return (
           <>
@@ -177,20 +160,22 @@ const ResidentWKPage = () => {
                 <ArrowBack />
               </IconButton>
             </BackButtonContainer>
-            <WorkOrderNewForm onSubmissionSuccess={handleSuccessfulSubmission} />
+            <WorkOrderNewForm
+              onSubmissionSuccess={handleSuccessfulSubmission}
+            />
           </>
         );
 
       case 'table':
         return (
-        <>
-          <BackButtonContainer>
-            <IconButton onClick={() => setView('landing')}>
-              <ArrowBack />
-            </IconButton>
-          </BackButtonContainer>
-          <WorkOrderTable responseName="workOrdersByOwner" graphQLStr={queryWorkOrdersByOwner} setCurrentWK={setCurrentWK} />
-        </>);
+          <>
+            <BackButtonContainer>
+              <IconButton onClick={() => setView('landing')}>
+                <ArrowBack />
+              </IconButton>
+            </BackButtonContainer>
+            <WorkOrderTable setCurrentWK={setCurrentWK} />
+          </>);
 
       default:
         return (
@@ -208,21 +193,25 @@ const ResidentWKPage = () => {
     }
   };
 
-
   return (
     <React.Fragment>
       <Header>
-        <Logo src={ResidentMeLogo} alt="ResidentMe Logo"/>
+        <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
         <AppName>Work Order</AppName>
-        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-480px' }}>
-          <NotificationsIcon />
+        <IconButton color="inherit" onClick={handleNotificationClick} sx={{ marginRight: '-400px' }}>
+          <Badge badgeContent={notificationCount} color="warning">
+            <NotificationsIcon />
+          </Badge>
         </IconButton>
         <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ margin: '20px' }}>
           <DehazeIcon />
         </IconButton>
         <Navbar isDrawerOpen={isDrawerOpen} handleDrawerToggle={handleDrawerToggle} />
       </Header>
-      {renderContent()}
+      <ContentContainer>
+        {renderContent()}
+      </ContentContainer>
+
     </React.Fragment>
   );
 }
