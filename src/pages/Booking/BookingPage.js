@@ -201,10 +201,9 @@ const BookingPage = () => {
     };
     const client = new GraphQLClient(graphqlAPI, { headers });
 
-    // Format the date to YYYY-MM-DD format without converting to UTC
     const formattedDate = [
       date.getFullYear(),
-      (date.getMonth() + 1).toString().padStart(2, "0"), // Months are zero-indexed
+      (date.getMonth() + 1).toString().padStart(2, "0"),
       date.getDate().toString().padStart(2, "0"),
     ].join("-");
 
@@ -220,7 +219,21 @@ const BookingPage = () => {
       setRefreshCounter((prev) => prev + 1); // Increment to trigger re-fetch
     } catch (error) {
       console.error("Error creating booking:", error);
-      alert("Failed to create booking!");
+      // Check if the error message is about the booking slot being already booked
+      if (error.response && error.response.errors) {
+        const message = error.response.errors
+          .map((err) => err.message)
+          .join("; ");
+        if (message.includes("The selected time slot is already booked")) {
+          alert(
+            "This time slot is already booked, please choose another time."
+          );
+        } else {
+          alert("Failed to create booking!");
+        }
+      } else {
+        alert("Failed to create booking!");
+      }
     }
   };
 
