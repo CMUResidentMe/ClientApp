@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-import { MenuBookOutlined } from '@mui/icons-material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ResidentMeLogo from "../../../assets/logo.png";
-import CategoryCards from "./CategoryCards.jsx";
 import { Card, Row, Col, Container, Image } from 'react-bootstrap';
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../../../components/NavBar.js";
-import MarketPlaceNav from "../components/MarketPlaceNav.jsx";
 
 function MarketPlaceIndexPage() {
     const { loading, data } = {};

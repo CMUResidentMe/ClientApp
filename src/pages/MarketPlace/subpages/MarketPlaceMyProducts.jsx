@@ -39,62 +39,68 @@ export default function MarketPlaceMyProducts() {
     }
 
     return (
-       <div className={'container mt-5'}>
-           <div className="col-md-9">
-               {loading && (
-                   <div className={'d-flex justify-content-center'}>
-                        <Spinner />
-                   </div>
-               )}
-               <div className="row">
-                   {products.length === 0 && (
-                       <Empty />
-                   )}
-
-                   {products.map((product) => (
-                       <div key={product.id} className="col-md-4 mb-4">
-                           <div className="card">
-                               <img
-                                   src={product.image}
-                                   className="card-img-top"
-                                   alt={product.title}
-                               />
-                               <div className="card-body">
-                                   <h5 className="card-title">{product.title}</h5>
-                                   <p>
+        <div className="container mt-5">
+            <h2 style={{ fontFamily: 'Roboto, sans-serif', color: '#A67B5B', fontWeight: '500', fontSize: '28px', textAlign: 'left', marginBottom: '20px' }}>
+                My Products
+            </h2>
+            <div className="col-md-9">
+                {loading && (
+                    <div className="d-flex justify-content-center">
+                        <Spinner animation="border" />
+                    </div>
+                )}
+                <div className="row">
+                    {products.length === 0 && (
+                        <Empty description="No Products Found" />
+                    )}
+    
+                    {products.map((product) => (
+                        <div key={product.id} className="col-md-4 mb-4">
+                            <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                <img
+                                    src={product.image}
+                                    style={{ height: '200px', width: '100%', objectFit: 'cover' }}
+                                    className="card-img-top"
+                                    alt={product.title}
+                                />
+                                <div className="card-body" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                    <h5 className="card-title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                        {product.title}
+                                    </h5>
+                                    <div>
+                                        <p>
                                             <span className="badge bg-primary">
                                                 {product.category}
                                             </span>
-                                   </p>
-                                   <p className="card-text text-danger">${product.price}</p>
-                                   <p>
-                                       Published At: {new Date(Number(product.createdAt)).toLocaleString()}
-                                   </p>
-                                   <p className={'text-end d-flex gap-2 justify-content-end'}>
-                                       <IconButton
-                                           onClick={() => navigate('/marketplace/goods/' + product.id)}
-                                           color={'primary'}>
-                                           <ArrowCircleRightIcon />
-                                       </IconButton>
-
-                                       <IconButton
-                                           onClick={() => navigate('/marketplace/update/' + product.id)}
-                                           color={'primary'}>
-                                           <EditIcon />
-                                       </IconButton>
-
-                                       <IconButton
-                                           onClick={() => handleClickDelete(product.id)}
-                                           color={'error'}>
-                                           <DeleteForeverIcon />
-                                       </IconButton>
-                                   </p>
-                               </div>
-                           </div>
-                       </div>
-                   ))}
-               </div>
-           </div>
-       </div>
-    )
+                                        </p>
+                                        <p className="card-text text-danger">${product.price}</p>
+                                        <p>Published At: {new Date(Number(product.createdAt)).toLocaleString()}</p>
+                                    </div>
+                                    <div className={'text-end d-flex gap-2 justify-content-end'}>
+                                        <IconButton
+                                            onClick={() => navigate('/marketplace/goods/' + product.id)}
+                                            color={'primary'}>
+                                            <ArrowCircleRightIcon />
+                                        </IconButton>
+    
+                                        <IconButton
+                                            onClick={() => navigate('/marketplace/update/' + product.id)}
+                                            color={'primary'}>
+                                            <EditIcon />
+                                        </IconButton>
+    
+                                        <IconButton
+                                            onClick={() => handleClickDelete(product.id)}
+                                            color={'error'}>
+                                            <DeleteForeverIcon />
+                                        </IconButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    )    
 }

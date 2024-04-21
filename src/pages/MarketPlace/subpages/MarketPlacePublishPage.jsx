@@ -25,7 +25,6 @@ const validationSchema = Yup.object({
     description: Yup.string().required('Description is required'),
     price: Yup.number().required('Price is required').positive('Price must be greater than zero'),
     category: Yup.string().required('Category is required'),
-    // tradePlace: Yup.string().required('Trade place is required'),
     contact: Yup.string().required('Contact information is required'),
 });
 

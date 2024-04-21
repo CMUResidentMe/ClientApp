@@ -58,8 +58,15 @@ const MarketPlaceHomePage = () => {
     return (
         <div className="container mt-5">
             <Button
-                variant={'contained'}
-                onClick={() => navigate('/marketplace/publish')}>
+                variant="contained"
+                onClick={() => navigate('/marketplace/publish')}
+                style={{
+                    backgroundColor: '#A67B5B',
+                    color: '#ffffff',
+                    '&:hover': {
+                        backgroundColor: '#94684f'
+                    }
+                }}>
                 Publish Goods
             </Button>
             <div className="row mt-5">
@@ -95,7 +102,7 @@ const MarketPlaceHomePage = () => {
                                     {CategoryList.map(category => {
                                         return (
                                             <MenuItem key={category.name} value={category.name}>
-                                                <img src={category.image} width={40}/>
+                                                <img src={category.image} width={40} alt={category.name}/>
                                                 {category.name}
                                             </MenuItem>
                                         )
@@ -110,26 +117,29 @@ const MarketPlaceHomePage = () => {
                         {filteredProducts.length === 0 && (
                             <Empty />
                         )}
-
+    
                         {filteredProducts.map((product) => (
                             <div key={product.id} className="col-md-4 mb-4">
-                                <div className="card">
+                                <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                                     <img
                                         src={product.image}
+                                        style={{ height: '200px', width: '100%', objectFit: 'cover' }}
                                         className="card-img-top"
                                         alt={product.title}
                                     />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{product.title}</h5>
-                                        <p>
-                                            <span className="badge bg-primary">
-                                                {product.category}
-                                            </span>
-                                        </p>
-                                        <p className="card-text text-danger">${product.price}</p>
-                                        <p>
-                                            Published At: {new Date(Number(product.createdAt)).toLocaleString()}
-                                        </p>
+                                    <div className="card-body" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                        <h5 className="card-title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                            {product.title}
+                                        </h5>
+                                        <div>
+                                            <p>
+                                                <span className="badge bg-primary">
+                                                    {product.category}
+                                                </span>
+                                            </p>
+                                            <p className="card-text text-danger">${product.price}</p>
+                                            <p>Published At: {new Date(Number(product.createdAt)).toLocaleString()}</p>
+                                        </div>
                                         <p className={'text-end'}>
                                             <IconButton
                                                 onClick={() => navigate('/marketplace/goods/' + product.id)}
@@ -146,5 +156,6 @@ const MarketPlaceHomePage = () => {
             </div>
         </div>
     )
+    
 }
 export default MarketPlaceHomePage;
