@@ -129,6 +129,26 @@ const CancelBookingPage = () => {
         <Navbar />
       </Header>
       <Container style={{ paddingTop: "140px", marginTop: "100px" }}>
+        {" "}
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#F2EFEA",
+            color: "black",
+            marginTop: 3,
+            padding: "10px 30px",
+            fontSize: "1rem",
+            "&:hover": {
+              backgroundColor: "#e0ded4",
+            },
+            position: "absolute",
+            top: "80px",
+            left: "20px",
+          }}
+          onClick={() => navigate("/booking")}
+        >
+          Go Back to Booking
+        </Button>
         {bookings.length > 0 ? (
           bookings.map((booking) => (
             <StyledPaper key={booking.booking_id} elevation={3}>
