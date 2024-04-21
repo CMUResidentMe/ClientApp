@@ -171,6 +171,7 @@ const BookingPage = () => {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [refreshCounter, setRefreshCounter] = useState(0);
 
   useEffect(() => {
     if (!roomType) return;
@@ -191,7 +192,7 @@ const BookingPage = () => {
         setRooms(updatedRooms);
       })
       .catch((error) => console.error("Error fetching rooms:", error));
-  }, [roomType, date]);
+  }, [roomType, date, refreshCounter]);
 
   const handleCreateBooking = async () => {
     const token = localStorage.getItem("token");
@@ -199,16 +200,24 @@ const BookingPage = () => {
       authorization: token,
     };
     const client = new GraphQLClient(graphqlAPI, { headers });
+
+    // Format the date to YYYY-MM-DD format without converting to UTC
+    const formattedDate = [
+      date.getFullYear(),
+      (date.getMonth() + 1).toString().padStart(2, "0"), // Months are zero-indexed
+      date.getDate().toString().padStart(2, "0"),
+    ].join("-");
+
     try {
       await client.request(CREATE_BOOKING_MUTATION, {
         room_id: selectedRoomId,
-        date: date.toISOString().split("T")[0],
+        date: formattedDate, // Use the locally formatted date
         start_time: startTime,
         end_time: endTime,
       });
       alert("Booking successful!");
       setBookingDialogOpen(false);
-      setDate(new Date(date)); // Refresh to show updated times
+      setRefreshCounter((prev) => prev + 1); // Increment to trigger re-fetch
     } catch (error) {
       console.error("Error creating booking:", error);
       alert("Failed to create booking!");
