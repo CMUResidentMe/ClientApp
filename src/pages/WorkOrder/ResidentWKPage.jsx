@@ -41,7 +41,7 @@ const ServiceContainer = styled.div`
   margin-top: 100px; // Adjust as needed
 `;
 
-const HeaderHeight = '60px';
+const HeaderHeight = '100px';
 
 const Header = styled.div`
   position: fixed;
