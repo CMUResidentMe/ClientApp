@@ -7,7 +7,7 @@ import ManagerHome from "./pages/ManagerHome.js";
 import LoginPage from "./auth/LoginPage.js";
 import RegisterPage from "./auth/RegisterPage.js";
 import CommunityBoardPage from "./pages/CommunityBoard/CommunityBoardPage.js";
-import WorkOrderPage from "./pages/WorkOrder/WorkOrderPage.jsx";
+// import WorkOrderPage from "./pages/WorkOrder/WorkOrderPage.jsx";
 import BookingPage from "./pages/Booking/BookingPage.js";
 import NotificationPage from "./pages/Notification/NotificationTable.jsx";
 import BookingManager from "./pages/Booking/BookingManager.js";
@@ -21,6 +21,7 @@ import MarketPlaceProductDetail from "./pages/MarketPlace/subpages/MarketPlacePr
 import MarketPlaceMyProducts from "./pages/MarketPlace/subpages/MarketPlaceMyProducts.jsx";
 import MarketPlaceMyOrders from "./pages/MarketPlace/subpages/MarketPlaceMyOrders.jsx";
 import MarketPlaceIndexPage from "./pages/MarketPlace/subpages/MarketPlaceIndexPage.jsx";
+import MarketPlaceSoldProducts from "./pages/MarketPlace/subpages/MarketPlaceSoldProducts.jsx";
 
 //MANAGER
 
@@ -43,9 +44,10 @@ const AppRouter = () => {
           <Route path={'update/:goodsId'} element={<MarketPlaceUpdatePage />}/>
           <Route path={'my-goods'} element={<MarketPlaceMyProducts />}/>
           <Route path={'my-orders'} element={<MarketPlaceMyOrders />}/>
+          <Route path={'my-sold'} element={<MarketPlaceSoldProducts />}/>
           <Route path={'goods/:goodsId'} element={<MarketPlaceProductDetail />}/>
         </Route>
-        <Route path="/work-order" element={<WorkOrderPage />} />
+        {/*<Route path="/work-order" element={<WorkOrderPage />} />*/}
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/booking-manager" element={<BookingManager />} />
         <Route path="/notification" element={<NotificationPage />} />
