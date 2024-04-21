@@ -1,54 +1,250 @@
 import React, { useState, useEffect } from "react";
-import { Container, Box, IconButton } from "@mui/material";
-import { MenuBookOutlined } from '@mui/icons-material';
+import {
+  Container,
+  Typography,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
+import { AddBox, Delete, CheckCircle, Cancel } from "@mui/icons-material";
 import Navbar from "../../components/NavBar.js";
-import { useNavigate } from "react-router-dom";
-import Typography from '@mui/material/Typography/index.js';
+import styled from "@emotion/styled";
+import { GraphQLClient, gql } from "graphql-request";
+import staticInitObject from "../../config/AllStaticConfig.js";
 
-const BookingManager = () => {
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
+const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
+const token = localStorage.getItem("token");
+const headers = {
+  authorization: token,
+};
+const client = new GraphQLClient(graphqlAPI, { headers });
 
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!isDrawerOpen);
+const HeaderHeight = "60px";
+
+const Header = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  height: ${HeaderHeight};
+  background-color: #f2efea;
+  color: #746352;
+  z-index: 1000;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - ${HeaderHeight});
+  padding-top: ${HeaderHeight};
+  width: 100%;
+  padding-top: 120px;
+`;
+
+// GraphQL Queries and Mutations
+const GET_ALL_ROOMS_QUERY = gql`
+  query GetAllRooms {
+    allRooms {
+      id
+      name
+      room_type
+    }
+  }
+`;
+
+const DELETE_ROOM_MUTATION = gql`
+  mutation DeleteRoom($room_id: ID!) {
+    deleteRoom(room_id: $room_id)
+  }
+`;
+
+const GET_UNCONFIRMED_PARTY_ROOMS = gql`
+  query GetUnconfirmedPartyRooms {
+    unconfirmedPartyRooms {
+      id
+      name
+      room_type
+      bookedTimes {
+        date
+        startTime
+        id
+        endTime
+        user_id
+        user_name
+        is_confirmed
+      }
+    }
+  }
+`;
+
+const APPROVE_BOOKING_MUTATION = gql`
+  mutation ApproveBooking($booking_id: ID!) {
+    approveBooking(booking_id: $booking_id) {
+      id
+    }
+  }
+`;
+
+const DECLINE_BOOKING_MUTATION = gql`
+  mutation DeclineBooking($booking_id: ID!) {
+    declineBooking(booking_id: $booking_id) {
+      id
+    }
+  }
+`;
+
+const ManagerPage = () => {
+  const [rooms, setRooms] = useState([]);
+  const [partyRooms, setPartyRooms] = useState([]);
+  const [refreshData, setRefreshData] = useState(false);
+  const fetchPartyRooms = () => {
+    client
+      .request(GET_UNCONFIRMED_PARTY_ROOMS)
+      .then((data) => {
+        // Filter out confirmed bookings from each room's bookedTimes array
+        const filteredRooms = data.unconfirmedPartyRooms.map((room) => ({
+          ...room,
+          bookedTimes: room.bookedTimes.filter((bt) => !bt.is_confirmed),
+        }));
+
+        // Set the filtered rooms to state
+        setPartyRooms(filteredRooms);
+
+        console.log("Unconfirmed party rooms fetched", filteredRooms);
+      })
+      .catch((error) =>
+        console.error("Error fetching unconfirmed party rooms:", error)
+      );
+  };
+
+  useEffect(() => {
+    client
+      .request(GET_ALL_ROOMS_QUERY)
+      .then((data) => setRooms(data.allRooms))
+      .catch((error) => console.error("Error fetching rooms:", error));
+
+    fetchPartyRooms();
+  }, [refreshData]);
+
+  const handleDeleteRoom = (room_id) => {
+    if (window.confirm("Are you sure you want to delete this room?")) {
+      client
+        .request(DELETE_ROOM_MUTATION, { room_id })
+        .then(() => {
+          alert("Room deleted successfully.");
+          setRooms((prev) => prev.filter((room) => room.id !== room_id));
+        })
+        .catch((error) => alert("Failed to delete room. Please try again."));
+    }
+  };
+
+  const handleApprove = (booking_id) => {
+    console.log("Approving booking with ID:", booking_id);
+    client
+      .request(APPROVE_BOOKING_MUTATION, { booking_id })
+      .then(() => {
+        alert("Booking approved successfully.");
+        setRefreshData((old) => !old);
+        setPartyRooms((prev) =>
+          prev.filter((room) =>
+            room.bookedTimes.some((bt) => bt.id !== booking_id)
+          )
+        );
+      })
+      .catch((error) => {
+        console.error("Approval error:", error);
+        alert("Failed to approve booking.");
+      });
+  };
+
+  const handleDecline = (booking_id) => {
+    client
+      .request(DECLINE_BOOKING_MUTATION, { booking_id })
+      .then(() => {
+        alert("Booking declined successfully.");
+        setRefreshData((old) => !old);
+        setPartyRooms((prev) =>
+          prev.filter((room) =>
+            room.bookedTimes.some((bt) => bt.id !== booking_id)
+          )
+        );
+      })
+      .catch((error) => alert("Failed to decline booking."));
   };
 
   return (
-    <Container
-      maxWidth="lg"
-      sx={{
-        boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.25)",
-        backgroundColor: "rgba(255, 255, 255, 0.85)",
-        paddingTop: "1rem",
-        paddingBottom: "2rem",
-        paddingLeft: "2rem",
-        paddingRight: "2rem",
-        borderRadius: "8px",
-      }}
-    >
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ marginBottom: "0.5rem" }}
-      >
-        <Typography variant="h3" component="h1" sx={{ flexGrow: 1 }}>
-          Here is booking page
+    <>
+      <Header>
+        <Navbar />
+        <Typography variant="h4" sx={{ ml: 2 }}>
+          Manager Dashboard
         </Typography>
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-          onClick={handleDrawerToggle}
-          sx={{ margin: 1 }}
-        >
-          <MenuBookOutlined />
-        </IconButton>
-      </Box>
-      <Navbar
-        isDrawerOpen={isDrawerOpen}
-        handleDrawerToggle={handleDrawerToggle}
-      />
-    </Container>
+      </Header>
+      <ContentContainer>
+        <Container maxWidth="lg">
+          <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
+            Cancel Bookings
+          </Typography>
+          <List>
+            {rooms.map((room) => (
+              <ListItem key={room.id}>
+                <ListItemText primary={room.name} secondary={room.room_type} />
+                <IconButton
+                  onClick={() => handleDeleteRoom(room.id)}
+                  edge="end"
+                  aria-label="delete"
+                >
+                  <Delete />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+          <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
+            Approve or Decline Party Room Booking Requests
+          </Typography>
+          <List>
+            {partyRooms.flatMap((room) =>
+              room.bookedTimes.map((booking) => (
+                <ListItem key={`${room.id}-${booking.id}`}>
+                  {" "}
+                  <ListItemText
+                    primary={`${room.name} - ${room.room_type}`}
+                    secondary={`${booking.date} from ${booking.startTime} to ${booking.endTime}, booked by ${booking.user_name}`}
+                  />
+                  <IconButton
+                    onClick={() => handleApprove(booking.id)}
+                    color="primary"
+                  >
+                    <CheckCircle />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => handleDecline(booking.id)}
+                    color="secondary"
+                  >
+                    <Cancel />
+                  </IconButton>
+                </ListItem>
+              ))
+            )}
+          </List>
+        </Container>
+      </ContentContainer>
+    </>
   );
 };
 
-export default BookingManager;
+export default ManagerPage;

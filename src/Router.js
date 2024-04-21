@@ -9,10 +9,11 @@ import RegisterPage from "./auth/RegisterPage.js";
 import CommunityBoardPage from "./pages/CommunityBoard/CommunityBoardPage.js";
 // import WorkOrderPage from "./pages/WorkOrder/WorkOrderPage.jsx";
 import BookingPage from "./pages/Booking/BookingPage.js";
+import CancelbookPage from "./pages/Booking/CancelbookPage.js";
 import NotificationPage from "./pages/Notification/NotificationTable.jsx";
 import BookingManager from "./pages/Booking/BookingManager.js";
-import ResidentWKPage from './pages/WorkOrder/ResidentWKPage.jsx';
-import StaffWKPage from './pages/WorkOrder/StaffWKPage.jsx'
+import ResidentWKPage from "./pages/WorkOrder/ResidentWKPage.jsx";
+import StaffWKPage from "./pages/WorkOrder/StaffWKPage.jsx";
 import MarketPlaceLayout from "./pages/MarketPlace/subpages/MarketPlaceLayout.jsx";
 import MarketPlaceHomePage from "./pages/MarketPlace/subpages/MarketPlaceHomePage.jsx";
 import MarketPlacePublishPage from "./pages/MarketPlace/subpages/MarketPlacePublishPage.jsx";
@@ -23,8 +24,6 @@ import MarketPlaceMyOrders from "./pages/MarketPlace/subpages/MarketPlaceMyOrder
 import MarketPlaceIndexPage from "./pages/MarketPlace/subpages/MarketPlaceIndexPage.jsx";
 import MarketPlaceSoldProducts from "./pages/MarketPlace/subpages/MarketPlaceSoldProducts.jsx";
 
-//MANAGER
-
 const AppRouter = () => {
   return (
     <Router basename="/">
@@ -32,25 +31,35 @@ const AppRouter = () => {
         <Route path="/" element={<LoginPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/manager-home" element={<ManagerHome />} />
-        <Route path="/register" element={<RegisterPage privilege="resident"/>} />
-        <Route path="/staff-register" element={<RegisterPage privilege="admin"/>} />
+        <Route
+          path="/register"
+          element={<RegisterPage privilege="resident" />}
+        />
+        <Route
+          path="/staff-register"
+          element={<RegisterPage privilege="admin" />}
+        />
         <Route path="/community-board" element={<CommunityBoardPage />} />
         <Route path="/work-order" element={<ResidentWKPage />} />
         <Route path="/staff-work-order" element={<StaffWKPage />} />
-        <Route path="/marketplace" element={<MarketPlaceLayout />} >
-          <Route path={''} index element={<MarketPlaceIndexPage />} />
-          <Route path={'playground'} element={<MarketPlaceHomePage />} />
-          <Route path={'publish'} element={<MarketPlacePublishPage />}/>
-          <Route path={'update/:goodsId'} element={<MarketPlaceUpdatePage />}/>
-          <Route path={'my-goods'} element={<MarketPlaceMyProducts />}/>
-          <Route path={'my-orders'} element={<MarketPlaceMyOrders />}/>
-          <Route path={'my-sold'} element={<MarketPlaceSoldProducts />}/>
-          <Route path={'goods/:goodsId'} element={<MarketPlaceProductDetail />}/>
+        <Route path="/marketplace" element={<MarketPlaceLayout />}>
+          <Route path={""} index element={<MarketPlaceIndexPage />} />
+          <Route path={"playground"} element={<MarketPlaceHomePage />} />
+          <Route path={"publish"} element={<MarketPlacePublishPage />} />
+          <Route path={"update/:goodsId"} element={<MarketPlaceUpdatePage />} />
+          <Route path={"my-goods"} element={<MarketPlaceMyProducts />} />
+          <Route path={"my-orders"} element={<MarketPlaceMyOrders />} />
+          <Route path={"my-sold"} element={<MarketPlaceSoldProducts />} />
+          <Route
+            path={"goods/:goodsId"}
+            element={<MarketPlaceProductDetail />}
+          />
         </Route>
         {/*<Route path="/work-order" element={<WorkOrderPage />} />*/}
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/booking-manager" element={<BookingManager />} />
         <Route path="/notification" element={<NotificationPage />} />
+        <Route path="/cancel-booking" element={<CancelbookPage />} />
       </Routes>
     </Router>
   );
