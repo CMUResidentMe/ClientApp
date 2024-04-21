@@ -43,7 +43,7 @@ export default function MarketPlaceSoldProducts() {
                                 <TableCell align="right">Description</TableCell>
                                 <TableCell align="right">Price</TableCell>
                                 <TableCell align="right">Category</TableCell>
-                                <TableCell align="right">Trade Place</TableCell>
+                                <TableCell align="right">Trade Location</TableCell>
                                 <TableCell align="right">Contact</TableCell>
                             </TableRow>
                         </TableHead>
