@@ -39,7 +39,7 @@ const MarketPlacePublishPage = () => {
             price: '',
             image: '',
             category: '',
-            tradePlace: '',
+            tradePlace: ' ',
             contact: '',
             status: 'selling',
         },

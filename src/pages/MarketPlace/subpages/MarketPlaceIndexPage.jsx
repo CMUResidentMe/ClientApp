@@ -3,7 +3,6 @@ import { MenuBookOutlined } from '@mui/icons-material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ResidentMeLogo from "../../../assets/logo.png";
 import CategoryCards from "./CategoryCards.jsx";
-import MarketplaceFooter from "./MarketplaceFooter.jsx";
 import { Card, Row, Col, Container, Image } from 'react-bootstrap';
 import {Box, Button, IconButton, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";

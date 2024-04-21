@@ -6,12 +6,13 @@ import {useNavigate} from "react-router-dom";
 import MarketPlaceNav from "./MarketPlaceNav.jsx";
 import NavBar from "../../../components/NavBar.js";
 import {MenuBookOutlined} from "@mui/icons-material";
+
 const HeaderBar = () => {
     const navigate = useNavigate();
     const [isDrawerOpen, setDrawerOpen] = useState(false);
     return (
-        <AppBar position="static">
-            <Toolbar >
+        <AppBar position="static" sx={{ backgroundColor: '#d2b48c' }}>
+            <Toolbar>
                 <img onClick={() => navigate('/marketplace')} className={'me-2'} width={40} src={MarketIcon}/>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     ResidentMe - MarketPlace
