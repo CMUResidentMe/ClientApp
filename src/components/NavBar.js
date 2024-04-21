@@ -65,12 +65,6 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
               </ListItemIcon>
               <ListItemText primary="Booking" />
             </ListItem>
-            <ListItem onClick={() => handleNavItemClick('/notification')}>
-              <ListItemIcon>
-                <NotificationsOutlined />
-              </ListItemIcon>
-              <ListItemText primary="Notifications" />
-            </ListItem>
             <ListItem onClick={() => handleNavItemClick('/home')}>
               <ListItemIcon>
                 <CottageOutlined />
