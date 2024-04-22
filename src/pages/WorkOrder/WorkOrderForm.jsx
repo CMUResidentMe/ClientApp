@@ -187,6 +187,22 @@ const WorkOrderForm = ({ currentWK, closeModal }) => {
     }));
   }
 
+  const formatDate = (date) => {
+    let d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
+  };
+
+  const today = formatDate(new Date());
+
   return (
     <ContentContainer>
       <Modal
@@ -225,7 +241,16 @@ const WorkOrderForm = ({ currentWK, closeModal }) => {
           </div>
           <div style={styles.inputGroup}>
             <label htmlFor="preferredTime" style={styles.label}>Preferred Time</label>
-            <input id="preferredTime" disabled={isStaff} name="preferredTime" type="date" value={workOrderData.preferredTime} onChange={handleChange} style={styles.input} />
+            <input 
+              id="preferredTime" 
+              disabled={isStaff} 
+              name="preferredTime" 
+              type="date" 
+              value={workOrderData.preferredTime} 
+              onChange={handleChange} 
+              style={styles.input} 
+              min={today}
+            />
           </div>
           <div style={styles.inputGroup}>
             <label htmlFor="assignedStaff" style={styles.label}>Assigned Staff</label>

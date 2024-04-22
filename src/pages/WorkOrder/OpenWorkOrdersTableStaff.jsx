@@ -18,7 +18,7 @@ const ContentContainer = styled.div`
   min-height: 75vh;
   background-color: "#f7f7f7";
   padding-top: 10px;
-  width: 70%;
+  width: 80%;
 `;
 
 const modalStyle = {
@@ -163,8 +163,8 @@ const OpenWorkOrdersStaffTable = (props) => {
               justifyContent: 'center',
               bgcolor: 'background.paper',
               boxShadow: 24,
-              p: 4,
-              m: 4,
+              // p: 4,
+              // m: 4,
               borderRadius: '12px',
               cursor: 'default',
               height: '38%',

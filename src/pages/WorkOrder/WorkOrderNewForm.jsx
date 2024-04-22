@@ -63,10 +63,10 @@ const WorkOrderNewForm = ({ onSubmissionSuccess }) => {
     images: [],
   });
 
-  const [createMutation, { data, loading, error }] = useMutation(create_mutation, 
+  const [createMutation, { data, loading, error }] = useMutation(create_mutation,
     {
       refetchQueries: [
-          {query: queryWorkOrdersByOwner}, 
+        { query: queryWorkOrdersByOwner },
       ],
     }
   );
@@ -126,6 +126,22 @@ const WorkOrderNewForm = ({ onSubmissionSuccess }) => {
     }));
   }
 
+  const formatDate = (date) => {
+    let d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
+  };
+
+  const today = formatDate(new Date());
+
   return (
     <ContentContainer>
       <Modal
@@ -163,7 +179,15 @@ const WorkOrderNewForm = ({ onSubmissionSuccess }) => {
           </div>
           <div style={styles.inputGroup}>
             <label htmlFor="preferredTime" style={styles.label}>Preferred Time</label>
-            <input id="preferredTime" name="preferredTime" type="date" value={workOrderData.preferredTime} onChange={handleChange} style={styles.input} />
+            <input
+              id="preferredTime"
+              name="preferredTime"
+              type="date"
+              value={workOrderData.preferredTime}
+              onChange={handleChange}
+              style={styles.input}
+              min={today}
+            />
           </div>
         </div>
 

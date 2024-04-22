@@ -45,11 +45,13 @@ const styles = {
     },
     inputGroup: {
       marginBottom: "1rem",
+      fontSize: "12px",
     },
     label: {
       display: "block",
       marginBottom: ".5rem",
       color: "#333",
+      fontSize: "12px",
     },
     input: {
       padding: "0.5rem",
@@ -57,6 +59,7 @@ const styles = {
       border: "1px solid #ddd", // Light grey border
       width: "auto", // Let them naturally take up the needed space
       flexGrow: 1, // Allow them to grow if there is space in the flex container
+      fontSize: "12px",
     },
     inputArea: {
       padding: "0.5rem",
@@ -64,6 +67,7 @@ const styles = {
       border: "1px solid #ddd", // Light grey border
       width: "100%", // Full-width inputs
       height: "100px",
+      fontSize: "12px",
     },
     ActionButton: {
       backgroundColor: "#746352",
@@ -72,6 +76,7 @@ const styles = {
       border: "none",
       borderRadius: "3px",
       cursor: "pointer",
+      fontSize: "12px",
     },
     registerPrompt: {
       marginTop: "1rem",
@@ -91,6 +96,7 @@ const styles = {
       textAlign: "center",
       width: "100%",
       boxSizing: "border-box",
+      fontSize: "12px",
     },
   };
 
