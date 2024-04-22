@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IconButton } from "@mui/material";
+import { IconButton, Badge } from "@mui/material";
 import {
   ArrowBack,
   Notifications,
@@ -7,9 +7,11 @@ import {
 } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import Navbar from "../../components/NavBar.js";
-import ThreadList from "./ThreadList.js";
-import PostList from "./PostList.js";
+import ThreadList from "./ThreadList.jsx";
+import PostList from "./PostList.jsx";
+import NotificationsIcon from "@mui/icons-material/Notifications.js";
 import NotificationTable from "../Notification/NotificationTable.jsx";
+import useNotificationListener from "../../notification/NotificationListener.js";
 import ResidentMeLogo from "../../assets/logo.png";
 
 const HeaderHeight = "100px";
@@ -68,6 +70,15 @@ const ContentContainer = styled.div`
   box-sizing: border-box; // Include padding in the element's total width and height
 `;
 
+const NotificationTableWrapper = styled.div`
+  display: flex;
+  justify-content: center; // Center horizontally
+  align-items: center; // Center vertically
+  flex-direction: column; // Stack children vertically
+  width: 100%; // Take the full width of the container
+  height: 100%; // Take the full height available
+`;
+
 const Logo = styled.img`
   height: 80px;
   margin-right: 10px;
@@ -88,6 +99,7 @@ const CommunicationBoardPage = () => {
   const [currentThreadUserName, setCurrentThreadUserName] = useState("");
   const [currentThreadCreatedAt, setCurrentThreadCreatedAt] = useState("");
   const [notifications, setNotifications] = useState([]);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   const handleThreadSelect = (id, title, content, userName, createdAt) => {
     setCurrentThread(id);
@@ -102,8 +114,17 @@ const CommunicationBoardPage = () => {
     setDrawerOpen(!isDrawerOpen);
   };
 
+  const commBoardUpdateCB = (event) => {
+    console.log("Received notification:", event);
+    setNotifications((prevNotifications) => [...prevNotifications, event]);
+    setNotificationCount((prevCount) => prevCount + 1);
+  };
+
+  useNotificationListener(commBoardUpdateCB);
+
   const handleNotificationClick = () => {
-    setView("notifications"); // Switch to 'notifications' view when notification icon is clicked
+    setView("notifications");
+    setNotificationCount(0);
   };
 
   const handleBack = () => {
@@ -119,7 +140,7 @@ const CommunicationBoardPage = () => {
   const renderContent = () => {
     switch (view) {
       case "notifications":
-        return <NotificationTable notifications={notifications} />; // Component to render list of notifications
+        return <NotificationTableWrapper><NotificationTable notifications={notifications} /></NotificationTableWrapper>; // Component to render list of notifications
       case "posts":
         return (
           <PostList
@@ -149,7 +170,9 @@ const CommunicationBoardPage = () => {
 
         <RightIconsContainer>
           <IconButton onClick={handleNotificationClick}>
-            <Notifications />
+            <Badge badgeContent={notificationCount} color="warning">
+              <NotificationsIcon />
+            </Badge>
           </IconButton>
           <IconButton onClick={handleDrawerToggle}>
             <MenuIcon />
@@ -162,14 +185,12 @@ const CommunicationBoardPage = () => {
       />
       <ContentContainer>
         {(view === "posts" || view === "notifications") && (
-          // <BackButtonContainer>
           <IconButton
             onClick={handleBack}
             sx={{ position: "absolute", top: 110, left: 30 }}
           >
             <ArrowBack />
           </IconButton>
-          // {/* </BackButtonContainer> */}
         )}
         {renderContent()}
       </ContentContainer>

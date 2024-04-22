@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { gql, request } from "graphql-request";
-import Reply from "./Reply.js";
+import Reply from "./Reply.jsx";
 import { Button, Box } from "@mui/material";
 import staticInitObject from "../../config/AllStaticConfig.js";
 

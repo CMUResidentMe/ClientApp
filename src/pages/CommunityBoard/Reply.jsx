@@ -12,6 +12,7 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import staticInitObject from "../../config/AllStaticConfig.js";
@@ -71,7 +72,7 @@ const Reply = ({ id, content, userName, createdAt, fetchReplies }) => {
           onClick={handleDeleteClick}
           sx={{ position: "absolute", top: -4, right: -4 }}
         >
-          <FontAwesomeIcon icon={faTimes} />
+          <CloseIcon />
         </IconButton>
       )}
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
