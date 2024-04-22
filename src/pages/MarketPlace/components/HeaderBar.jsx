@@ -74,7 +74,7 @@ const HeaderBar = () => {
                 <Box sx={{
                     width: '100%',
                     maxWidth: '1500px',
-                    marginTop: '65px', 
+                    marginTop: '64px', 
                     backgroundColor: "white",
                     zIndex: 1200,
                     position: 'fixed', 
