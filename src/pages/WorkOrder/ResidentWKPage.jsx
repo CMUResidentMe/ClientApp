@@ -106,7 +106,7 @@ const ResidentWKPage = () => {
   
   const workorderUpdateCB = (event) => {
     console.log("Received notification:", event);
-    setNotifications(prevNotifications => [...prevNotifications, event]);
+    setNotifications(prevNotifications => [event, ...prevNotifications]);
     setNotificationCount(prevCount => prevCount + 1);
   };
   
