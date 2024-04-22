@@ -35,12 +35,6 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
         <Box sx={{ width: 250 }} role="presentation">
           <img src={logo} alt="ResidentMe Logo" style={{ maxWidth: '150px', margin: '16px' }} />
           <List>
-          <ListItem onClick={() => handleNavItemClick('/login')}>
-              <ListItemIcon>
-                <AccountCircleOutlined />
-              </ListItemIcon>
-              <ListItemText primary="User Login" />
-            </ListItem>
             <ListItem onClick={() => handleNavItemClick('/community-board')}>
               <ListItemIcon>
                 <HomeOutlined />
