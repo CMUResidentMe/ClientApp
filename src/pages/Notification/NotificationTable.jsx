@@ -19,7 +19,7 @@ const ContentContainer = styled.div`
   eventTime: '04-21 01:34',
   owner: '661bff26a8293a3ed2fd06ee',
   message: 'semanticId:WO-66, workType change from bbbvvvccc to vvv, ',
-  notificationID: 4
+  sourceID: uuid of concerned object
 }*/
 const columns = [
   { field: 'id', headerName: 'ID', width: 100, resizable: false, cellClassName: 'firstColumnPadding',},
