@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { gql, request, GraphQLClient } from "graphql-request";
-import ThreadItem from "./ThreadItem.js";
-import InputArea from "./InputArea.js";
-import { Button, Box } from "@mui/material";
+import ThreadItem from "./ThreadItem.jsx";
+import InputArea from "./InputArea.jsx";
+import { Button, Box, IconButton } from "@mui/material";
+import RefreshIcon from '@mui/icons-material/Refresh';
 import staticInitObject from "../../config/AllStaticConfig.js";
 
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
@@ -110,6 +111,11 @@ const ThreadList = ({ onThreadSelect }) => {
             Load More
           </Button>
         )}
+      </Box>
+      <Box mt={2} width="100%" display="flex" justifyContent="center">
+        <IconButton color="white" onClick={fetchThreads} aria-label="refresh">
+            <RefreshIcon />
+        </IconButton>
       </Box>
       <Box marginTop={5}>
         <InputArea type="thread" onSubmit={handleCreateThread} />

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { gql, request, GraphQLClient } from "graphql-request";
-import ThreadSummary from "./ThreadSummary.js";
-import PostItem from "./PostItem.js";
-import InputArea from "./InputArea.js";
-import { Button, Box } from "@mui/material";
+import ThreadSummary from "./ThreadSummary.jsx";
+import PostItem from "./PostItem.jsx";
+import InputArea from "./InputArea.jsx";
+import { Button, Box, IconButton } from "@mui/material";
+import RefreshIcon from '@mui/icons-material/Refresh';
 import staticInitObject from "../../config/AllStaticConfig.js";
 
 const actionButtonStyle = {
@@ -122,6 +123,11 @@ const PostList = ({
             Load More
           </Button>
         )}
+      </Box>
+      <Box mt={2} width="100%" display="flex" justifyContent="center">
+        <IconButton color="white" onClick={fetchPosts} aria-label="refresh">
+            <RefreshIcon />
+        </IconButton>
       </Box>
       <Box marginTop={5}>
         <InputArea type="post" onSubmit={handleCreatePost} />

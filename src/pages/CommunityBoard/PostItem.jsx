@@ -14,8 +14,8 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import InputArea from "./InputArea.js";
-import ReplyList from "./ReplyList.js";
+import InputArea from "./InputArea.jsx";
+import ReplyList from "./ReplyList.jsx";
 import staticInitObject from "../../config/AllStaticConfig.js";
 import { gql, GraphQLClient } from "graphql-request";
 
