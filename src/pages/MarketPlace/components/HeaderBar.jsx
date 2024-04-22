@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, Avatar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MarketIcon from '../../../assets/market-logo.png';
@@ -24,6 +24,18 @@ const HeaderBar = () => {
             setNotificationCount(0); // Reset notification count after viewing
         }
     };
+
+    useEffect(() => {
+        if (isNotificationOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'visible';
+        }
+
+        return () => {
+            document.body.style.overflow = 'visible';
+        };
+    }, [isNotificationOpen]);
 
     return (
         <React.Fragment>
