@@ -16,6 +16,7 @@ import ResidentMeLogo from "../../assets/logo.png";
 
 const HeaderHeight = "100px";
 
+// Styled components for the header and its children
 const Header = styled.div`
   position: fixed;
   top: 0;
@@ -58,6 +59,7 @@ const BackButtonContainer = styled.div`
   padding-top: 8rem;
 `;
 
+// Styled components for the content container
 const ContentContainer = styled.div`
   padding-top: calc(
     ${HeaderHeight} + 60px
@@ -70,6 +72,7 @@ const ContentContainer = styled.div`
   box-sizing: border-box; // Include padding in the element's total width and height
 `;
 
+// Styled components for the notification table wrapper
 const NotificationTableWrapper = styled.div`
   display: flex;
   justify-content: center; // Center horizontally
@@ -79,6 +82,7 @@ const NotificationTableWrapper = styled.div`
   height: 100%; // Take the full height available
 `;
 
+// Styled component for the logo and app name
 const Logo = styled.img`
   height: 80px;
   margin-right: 10px;
@@ -92,15 +96,17 @@ const AppName = styled.h1`
 
 const CommunicationBoardPage = () => {
   const [view, setView] = useState("threads"); // Initial view to show threads
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [isDrawerOpen, setDrawerOpen] = useState(false); // State to manage the drawer
+  // States to manage the current thread details
   const [currentThreadId, setCurrentThread] = useState(null);
   const [currentThreadTitle, setCurrentThreadTitle] = useState("");
   const [currentThreadContent, setCurrentThreadContent] = useState("");
   const [currentThreadUserName, setCurrentThreadUserName] = useState("");
   const [currentThreadCreatedAt, setCurrentThreadCreatedAt] = useState("");
-  const [notifications, setNotifications] = useState([]);
-  const [notificationCount, setNotificationCount] = useState(0);
+  const [notifications, setNotifications] = useState([]); // State to manage notifications
+  const [notificationCount, setNotificationCount] = useState(0); // State to manage notification count
 
+  // Function to handle thread selection
   const handleThreadSelect = (id, title, content, userName, createdAt) => {
     setCurrentThread(id);
     setCurrentThreadTitle(title);
@@ -110,23 +116,28 @@ const CommunicationBoardPage = () => {
     setView("posts");
   };
 
+  // Function to handle drawer toggle
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
   };
 
-  const commBoardUpdateCB = (event) => {
+  // Callback function to handle notification updates
+  const notificationUpdateCB = (event) => {
     console.log("Received notification:", event);
     setNotifications((prevNotifications) => [ event, ...prevNotifications]);
     setNotificationCount((prevCount) => prevCount + 1);
   };
 
-  useNotificationListener(commBoardUpdateCB);
+  // Custom hook to listen for notifications
+  useNotificationListener(notificationUpdateCB);
 
+  // Function to handle notification click
   const handleNotificationClick = () => {
     setView("notifications");
     setNotificationCount(0);
   };
 
+  // Function to handle back button click
   const handleBack = () => {
     setView("threads"); // Return to 'threads' view from any other view
     setCurrentThread(null);
@@ -169,6 +180,7 @@ const CommunicationBoardPage = () => {
         </CenterContainer>
 
         <RightIconsContainer>
+          {/* Button to show notification count */}
           <IconButton onClick={handleNotificationClick}>
             <Badge badgeContent={notificationCount} color="warning">
               <NotificationsIcon />
@@ -184,6 +196,7 @@ const CommunicationBoardPage = () => {
         handleDrawerToggle={handleDrawerToggle}
       />
       <ContentContainer>
+        {/* Render back button only when in 'posts' or 'notifications' view */}
         {(view === "posts" || view === "notifications") && (
           <IconButton
             onClick={handleBack}

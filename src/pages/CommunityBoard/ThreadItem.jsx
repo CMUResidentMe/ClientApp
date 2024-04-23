@@ -17,8 +17,10 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import staticInitObject from "../../config/AllStaticConfig.js";
 import { gql, GraphQLClient } from "graphql-request";
 
+// Styled components for the header and its children
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 
+// GraphQL mutation to delete a thread
 const DELETE_THREAD_MUTATION = gql`
   mutation DeleteThread($id: ID!) {
     deleteThread(id: $id)
@@ -34,7 +36,9 @@ const ThreadItem = ({
   onThreadSelect,
   fetchThreads,
 }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // state to show/hide delete confirmation dialog
+
+  // Check if the current user can delete the thread
   const currentUser = localStorage.getItem("username");
   const currentUserPrivilege = localStorage.getItem("privilege");
   // Boolean to determine if the current user can delete the thread
@@ -63,6 +67,7 @@ const ThreadItem = ({
 
     try {
       await client.request(DELETE_THREAD_MUTATION, { id });
+      // Refetch threads after deletion
       await fetchThreads();
       handleClose();
     } catch (error) {
@@ -82,6 +87,7 @@ const ThreadItem = ({
       }}
       onClick={() => onThreadSelect(id, title, content, userName, createdAt)}
     >
+      {/* Render the delete button if the current user can delete the thread */}
       {canDelete && (
         <IconButton
           onClick={handleDeleteClick}
@@ -113,7 +119,8 @@ const ThreadItem = ({
         ).toLocaleString()}`}</Typography>
         <Typography variant="subtitle2">{`Created by: ${userName}`}</Typography>
       </Box>
-
+      
+      {/* Dialog to confirm thread deletion */}
       <Dialog
         open={open}
         onClose={handleClose}

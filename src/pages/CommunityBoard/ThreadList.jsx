@@ -6,8 +6,10 @@ import { Button, Box, IconButton } from "@mui/material";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import staticInitObject from "../../config/AllStaticConfig.js";
 
+// Styled components for the header and its children
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 
+// GraphQL query to get threads
 const GET_THREADS_QUERY = gql`
   query GetThreads($pageNum: Int!, $pageSize: Int!) {
     threads(pageNum: $pageNum, pageSize: $pageSize) {
@@ -21,6 +23,7 @@ const GET_THREADS_QUERY = gql`
   }
 `;
 
+// Styled components for the header and its children
 const actionButtonStyle = {
   backgroundColor: "#746352",
   color: "white",
@@ -33,6 +36,7 @@ const actionButtonStyle = {
   },
 };
 
+// GraphQL mutation to create a thread
 const CREATE_THREAD_MUTATION = gql`
   mutation CreateThread($title: String!, $content: String!) {
     createThread(title: $title, content: $content) {
@@ -47,11 +51,12 @@ const CREATE_THREAD_MUTATION = gql`
 `;
 
 const ThreadList = ({ onThreadSelect }) => {
-  const [threads, setThreads] = useState([]);
-  const [page, setPage] = useState(0);
-  const pageSize = 10;
-  const [hasMore, setHasMore] = useState(false);
+  const [threads, setThreads] = useState([]); // state to store threads
+  const [page, setPage] = useState(0); // state to store page number
+  const pageSize = 10; // number of threads per page
+  const [hasMore, setHasMore] = useState(false); // state to check if there are more threads
 
+  // Function to fetch threads
   const fetchThreads = useCallback(async () => {
     try {
       const { threads } = await request(graphqlAPI, GET_THREADS_QUERY, {
@@ -67,10 +72,12 @@ const ThreadList = ({ onThreadSelect }) => {
     }
   }, [page, pageSize]);
 
+  // Fetch threads on initial render
   useEffect(() => {
     fetchThreads();
   }, [fetchThreads]);
 
+  // Function to handle thread creation
   const handleCreateThread = async ({ title, content }) => {
     const token = localStorage.getItem("token");
     const headers = {
@@ -87,6 +94,7 @@ const ThreadList = ({ onThreadSelect }) => {
 
   return (
     <Box>
+      {/* Render the list of threads */}
       {threads.map((thread) => (
         <ThreadItem
           key={thread.id}
@@ -102,6 +110,7 @@ const ThreadList = ({ onThreadSelect }) => {
           marginY: 2,
         }}
       >
+        {/* Render the 'Load More' button if there are more threads to fetch */}
         {hasMore && (
           <Button
             sx={actionButtonStyle}
@@ -112,6 +121,7 @@ const ThreadList = ({ onThreadSelect }) => {
           </Button>
         )}
       </Box>
+      {/* Refresh button to refetch threads */}
       <Box mt={2} width="100%" display="flex" justifyContent="center">
         <IconButton color="white" onClick={fetchThreads} aria-label="refresh">
             <RefreshIcon />
