@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute.js";
 
 //CLIENT
 import HomePage from "./pages/Home.jsx";
@@ -30,14 +31,21 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/manager-home" element={<ManagerHome />} />
+        <Route
+          path="/manager-home"
+          element={
+            <ProtectedRoute privilegeRequired="manager">
+              <ManagerHome />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/register"
           element={<RegisterPage privilege="resident" />}
         />
         <Route
           path="/staff-register"
-          element={<RegisterPage privilege="admin" />}
+          element={<RegisterPage privilege="manager" />}
         />
         <Route
           path="/communication-board"
@@ -60,7 +68,14 @@ const AppRouter = () => {
         </Route>
         {/*<Route path="/work-order" element={<WorkOrderPage />} />*/}
         <Route path="/booking" element={<BookingPage />} />
-        <Route path="/booking-manager" element={<BookingManager />} />
+        <Route
+          path="/booking-manager"
+          element={
+            <ProtectedRoute privilegeRequired="manager">
+              <BookingManager />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/notification" element={<NotificationPage />} />
         <Route path="/cancel-booking" element={<CancelbookPage />} />
       </Routes>
