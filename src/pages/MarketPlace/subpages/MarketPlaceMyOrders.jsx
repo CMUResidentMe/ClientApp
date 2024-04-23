@@ -30,7 +30,7 @@ export default function MarketPlaceMyOrders() {
 
     return (
         <div className={'container mt-5'}>
-            <h2 style={{ fontFamily: 'Roboto, sans-serif', color: '#A67B5B', fontWeight: '500', fontSize: '28px', textAlign: 'left', marginBottom: '20px' }}>
+            <h2 style={{ fontFamily: 'Roboto, sans-serif', color: '#A67B5B', fontWeight: '500', fontSize: '28px', textAlign: 'left', marginBottom: '20px', marginTop: '95px' }}>
                 My Interest Order
             </h2>
             {orders.length === 0 && (
