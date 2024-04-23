@@ -4,9 +4,11 @@ import commBoardIcon from "../assets/commBoard.png";
 import managerToolsIcon from "../assets/managerTools.png";
 import marketPlaceManagerIcon from "../assets/marketPlaceManager.png";
 import ResidentMeLogo from "../assets/logo.png";
-
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { Typography } from "@mui/material";
+import Button from "@mui/material/Button";
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const StyledServiceLink = styled(Link)`
   text-align: center;
@@ -68,7 +70,18 @@ const Greeting = styled.h2`
   flex: 1;
   text-align: right;
 `;
-
+const LogoutButton = styled.button`
+  padding: 10px 20px;
+  background-color: #c1c1c1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  &:hover {
+    background-color: #a1a1a1;
+  }
+`;
 const ServiceContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -111,12 +124,25 @@ const services = [
 ];
 
 const ManagerHome = () => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
   return (
     <Container>
       <Header>
         <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
         <AppName>ResidentMe</AppName>
         <Greeting>Welcome, Manager</Greeting>
+        <Button
+          startIcon={<ExitToAppIcon />}
+          onClick={handleLogout}
+          color="inherit"
+          variant="outlined"
+        >
+          Logout
+        </Button>
       </Header>
       <ServiceContainer>
         {services.map((service, index) => (

@@ -4,7 +4,7 @@ import ProtectedRoute from "./ProtectedRoute.js";
 
 //CLIENT
 import HomePage from "./pages/Home.jsx";
-import ManagerHome from "./pages/ManagerHome.js";
+import ManagerHome from "./pages/ManagerHome.jsx";
 import LoginPage from "./auth/LoginPage.js";
 import RegisterPage from "./auth/RegisterPage.js";
 import CommunicationBoardPage from "./pages/CommunicationBoard/CommunicationBoardPage.jsx";
