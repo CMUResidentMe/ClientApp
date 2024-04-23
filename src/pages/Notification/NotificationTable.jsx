@@ -28,9 +28,19 @@ const columns = [
   { field: 'message', headerName: 'Message', width: 850, cellClassName: 'lastColumnPadding', },
 ];
 
+const notificationTypeMapping = {
+  threadDeleted: 'Thread Deleted',
+  postCreated: 'New Post',
+  postDeleted: 'Post Deleted',
+  replyCreated: 'New Reply',
+  replyDeleted: 'Reply Deleted'
+};
+
 var notiSet = new Set();
 
 const NotificationTable = ({ notifications }) => {
+
+  const getDisplayType = (type) => notificationTypeMapping[type] || type;
 
   const rows = notifications.filter(noti => {
     if(!(noti.notificationID in notiSet)){
@@ -40,7 +50,7 @@ const NotificationTable = ({ notifications }) => {
   }).map((notification) => (
     {
       id: notification.notificationID,
-      notificationType: notification.notificationType,
+      notificationType: getDisplayType(notification.notificationType),
       eventTime: notification.eventTime,
       message: notification.message,
     }

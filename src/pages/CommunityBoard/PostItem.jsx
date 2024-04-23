@@ -14,11 +14,12 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import InputArea from "./InputArea.js";
-import ReplyList from "./ReplyList.js";
+import InputArea from "./InputArea.jsx";
+import ReplyList from "./ReplyList.jsx";
 import staticInitObject from "../../config/AllStaticConfig.js";
 import { gql, GraphQLClient } from "graphql-request";
 
+// Styled components for the header and its children
 const actionButtonStyle = {
   backgroundColor: "#746352",
   color: "white",
@@ -31,8 +32,10 @@ const actionButtonStyle = {
   },
 };
 
+// GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 
+// GraphQL mutation to create a reply
 const CREATE_REPLY_MUTATION = gql`
   mutation CreateReply($postId: ID!, $content: String!) {
     createReply(postId: $postId, content: $content) {
@@ -45,6 +48,7 @@ const CREATE_REPLY_MUTATION = gql`
   }
 `;
 
+// GraphQL mutation to delete a post
 const DELETE_POST_MUTATION = gql`
   mutation DeletePost($id: ID!) {
     deletePost(id: $id)
@@ -52,10 +56,11 @@ const DELETE_POST_MUTATION = gql`
 `;
 
 const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
-  const [showReplyInput, setShowReplyInput] = useState(false);
-  const [refetchReplies, setRefetchReplies] = useState(() => () => {});
-  const [open, setOpen] = useState(false);
+  const [showReplyInput, setShowReplyInput] = useState(false); // state to show/hide reply input
+  const [refetchReplies, setRefetchReplies] = useState(() => () => {}); // state to refetch replies
+  const [open, setOpen] = useState(false); // state to show/hide delete confirmation dialog
 
+  // Check if the current user can delete the post
   const currentUser = localStorage.getItem("username");
   const currentUserPrivilege = localStorage.getItem("privilege");
   const canDelete =
@@ -69,6 +74,7 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
     setOpen(false);
   };
 
+  // Function to handle post deletion
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
     const headers = {
@@ -77,6 +83,7 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
     const client = new GraphQLClient(graphqlAPI, { headers });
     try {
       await client.request(DELETE_POST_MUTATION, { id });
+      // Refetch posts after deletion
       await fetchPosts();
       handleClose();
     } catch (error) {
@@ -84,6 +91,7 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
     }
   };
 
+  // Function to handle reply creation
   const handleCreateReply = async ({ content }) => {
     const token = localStorage.getItem("token");
     const headers = {
@@ -95,6 +103,7 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
         postId: id,
         content,
       });
+      // Refetch replies after creation
       refetchReplies();
       setShowReplyInput(false);
     } catch (error) {
@@ -112,6 +121,7 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
         border: "1px solid #cccccc",
       }}
     >
+      {/*Render the delete button only if the current user can delete the post*/}
       {canDelete && (
         <IconButton
           onClick={handleDeleteClick}
@@ -134,6 +144,7 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
           Reply
         </Button>
       </Box>
+      {/* Render the reply input area only if the user clicks the reply button */}
       {showReplyInput && (
         <InputArea
           sx={actionButtonStyle}
@@ -148,6 +159,7 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
         <Typography variant="subtitle2">{`Posted by: ${userName}`}</Typography>
       </Box>
       <ReplyList postId={id} setRefetchReplies={setRefetchReplies} />
+      {/* Render the delete confirmation dialog only if the user clicks the delete button */}
       <Dialog
         open={open}
         onClose={handleClose}

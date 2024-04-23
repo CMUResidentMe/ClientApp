@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import {
-  Box,
   Typography,
   Paper,
-  Avatar,
   IconButton,
+  Box,
+  Avatar,
   Dialog,
   DialogActions,
   DialogContent,
@@ -12,32 +12,28 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import staticInitObject from "../../config/AllStaticConfig.js";
 import { gql, GraphQLClient } from "graphql-request";
 
+// Styled components for the header and its children
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 
-const DELETE_THREAD_MUTATION = gql`
-  mutation DeleteThread($id: ID!) {
-    deleteThread(id: $id)
+// GraphQL mutation to delete a reply
+const DELETE_REPLY_MUTATION = gql`
+  mutation DeleteReply($id: ID!) {
+    deleteReply(id: $id)
   }
 `;
 
-const ThreadItem = ({
-  id,
-  title,
-  content,
-  userName,
-  createdAt,
-  onThreadSelect,
-  fetchThreads,
-}) => {
-  const [open, setOpen] = useState(false);
+const Reply = ({ id, content, userName, createdAt, fetchReplies }) => {
+  const [open, setOpen] = useState(false); // state to show/hide dialog
+
+  // Check if the current user can delete the reply
   const currentUser = localStorage.getItem("username");
   const currentUserPrivilege = localStorage.getItem("privilege");
-  // Boolean to determine if the current user can delete the thread
   const canDelete =
     currentUser === userName || currentUserPrivilege === "manager";
 
@@ -46,27 +42,23 @@ const ThreadItem = ({
     setOpen(true);
   };
 
-  const handleClose = (e) => {
-    e.stopPropagation();
+  const handleClose = () => {
     setOpen(false);
   };
 
-  // Function to handle the deletion of a thread
-  const handleDelete = async (e) => {
-    e.stopPropagation();
+  // Function to handle reply deletion
+  const handleDelete = async () => {
     const token = localStorage.getItem("token");
-    const headers = {
-      authorization: token,
-    };
-
+    const headers = { authorization: token };
     const client = new GraphQLClient(graphqlAPI, { headers });
 
     try {
-      await client.request(DELETE_THREAD_MUTATION, { id });
-      await fetchThreads();
+      await client.request(DELETE_REPLY_MUTATION, { id });
+      // Refetch replies after deletion
+      await fetchReplies();
       handleClose();
     } catch (error) {
-      console.error("Error deleting thread:", error);
+      console.error("Error deleting reply:", error);
     }
   };
 
@@ -80,40 +72,29 @@ const ThreadItem = ({
         position: "relative",
         border: "1px solid #cccccc",
       }}
-      onClick={() => onThreadSelect(id, title, content, userName, createdAt)}
     >
+      {/* Render the delete button if the current user can delete the reply */}
       {canDelete && (
         <IconButton
           onClick={handleDeleteClick}
           sx={{ position: "absolute", top: -4, right: -4 }}
         >
-          <FontAwesomeIcon icon={faTimes} />
+          <CloseIcon />
         </IconButton>
       )}
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
         <Avatar sx={{ marginRight: 2 }}>{userName.charAt(0)}</Avatar>
-        <Typography variant="h6" sx={{ wordBreak: "break-all" }}>
-          {title}
+        <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
+          {content}
         </Typography>
       </Box>
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{
-          wordBreak: "break-word",
-          overflowWrap: "break-word",
-          hyphens: "auto",
-        }}
-      >
-        {content}
-      </Typography>
       <Box display="flex" justifyContent="space-between" sx={{ marginTop: 1 }}>
         <Typography variant="overline">{`${new Date(
           createdAt
         ).toLocaleString()}`}</Typography>
-        <Typography variant="subtitle2">{`Created by: ${userName}`}</Typography>
+        <Typography variant="subtitle2">{`Replied by: ${userName}`}</Typography>
       </Box>
-
+      {/* Dialog to confirm reply deletion */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -123,7 +104,7 @@ const ThreadItem = ({
         <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this thread? This action cannot be
+            Are you sure you want to delete this reply? This action cannot be
             undone.
           </DialogContentText>
         </DialogContent>
@@ -138,4 +119,4 @@ const ThreadItem = ({
   );
 };
 
-export default ThreadItem;
+export default Reply;

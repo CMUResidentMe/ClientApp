@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { gql, request, GraphQLClient } from "graphql-request";
-import ThreadSummary from "./ThreadSummary.js";
-import PostItem from "./PostItem.js";
-import InputArea from "./InputArea.js";
-import { Button, Box } from "@mui/material";
+import ThreadSummary from "./ThreadSummary.jsx";
+import PostItem from "./PostItem.jsx";
+import InputArea from "./InputArea.jsx";
+import { Button, Box, IconButton } from "@mui/material";
+import RefreshIcon from '@mui/icons-material/Refresh';
 import staticInitObject from "../../config/AllStaticConfig.js";
 
+// Styled components for the header and its children
 const actionButtonStyle = {
   backgroundColor: "#746352",
   color: "white",
@@ -18,8 +20,10 @@ const actionButtonStyle = {
   },
 };
 
+// GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 
+// GraphQL query to get posts by thread
 const GET_POSTS_QUERY = gql`
   query GetPostsByThread($threadId: ID!, $pageNum: Int!, $pageSize: Int!) {
     postsByThread(threadId: $threadId, pageNum: $pageNum, pageSize: $pageSize) {
@@ -32,6 +36,7 @@ const GET_POSTS_QUERY = gql`
   }
 `;
 
+// GraphQL mutation to create a post
 const CREATE_POST_MUTATION = gql`
   mutation CreatePost($threadId: ID!, $content: String!) {
     createPost(threadId: $threadId, content: $content) {
@@ -51,11 +56,12 @@ const PostList = ({
   threadUserName,
   threadCreatedAt,
 }) => {
-  const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(0);
-  const pageSize = 10;
-  const [hasMore, setHasMore] = useState(false);
+  const [posts, setPosts] = useState([]); // state to store posts
+  const [page, setPage] = useState(0); // state to store page number
+  const pageSize = 10; // number of posts per page
+  const [hasMore, setHasMore] = useState(false); // state to store whether there are more posts to fetch
 
+  // Function to fetch posts by thread
   const fetchPosts = useCallback(async () => {
     if (!threadId) return;
     try {
@@ -74,10 +80,12 @@ const PostList = ({
     }
   }, [threadId, page, pageSize]);
 
+  // Fetch posts on initial render
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
+  // Function to handle post creation
   const handleCreatePost = async ({ content }) => {
     const token = localStorage.getItem("token");
     const headers = {
@@ -89,6 +97,7 @@ const PostList = ({
         threadId,
         content,
       });
+      // Refetch posts after creation
       await fetchPosts();
     } catch (error) {
       console.error("Error creating post:", error);
@@ -103,6 +112,7 @@ const PostList = ({
         userName={threadUserName}
         createdAt={threadCreatedAt}
       />
+      {/* Render the list of posts */}
       {posts.map((post) => (
         <PostItem key={post.id} {...post} fetchPosts={fetchPosts} />
       ))}
@@ -113,6 +123,7 @@ const PostList = ({
           marginY: 2,
         }}
       >
+        {/* Render the 'Load More' button if there are more posts to fetch */}
         {hasMore && (
           <Button
             sx={actionButtonStyle}
@@ -122,6 +133,12 @@ const PostList = ({
             Load More
           </Button>
         )}
+      </Box>
+      {/* Render the 'Refresh' button to fetch posts again */}
+      <Box mt={2} width="100%" display="flex" justifyContent="center">
+        <IconButton color="white" onClick={fetchPosts} aria-label="refresh">
+            <RefreshIcon />
+        </IconButton>
       </Box>
       <Box marginTop={5}>
         <InputArea type="post" onSubmit={handleCreatePost} />
