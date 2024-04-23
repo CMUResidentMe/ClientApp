@@ -26,10 +26,10 @@ function MarketPlaceIndexPage() {
                         <Image style={{ width: 200, height: 200, borderRadius: '50%', objectFit: 'cover' }} src={ResidentMeLogo} />
                     </Col>
                     <Col sm={5}>
-                        <h1 style={{ fontWeight: '600', color: '#8B4513', fontSize: '28px', fontFamily: 'Georgia, serif' }}>ResidentMe Community</h1>
+                        <h1 style={{ fontWeight: '600', color: '#8B4513', fontSize: '28px', fontFamily: 'Georgia, serif' }}>ResidentMe Communication</h1>
                         <p style={{ color: '#A0522D', fontSize: '18px', fontFamily: 'Georgia, serif' }}>
-                            Welcome to ResidentMe - MarketPlace, the community that allows you to publish and purchase items
-                            from your neighbors. We wish people in this community can purchase tools, equipment and more.
+                            Welcome to ResidentMe - MarketPlace, the communication that allows you to publish and purchase items
+                            from your neighbors. We wish people in this communication can purchase tools, equipment and more.
                         </p>
                         <p>
                             <Button

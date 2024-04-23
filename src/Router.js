@@ -6,7 +6,7 @@ import HomePage from "./pages/Home.jsx";
 import ManagerHome from "./pages/ManagerHome.js";
 import LoginPage from "./auth/LoginPage.js";
 import RegisterPage from "./auth/RegisterPage.js";
-import CommunityBoardPage from "./pages/CommunityBoard/CommunityBoardPage.jsx";
+import CommunicationBoardPage from "./pages/CommunicationBoard/CommunicationBoardPage.jsx";
 // import WorkOrderPage from "./pages/WorkOrder/WorkOrderPage.jsx";
 import BookingPage from "./pages/Booking/BookingPage.js";
 import CancelbookPage from "./pages/Booking/CancelbookPage.js";
@@ -39,7 +39,10 @@ const AppRouter = () => {
           path="/staff-register"
           element={<RegisterPage privilege="admin" />}
         />
-        <Route path="/community-board" element={<CommunityBoardPage />} />
+        <Route
+          path="/communication-board"
+          element={<CommunicationBoardPage />}
+        />
         <Route path="/work-order" element={<ResidentWKPage />} />
         <Route path="/staff-work-order" element={<StaffWKPage />} />
         <Route path="/marketplace" element={<MarketPlaceLayout />}>
