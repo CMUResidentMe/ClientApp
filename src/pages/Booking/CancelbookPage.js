@@ -6,6 +6,7 @@ import {
   Button,
   Paper,
 } from "@mui/material";
+import { Badge } from "@mui/material";
 import styled from "@emotion/styled";
 import {
   Notifications as NotificationsIcon,
@@ -157,6 +158,14 @@ const CancelBookingPage = () => {
               <Typography variant="h6">
                 {booking.date} from {booking.startTime} to {booking.endTime} -{" "}
                 {booking.room_name}
+                {!booking.is_confirmed && (
+                  <Typography
+                    component="span"
+                    style={{ color: "red", marginLeft: "10px" }}
+                  >
+                    (Pending)
+                  </Typography>
+                )}
               </Typography>
               <Button
                 variant="outlined"
