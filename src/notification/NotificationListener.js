@@ -10,6 +10,10 @@ export default function useNotificationListener(workorderUpdateCB) {
     };
 
     socketManager
+        .getIo()
+        .on(staticInitObject.OrderGoods, handleNotification);
+
+    socketManager
       .getIo()
       .on(staticInitObject.workorderCreated, handleNotification);
     socketManager

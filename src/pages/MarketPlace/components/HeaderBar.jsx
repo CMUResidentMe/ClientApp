@@ -10,6 +10,7 @@ import NotificationTable from '../../Notification/NotificationTable.jsx';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import { Box } from '@mui/system';
+import useNotificationListener from "../../../notification/NotificationListener.js";
 import HomeIcon from '@mui/icons-material/Home'; 
 
 const HeaderBar = () => {
@@ -29,6 +30,14 @@ const HeaderBar = () => {
             setNotificationCount(0); // Reset notification count after viewing
         }
     };
+
+    const receiveMessages = (event) => {
+        console.log("Received notification:", event);
+        setNotifications(prevNotifications => [event, ...prevNotifications]);
+        setNotificationCount(prevCount => prevCount + 1);
+    };
+
+    useNotificationListener(receiveMessages);
 
     useEffect(() => {
         if (isNotificationOpen) {
@@ -86,7 +95,7 @@ const HeaderBar = () => {
                 <Box sx={{
                     width: '100%',
                     maxWidth: '1500px',
-                    marginTop: '65px', 
+                    marginTop: '64px', 
                     backgroundColor: "white",
                     zIndex: 1200,
                     position: 'fixed', 

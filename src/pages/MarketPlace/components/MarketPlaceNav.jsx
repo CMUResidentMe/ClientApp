@@ -68,11 +68,11 @@ export default function MarketPlaceNav() {
                         <MenuItem onClick={() => {
                             navigate(`/marketplace/my-orders`)
                             handleClose();
-                        }}>My Orders</MenuItem>
+                        }}>My Interest Order</MenuItem>
                         <MenuItem onClick={() => {
                             navigate(`/marketplace/my-sold`)
                             handleClose();
-                        }}>My Sold</MenuItem>
+                        }}>Order Interest Tracker</MenuItem>
                         <MenuItem onClick={() => {  
                             navigate(`/marketplace`)
                             handleClose();

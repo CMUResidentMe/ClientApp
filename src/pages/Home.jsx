@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Grid, Typography, Button, Box, IconButton, Slide, Card, CardContent, CardMedia, CardActionArea, Badge } from '@mui/material';
 import { MenuBookOutlined } from '@mui/icons-material';
 import Navbar from '../components/NavBar.js';
-import backgroundImage from '../assets/background.gif';
+import backgroundImage from '../assets/background.jpg';
 import communicationImage from '../assets/communication.png';
 import marketplaceImage from '../assets/marketplace.png';
 import workOrderImage from '../assets/workorder.png';

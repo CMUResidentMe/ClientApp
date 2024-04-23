@@ -49,7 +49,7 @@ const MarketPlacePublishPage = () => {
             }).then(r => {
                 message.success('Publish success');
                 formik.resetForm();
-                navigate(-1);
+                navigate('/marketplace/playground')
             });
         },
     });
