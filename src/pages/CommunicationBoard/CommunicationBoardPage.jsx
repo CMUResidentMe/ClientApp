@@ -182,25 +182,23 @@ const CommunicationBoardPage = () => {
           <AppName>Communication Board</AppName>
         </CenterContainer>
 
-        {currentUserPrivilege === "resident" && (
-          <RightIconsContainer>
+        <RightIconsContainer>
             <IconButton onClick={handleNotificationClick}>
               <Badge badgeContent={notificationCount} color="warning">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+          {currentUserPrivilege === "resident" && (
             <IconButton onClick={handleDrawerToggle}>
               <MenuIcon />
             </IconButton>
-          </RightIconsContainer>
-        )}
-        {currentUserPrivilege === "manager" && (
-          <RightIconsContainer>
+          )}
+          {currentUserPrivilege === "manager" && (
             <IconButton onClick={handleBackManager}>
               <HomeIcon />
             </IconButton>
+          )}
           </RightIconsContainer>
-        )}
       </Header>
       {currentUserPrivilege === "resident" && (
         <Navbar isDrawerOpen={isDrawerOpen} handleDrawerToggle={handleDrawerToggle} />
