@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { IconButton, Badge } from "@mui/material";
 import {
   ArrowBack,
-  Notifications,
   Menu as MenuIcon,
 } from "@mui/icons-material";
 import styled from "@emotion/styled";

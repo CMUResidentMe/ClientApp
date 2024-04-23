@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { gql, request } from "graphql-request";
+import { gql, GraphQLClient } from "graphql-request";
 import Reply from "./Reply.jsx";
 import { Button, Box } from "@mui/material";
 import staticInitObject from "../../config/AllStaticConfig.js";
@@ -21,6 +21,11 @@ const actionButtonStyle = {
 
 // GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
+const token = localStorage.getItem("token");
+const headers = {
+  authorization: token,
+};
+const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL query to get replies by post
 const GET_REPLIES_QUERY = gql`
@@ -45,7 +50,7 @@ const ReplyList = ({ postId, setRefetchReplies }) => {
   const fetchReplies = useCallback(async () => {
     if (!postId) return;
     try {
-      const { repliesByPost } = await request(graphqlAPI, GET_REPLIES_QUERY, {
+      const { repliesByPost } = await client.request(GET_REPLIES_QUERY, {
         postId,
         pageNum: page,
         pageSize,

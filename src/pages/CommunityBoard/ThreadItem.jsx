@@ -12,13 +12,17 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import CloseIcon from '@mui/icons-material/Close';
 import staticInitObject from "../../config/AllStaticConfig.js";
 import { gql, GraphQLClient } from "graphql-request";
 
-// Styled components for the header and its children
+// GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
+const token = localStorage.getItem("token");
+const headers = {
+  authorization: token,
+};
+const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL mutation to delete a thread
 const DELETE_THREAD_MUTATION = gql`
@@ -58,12 +62,6 @@ const ThreadItem = ({
   // Function to handle the deletion of a thread
   const handleDelete = async (e) => {
     e.stopPropagation();
-    const token = localStorage.getItem("token");
-    const headers = {
-      authorization: token,
-    };
-
-    const client = new GraphQLClient(graphqlAPI, { headers });
 
     try {
       await client.request(DELETE_THREAD_MUTATION, { id });
@@ -93,7 +91,7 @@ const ThreadItem = ({
           onClick={handleDeleteClick}
           sx={{ position: "absolute", top: -4, right: -4 }}
         >
-          <FontAwesomeIcon icon={faTimes} />
+          <CloseIcon />
         </IconButton>
       )}
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
@@ -119,7 +117,7 @@ const ThreadItem = ({
         ).toLocaleString()}`}</Typography>
         <Typography variant="subtitle2">{`Created by: ${userName}`}</Typography>
       </Box>
-      
+
       {/* Dialog to confirm thread deletion */}
       <Dialog
         open={open}
