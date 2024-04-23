@@ -7,7 +7,25 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import staticInitObject from "../../config/AllStaticConfig.js";
 
 // Styled components for the header and its children
+const actionButtonStyle = {
+  backgroundColor: "#746352",
+  color: "white",
+  padding: "0.5rem 1rem",
+  border: "none",
+  borderRadius: "3px",
+  cursor: "pointer",
+  "&:hover": {
+    backgroundColor: "#5a4938",
+  },
+};
+
+// GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
+const token = localStorage.getItem("token");
+const headers = {
+  authorization: token,
+};
+const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL query to get threads
 const GET_THREADS_QUERY = gql`
@@ -22,19 +40,6 @@ const GET_THREADS_QUERY = gql`
     }
   }
 `;
-
-// Styled components for the header and its children
-const actionButtonStyle = {
-  backgroundColor: "#746352",
-  color: "white",
-  padding: "0.5rem 1rem",
-  border: "none",
-  borderRadius: "3px",
-  cursor: "pointer",
-  "&:hover": {
-    backgroundColor: "#5a4938",
-  },
-};
 
 // GraphQL mutation to create a thread
 const CREATE_THREAD_MUTATION = gql`
@@ -59,7 +64,7 @@ const ThreadList = ({ onThreadSelect }) => {
   // Function to fetch threads
   const fetchThreads = useCallback(async () => {
     try {
-      const { threads } = await request(graphqlAPI, GET_THREADS_QUERY, {
+      const { threads } = await client.request(GET_THREADS_QUERY, {
         pageNum: page,
         pageSize,
       });
@@ -79,11 +84,6 @@ const ThreadList = ({ onThreadSelect }) => {
 
   // Function to handle thread creation
   const handleCreateThread = async ({ title, content }) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      authorization: token,
-    };
-    const client = new GraphQLClient(graphqlAPI, { headers });
     try {
       await client.request(CREATE_THREAD_MUTATION, { title, content });
       await fetchThreads();

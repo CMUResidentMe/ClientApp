@@ -12,8 +12,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import CloseIcon from '@mui/icons-material/Close';
 import InputArea from "./InputArea.jsx";
 import ReplyList from "./ReplyList.jsx";
 import staticInitObject from "../../config/AllStaticConfig.js";
@@ -34,6 +33,11 @@ const actionButtonStyle = {
 
 // GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
+const token = localStorage.getItem("token");
+const headers = {
+  authorization: token,
+};
+const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL mutation to create a reply
 const CREATE_REPLY_MUTATION = gql`
@@ -76,11 +80,6 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
 
   // Function to handle post deletion
   const handleDelete = async () => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      authorization: token,
-    };
-    const client = new GraphQLClient(graphqlAPI, { headers });
     try {
       await client.request(DELETE_POST_MUTATION, { id });
       // Refetch posts after deletion
@@ -93,11 +92,6 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
 
   // Function to handle reply creation
   const handleCreateReply = async ({ content }) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      authorization: token,
-    };
-    const client = new GraphQLClient(graphqlAPI, { headers });
     try {
       await client.request(CREATE_REPLY_MUTATION, {
         postId: id,
@@ -127,7 +121,7 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
           onClick={handleDeleteClick}
           sx={{ position: "absolute", top: -4, right: -4 }}
         >
-          <FontAwesomeIcon icon={faTimes} />
+          <CloseIcon />
         </IconButton>
       )}
       <Box display="flex" alignItems="center" justifyContent="space-between">

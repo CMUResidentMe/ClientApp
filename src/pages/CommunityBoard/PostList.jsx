@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { gql, request, GraphQLClient } from "graphql-request";
+import { gql, GraphQLClient } from "graphql-request";
 import ThreadSummary from "./ThreadSummary.jsx";
 import PostItem from "./PostItem.jsx";
 import InputArea from "./InputArea.jsx";
@@ -22,6 +22,11 @@ const actionButtonStyle = {
 
 // GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
+const token = localStorage.getItem("token");
+const headers = {
+  authorization: token,
+};
+const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL query to get posts by thread
 const GET_POSTS_QUERY = gql`
@@ -65,7 +70,7 @@ const PostList = ({
   const fetchPosts = useCallback(async () => {
     if (!threadId) return;
     try {
-      const { postsByThread } = await request(graphqlAPI, GET_POSTS_QUERY, {
+      const { postsByThread } = await client.request(GET_POSTS_QUERY, {
         threadId,
         pageNum: page,
         pageSize,
@@ -87,11 +92,6 @@ const PostList = ({
 
   // Function to handle post creation
   const handleCreatePost = async ({ content }) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      authorization: token,
-    };
-    const client = new GraphQLClient(graphqlAPI, { headers });
     try {
       await client.request(CREATE_POST_MUTATION, {
         threadId,

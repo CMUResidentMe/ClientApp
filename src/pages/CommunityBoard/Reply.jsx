@@ -13,13 +13,16 @@ import {
   Button,
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import staticInitObject from "../../config/AllStaticConfig.js";
 import { gql, GraphQLClient } from "graphql-request";
 
-// Styled components for the header and its children
+// GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
+const token = localStorage.getItem("token");
+const headers = {
+  authorization: token,
+};
+const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL mutation to delete a reply
 const DELETE_REPLY_MUTATION = gql`
@@ -48,10 +51,6 @@ const Reply = ({ id, content, userName, createdAt, fetchReplies }) => {
 
   // Function to handle reply deletion
   const handleDelete = async () => {
-    const token = localStorage.getItem("token");
-    const headers = { authorization: token };
-    const client = new GraphQLClient(graphqlAPI, { headers });
-
     try {
       await client.request(DELETE_REPLY_MUTATION, { id });
       // Refetch replies after deletion
