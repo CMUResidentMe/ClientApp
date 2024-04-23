@@ -64,16 +64,18 @@ const Header = styled.div`
   right: 0;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   padding: 20px;
-  height: 60px;
+  padding-left: 14%; // More padding on the sides for a spaced-out look
+  padding-right: 14%;
+  height: ${HeaderHeight};
   background-color: #f2efea;
   color: #746352;
-  z-index: 1000;
+  z-index: 1000; // Keeping the header on top
 `;
 
 const Logo = styled.img`
-  height: 50px;
+  height: 80px;
 `;
 
 const AppName = styled.h1`
@@ -326,7 +328,7 @@ const BookingPage = () => {
           <Container
             maxWidth="lg"
             sx={{
-              marginTop: "120px",
+              marginTop: "80px",
               boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.25)",
               backgroundColor: "rgba(255, 255, 255, 0.85)",
               padding: 4,
