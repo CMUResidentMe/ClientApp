@@ -22,6 +22,7 @@ import styled from "@emotion/styled";
 import { GraphQLClient, gql } from "graphql-request";
 import staticInitObject from "../../config/AllStaticConfig.js";
 import { useNavigate } from "react-router-dom";
+import ResidentMeLogo from "../../assets/logo.png";
 // Kafka
 import { socketManager } from "../../notification/socketManager.js";
 
@@ -41,12 +42,25 @@ const Header = styled.div`
   right: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; // Ensures that children align to each end and center.
   padding: 20px;
-  height: ${HeaderHeight};
+  padding-left: 14%;  // Provides a buffer on the sides
+  padding-right: 14%;
+  height: 100px;  // Consistent height for larger header area
   background-color: #f2efea;
   color: #746352;
   z-index: 1000;
+`;
+const Logo = styled.img`
+  height: 80px; 
+  margin-right: auto; 
+`;
+
+const AppName = styled.h1`
+  font-size: 1.5rem;
+  font-weight: bold;
+  flex-grow: 1; // Allows it to use available space and center the text when possible
+  text-align: center; // Centers the text in its flex container
 `;
 
 const ContentContainer = styled.div`
@@ -215,10 +229,8 @@ const ManagerPage = () => {
   return (
     <>
       <Header>
-        <Navbar />
-        <Typography variant="h4" sx={{ ml: 2 }}>
-          Manager Dashboard
-        </Typography>
+      <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
+      <AppName>Manager Dashboard</AppName>
         <RightIconsContainer>
           <IconButton onClick={handleBackManager}>
             <HomeIcon />
