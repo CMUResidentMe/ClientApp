@@ -9,5 +9,7 @@ const staticInitObject = {
   postDeleted: "postDeleted",
   replyCreated: "replyCreated",
   replyDeleted: "replyDeleted",
+  BookingApproved: "BookingApproved",
+  BookingDeclined: "BookingDeclined",
 };
 export default staticInitObject;

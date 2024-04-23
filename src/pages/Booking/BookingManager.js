@@ -214,7 +214,7 @@ const ManagerPage = () => {
       <ContentContainer>
         <Container maxWidth="lg">
           <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
-            Cancel Bookings
+            Delete Rooms
           </Typography>
           <List>
             {rooms.map((room) => (

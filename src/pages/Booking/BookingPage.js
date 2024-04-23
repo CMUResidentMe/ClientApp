@@ -32,7 +32,7 @@ import { useNavigate } from "react-router-dom";
 
 import NotificationTable from "../Notification/NotificationTable.jsx";
 import useNotificationListener from "../../notification/NotificationListener.js";
-
+const HeaderHeight = "100px";
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 const RightIconsContainer = styled.div`
   display: flex;
@@ -48,7 +48,7 @@ const NotificationTableWrapper = styled.div`
 `;
 const ContentContainer = styled.div`
   padding-top: calc(
-    200px;
+    ${HeaderHeight} + 60px
   ); // Adjusted padding-top to add some space below the fixed header
   padding-bottom: 20px; // Give some padding at the bottom
   overflow: auto; // Scrollable content
@@ -506,7 +506,7 @@ const BookingPage = () => {
               }}
               onClick={() => navigate("/cancel-booking")}
             >
-              Cancel My Booking
+              My Bookings
             </Button>
           </Container>
         );
