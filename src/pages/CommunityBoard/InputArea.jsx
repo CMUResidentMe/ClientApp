@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 
+// Styled components for the header and its children
 const actionButtonStyle = {
   backgroundColor: "#746352",
   color: "white",
@@ -14,9 +15,10 @@ const actionButtonStyle = {
 };
 
 const InputArea = ({ type, onSubmit, onCancel }) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState(""); // state for title input
+  const [content, setContent] = useState(""); // state for content input
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     await onSubmit({
@@ -33,6 +35,7 @@ const InputArea = ({ type, onSubmit, onCancel }) => {
       onSubmit={handleSubmit}
       sx={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 3 }}
     >
+      {/* Render the input area based on the type of input */}
       {type === "thread" && (
         <TextField
           label="Title"

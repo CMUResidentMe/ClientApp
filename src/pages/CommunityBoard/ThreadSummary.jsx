@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, Paper, Avatar } from "@mui/material";
 
+// Component to display a thread summary as the first post in a thread
 const ThreadSummary = ({ title, content, userName, createdAt }) => {
   return (
     <Paper

@@ -18,8 +18,10 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import staticInitObject from "../../config/AllStaticConfig.js";
 import { gql, GraphQLClient } from "graphql-request";
 
+// Styled components for the header and its children
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 
+// GraphQL mutation to delete a reply
 const DELETE_REPLY_MUTATION = gql`
   mutation DeleteReply($id: ID!) {
     deleteReply(id: $id)
@@ -27,7 +29,9 @@ const DELETE_REPLY_MUTATION = gql`
 `;
 
 const Reply = ({ id, content, userName, createdAt, fetchReplies }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // state to show/hide dialog
+
+  // Check if the current user can delete the reply
   const currentUser = localStorage.getItem("username");
   const currentUserPrivilege = localStorage.getItem("privilege");
   const canDelete =
@@ -42,6 +46,7 @@ const Reply = ({ id, content, userName, createdAt, fetchReplies }) => {
     setOpen(false);
   };
 
+  // Function to handle reply deletion
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
     const headers = { authorization: token };
@@ -49,6 +54,7 @@ const Reply = ({ id, content, userName, createdAt, fetchReplies }) => {
 
     try {
       await client.request(DELETE_REPLY_MUTATION, { id });
+      // Refetch replies after deletion
       await fetchReplies();
       handleClose();
     } catch (error) {
@@ -67,6 +73,7 @@ const Reply = ({ id, content, userName, createdAt, fetchReplies }) => {
         border: "1px solid #cccccc",
       }}
     >
+      {/* Render the delete button if the current user can delete the reply */}
       {canDelete && (
         <IconButton
           onClick={handleDeleteClick}
@@ -87,7 +94,7 @@ const Reply = ({ id, content, userName, createdAt, fetchReplies }) => {
         ).toLocaleString()}`}</Typography>
         <Typography variant="subtitle2">{`Replied by: ${userName}`}</Typography>
       </Box>
-
+      {/* Dialog to confirm reply deletion */}
       <Dialog
         open={open}
         onClose={handleClose}
