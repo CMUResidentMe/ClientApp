@@ -78,7 +78,11 @@ const RegisterPage = (props) => {
     try {
       const data = await request(graphqlAPI, REGISTER_MUTATION, variables);
       // If the registration is successful, data should contain the success message
-      navigate("/"); // Redirect to login page after successful registration
+      if (props.privilege === "admin") {
+        navigate("/manager-home");  // Redirect admin to the ManagerHome after registering a staff
+      } else {
+        navigate("/");  // Redirect residents to the main page after registering themselves
+      }
     } catch (error) {
       // Extract the specific error message from the GraphQL error response
       const errorMessage =
@@ -87,6 +91,13 @@ const RegisterPage = (props) => {
       setError(errorMessage);
     }
   };
+
+  let backLink = "/";
+  let backLinkText = "Back to Login";
+  if (props.privilege === "admin") {
+    backLink = "/manager-home";  // Assuming this is the correct route for the Manager Home
+    backLinkText = "Back to Homepage";
+  }
 
   return (
     <div style={styles.container}>
@@ -149,8 +160,8 @@ const RegisterPage = (props) => {
           Register
         </button>
         <div style={styles.backToLoginContainer}>
-          <Link to="/" style={styles.backToLoginLink}>
-            Back to Login
+          <Link to={backLink} style={styles.backToLoginLink}>
+            {backLinkText}
           </Link>
         </div>
       </form>
