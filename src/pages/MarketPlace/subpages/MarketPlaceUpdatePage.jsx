@@ -101,9 +101,10 @@ const MarketPlaceUpdatePage = () => {
     };
 
     return (
+        <div className={'container mt-5'} style={{ marginLeft: '80px', marginTop: '180px' }}>
         <Container maxWidth="sm">
             <Box my={4}>
-                <Typography variant="h4" component="h1" gutterBottom>
+                <Typography variant="h6" component="h6" gutterBottom>
                     Post Second-Hand Goods
                 </Typography>
                 <form onSubmit={formik.handleSubmit}>
@@ -218,6 +219,7 @@ const MarketPlaceUpdatePage = () => {
                 </form>
             </Box>
         </Container>
+        </div>
     );
 };
 

@@ -39,8 +39,8 @@ export default function MarketPlaceMyProducts() {
     }
 
     return (
-        <div className="container mt-5">
-            <h2 style={{ fontFamily: 'Roboto, sans-serif', color: '#A67B5B', fontWeight: '500', fontSize: '28px', textAlign: 'left', marginBottom: '20px', marginTop: '95px' }}>
+        <div className="container mt-5" style={{ marginLeft: '200px' }}>
+            <h2 style={{ fontFamily: 'Roboto, sans-serif', color: '#A67B5B', fontWeight: '500', fontSize: '28px', textAlign: 'left', marginBottom: '20px', marginTop: '120px' }}>
                 My Products
             </h2>
             <div className="col-md-9">

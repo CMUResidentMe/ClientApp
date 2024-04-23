@@ -29,8 +29,8 @@ export default function MarketPlaceSoldProducts() {
 
 
     return (
-        <div className={'container mt-5'}>
-            <h2 style={{ fontFamily: 'Roboto, sans-serif', color: '#A67B5B', fontWeight: '500', fontSize: '28px', textAlign: 'left', marginBottom: '20px' }}>
+        <div className={'container mt-5'} >
+            <h2 style={{ fontFamily: 'Roboto, sans-serif', color: '#A67B5B', fontWeight: '500', fontSize: '28px', textAlign: 'left', marginTop: '120px', marginBottom: '20px' }}>
                 Order Interest Tracker
             </h2>
             {orders.length === 0 && (
