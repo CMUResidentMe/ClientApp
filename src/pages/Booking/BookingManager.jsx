@@ -14,11 +14,14 @@ import {
   ListItemText,
   IconButton,
 } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import HomeIcon from '@mui/icons-material/Home';
 import { AddBox, Delete, CheckCircle, Cancel } from "@mui/icons-material";
 import Navbar from "../../components/NavBar.js";
 import styled from "@emotion/styled";
 import { GraphQLClient, gql } from "graphql-request";
 import staticInitObject from "../../config/AllStaticConfig.js";
+import { useNavigate } from "react-router-dom";
 // Kafka
 import { socketManager } from "../../notification/socketManager.js";
 
@@ -55,6 +58,10 @@ const ContentContainer = styled.div`
   padding-top: ${HeaderHeight};
   width: 100%;
   padding-top: 120px;
+`;
+const RightIconsContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 // GraphQL Queries and Mutations
@@ -113,6 +120,7 @@ const ManagerPage = () => {
   const [rooms, setRooms] = useState([]);
   const [partyRooms, setPartyRooms] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Connect to WebSocket
@@ -202,6 +210,7 @@ const ManagerPage = () => {
       })
       .catch((error) => alert("Failed to decline booking."));
   };
+  const handleBackManager = () => navigate("/manager-home");
 
   return (
     <>
@@ -210,6 +219,11 @@ const ManagerPage = () => {
         <Typography variant="h4" sx={{ ml: 2 }}>
           Manager Dashboard
         </Typography>
+        <RightIconsContainer>
+          <IconButton onClick={handleBackManager}>
+            <HomeIcon />
+          </IconButton>
+        </RightIconsContainer>
       </Header>
       <ContentContainer>
         <Container maxWidth="lg">

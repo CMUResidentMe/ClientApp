@@ -11,7 +11,7 @@ import CommunicationBoardPage from "./pages/CommunicationBoard/CommunicationBoar
 import BookingPage from "./pages/Booking/BookingPage.js";
 import CancelbookPage from "./pages/Booking/CancelbookPage.js";
 import NotificationPage from "./pages/Notification/NotificationTable.jsx";
-import BookingManager from "./pages/Booking/BookingManager.js";
+import BookingManager from "./pages/Booking/BookingManager.jsx";
 import ResidentWKPage from "./pages/WorkOrder/ResidentWKPage.jsx";
 import StaffWKPage from "./pages/WorkOrder/StaffWKPage.jsx";
 import MarketPlaceLayout from "./pages/MarketPlace/subpages/MarketPlaceLayout.jsx";

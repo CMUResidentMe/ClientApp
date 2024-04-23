@@ -4,6 +4,7 @@ import {
   ArrowBack,
   Menu as MenuIcon,
 } from "@mui/icons-material";
+import HomeIcon from '@mui/icons-material/Home';
 import styled from "@emotion/styled";
 import Navbar from "../../components/NavBar.js";
 import ThreadList from "./ThreadList.jsx";
@@ -12,6 +13,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications.js";
 import NotificationTable from "../Notification/NotificationTable.jsx";
 import useNotificationListener from "../../notification/NotificationListener.js";
 import ResidentMeLogo from "../../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const HeaderHeight = "100px";
 
@@ -94,6 +96,7 @@ const AppName = styled.h1`
 `;
 
 const CommunicationBoardPage = () => {
+  const navigate = useNavigate();
   const [view, setView] = useState("threads"); // Initial view to show threads
   const [isDrawerOpen, setDrawerOpen] = useState(false); // State to manage the drawer
   // States to manage the current thread details
@@ -104,7 +107,7 @@ const CommunicationBoardPage = () => {
   const [currentThreadCreatedAt, setCurrentThreadCreatedAt] = useState("");
   const [notifications, setNotifications] = useState([]); // State to manage notifications
   const [notificationCount, setNotificationCount] = useState(0); // State to manage notification count
-
+  const currentUserPrivilege = localStorage.getItem("privilege");
   // Function to handle thread selection
   const handleThreadSelect = (id, title, content, userName, createdAt) => {
     setCurrentThread(id);
@@ -135,6 +138,7 @@ const CommunicationBoardPage = () => {
     setView("notifications");
     setNotificationCount(0);
   };
+  const handleBackManager = () => navigate("/manager-home");
 
   // Function to handle back button click
   const handleBack = () => {
@@ -178,22 +182,29 @@ const CommunicationBoardPage = () => {
           <AppName>Communication Board</AppName>
         </CenterContainer>
 
-        <RightIconsContainer>
-          {/* Button to show notification count */}
-          <IconButton onClick={handleNotificationClick}>
-            <Badge badgeContent={notificationCount} color="warning">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <IconButton onClick={handleDrawerToggle}>
-            <MenuIcon />
-          </IconButton>
-        </RightIconsContainer>
+        {currentUserPrivilege === "resident" && (
+          <RightIconsContainer>
+            <IconButton onClick={handleNotificationClick}>
+              <Badge badgeContent={notificationCount} color="warning">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton onClick={handleDrawerToggle}>
+              <MenuIcon />
+            </IconButton>
+          </RightIconsContainer>
+        )}
+        {currentUserPrivilege === "manager" && (
+          <RightIconsContainer>
+            <IconButton onClick={handleBackManager}>
+              <HomeIcon />
+            </IconButton>
+          </RightIconsContainer>
+        )}
       </Header>
-      <Navbar
-        isDrawerOpen={isDrawerOpen}
-        handleDrawerToggle={handleDrawerToggle}
-      />
+      {currentUserPrivilege === "resident" && (
+        <Navbar isDrawerOpen={isDrawerOpen} handleDrawerToggle={handleDrawerToggle} />
+      )}
       <ContentContainer>
         {/* Render back button only when in 'posts' or 'notifications' view */}
         {(view === "posts" || view === "notifications") && (

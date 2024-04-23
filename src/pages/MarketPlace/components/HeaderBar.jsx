@@ -10,6 +10,7 @@ import NotificationTable from '../../Notification/NotificationTable.jsx';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import { Box } from '@mui/system';
+import HomeIcon from '@mui/icons-material/Home'; 
 
 const HeaderBar = () => {
     const navigate = useNavigate();
@@ -17,7 +18,11 @@ const HeaderBar = () => {
     const [isNotificationOpen, setNotificationOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [notificationCount, setNotificationCount] = useState(0);
+    const currentUserPrivilege = localStorage.getItem("privilege");
 
+    const handleBackManager = () => {
+        navigate("/manager-home");
+    };
     const handleNotificationClick = () => {
         setNotificationOpen(!isNotificationOpen);
         if (isNotificationOpen) {
@@ -40,35 +45,42 @@ const HeaderBar = () => {
     return (
         <React.Fragment>
             <AppBar position="static" sx={{ backgroundColor: '#d2b48c' }}>
-            <Toolbar>
-                <img onClick={() => navigate('/marketplace')} className={'me-2'} width={40} src={MarketIcon} />
-                <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{
-                        flexGrow: 1,
-                        fontFamily: "'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif",
-                        fontSize: '1.25rem',
-                        fontWeight: 'bold',
-                        color: '#8B4513',
-                        letterSpacing: '0.1em'
-                    }}
-                >
-                    ResidentMe - MarketPlace
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <IconButton color="inherit" onClick={handleNotificationClick}>
-                        <Badge badgeContent={notificationCount} color="secondary">
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
-                    <MarketPlaceNav sx={{ marginRight: 60 }} />
-                    <IconButton color="inherit" aria-label="menu" sx={{ marginLeft: 1, marginRight: 2 }} onClick={() => setDrawerOpen(!isDrawerOpen)}>
-                        <MenuBookOutlined />
-                    </IconButton>
-                    <NavBar isDrawerOpen={isDrawerOpen} handleDrawerToggle={() => setDrawerOpen(!isDrawerOpen)} />
-                </Box>
-            </Toolbar>
+                <Toolbar>
+                    <img onClick={() => navigate('/marketplace')} className={'me-2'} width={40} src={MarketIcon} alt="Market Logo" />
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{
+                            flexGrow: 1,
+                            fontFamily: "'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif",
+                            fontSize: '1.25rem',
+                            fontWeight: 'bold',
+                            color: '#8B4513',
+                            letterSpacing: '0.1em'
+                        }}
+                    >
+                        ResidentMe - MarketPlace
+                    </Typography>
+                    {currentUserPrivilege === "resident" && (
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <IconButton color="inherit" onClick={handleNotificationClick}>
+                                <Badge badgeContent={notificationCount} color="secondary">
+                                    <NotificationsIcon />
+                                </Badge>
+                            </IconButton>
+                            <MarketPlaceNav sx={{ marginRight: 60 }} />
+                            <IconButton color="inherit" aria-label="menu" sx={{ marginLeft: 1, marginRight: 2 }} onClick={() => setDrawerOpen(!isDrawerOpen)}>
+                                <MenuIcon />
+                            </IconButton>
+                            <NavBar isDrawerOpen={isDrawerOpen} handleDrawerToggle={() => setDrawerOpen(!isDrawerOpen)} />
+                        </Box>
+                    )}
+                    {currentUserPrivilege === "manager" && (
+                        <IconButton color="inherit" onClick={handleBackManager}>
+                            <HomeIcon />
+                        </IconButton>
+                    )}
+                </Toolbar>
             </AppBar>
             {isNotificationOpen && (
                 <Box sx={{
