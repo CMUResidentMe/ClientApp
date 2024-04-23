@@ -80,8 +80,8 @@ const MarketPlaceProductDetailPage = () => {
     } = product;
 
     return (
-        <Container className="my-5">
-
+        <div className={'container'} style={{ marginTop: '130px' }} >
+        <Container className="my-5" >
             <Dialog open={openOrderForm} fullWidth onClose={() => setOpenOrderForm(false)}>
                 <DialogTitle>Express Interest</DialogTitle>
                 <DialogContent>
@@ -170,6 +170,7 @@ const MarketPlaceProductDetailPage = () => {
                 </Col>
             </Row>
         </Container>
+        </div>
     );
 };
 

@@ -44,7 +44,7 @@ const MarketPlaceHomePage = () => {
         }
     }, [data]);
 
-     // Observable
+     // Observer Design Pattern
     const [datas, setDatas] = useState('');
     const [subscription, setSubscription] = useState(null);
     useEffect(() => {

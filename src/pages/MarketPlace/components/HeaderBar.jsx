@@ -26,7 +26,7 @@ const ToolBar = styled.div`
   padding: 20px;
   padding-left: 2%;
   padding-right: 2%;
-  height: 40px;
+  height: 100px;
   background-color: #f2efea;
   color: #746352;
   z-index: 1100;
@@ -74,7 +74,7 @@ const HeaderBar = () => {
     return (
         <React.Fragment>
                 <ToolBar>
-                    <img onClick={() => navigate('/marketplace')} className={'me-2'} width={40} src={ResidentMeLogo} />
+                    <img onClick={() => navigate('/marketplace')} className={'me-2'} width={80} src={ResidentMeLogo} />
                     <Typography
                         style={{
                             fontSize: '1.5rem', // Larger size
@@ -108,13 +108,13 @@ const HeaderBar = () => {
                 <Box sx={{
                     width: '100%',
                     maxWidth: '1500px',
-                    marginTop: '40px', 
+                    marginTop: '100px', 
                     backgroundColor: "white",
                     zIndex: 1200,
                     position: 'fixed', 
                     left: 0,
                     top: 0,  
-                    height: 'calc(100vh - 40px)',  
+                    height: 'calc(100vh - 100px)',  
                     minHeight: '100%', 
                     overflow: 'auto'
                 }}>
