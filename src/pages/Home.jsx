@@ -27,11 +27,6 @@ const HomePage = () => {
     socketManager.connect(localStorage.getItem("token"));
   }, []);
 
-  useNotificationListener(event => {
-    console.log("Received notification:", event);
-    setNotifications(prevNotifications => [ event, ...prevNotifications]);
-    setNotificationCount(prevCount => prevCount + 1);
-  });
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
