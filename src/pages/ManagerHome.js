@@ -5,7 +5,7 @@ import managerToolsIcon from "../assets/managerTools.png";
 import marketPlaceManagerIcon from "../assets/marketPlaceManager.png";
 import ResidentMeLogo from "../assets/logo.png";
 
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
 const StyledServiceLink = styled(Link)`
@@ -89,9 +89,9 @@ const services = [
   },
   {
     icon: commBoardIcon,
-    text: "Community Board",
-    link: "/community-board",
-    altText: "Community Board",
+    text: "Communication Board",
+    link: "/communication-board",
+    altText: "Communication Board",
     bgColor: "#f3d9a4", // Soft Yellow Background
   },
   {
@@ -120,9 +120,17 @@ const ManagerHome = () => {
       </Header>
       <ServiceContainer>
         {services.map((service, index) => (
-          <StyledServiceLink to={service.link} key={index} bgColor={service.bgColor}>
+          <StyledServiceLink
+            to={service.link}
+            key={index}
+            bgColor={service.bgColor}
+          >
             <div>
-              <img src={service.icon} alt={service.altText} style={{ width: '80px', height: '80px', marginBottom: '16px' }} />
+              <img
+                src={service.icon}
+                alt={service.altText}
+                style={{ width: "80px", height: "80px", marginBottom: "16px" }}
+              />
             </div>
             <div>{service.text}</div>
           </StyledServiceLink>
