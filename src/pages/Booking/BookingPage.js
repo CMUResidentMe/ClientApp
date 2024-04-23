@@ -13,13 +13,16 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import { Badge } from "@mui/material";
 import Calendar from "react-calendar";
 import Navbar from "../../components/NavBar.js";
 import {
   Notifications as NotificationsIcon,
   MenuBookOutlined,
 } from "@mui/icons-material";
+import { ArrowBack, Menu as MenuIcon } from "@mui/icons-material";
 import partyRoomImage from "../../assets/partyroom.jpeg";
+
 import studyRoomImage from "../../assets/studyroom.png";
 import hangoutRoomImage from "../../assets/hangoutroom.jpeg";
 import ResidentMeLogo from "../../assets/logo.png";
@@ -27,8 +30,33 @@ import styled from "@emotion/styled";
 import staticInitObject from "../../config/AllStaticConfig.js";
 import { useNavigate } from "react-router-dom";
 
+import NotificationTable from "../Notification/NotificationTable.jsx";
+import useNotificationListener from "../../notification/NotificationListener.js";
+const HeaderHeight = "100px";
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
-
+const RightIconsContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const NotificationTableWrapper = styled.div`
+  display: flex;
+  justify-content: center; // Center horizontally
+  align-items: center; // Center vertically
+  flex-direction: column; // Stack children vertically
+  width: 100%; // Take the full width of the container
+  height: 100%; // Take the full height available
+`;
+const ContentContainer = styled.div`
+  padding-top: calc(
+    ${HeaderHeight} + 60px
+  ); // Adjusted padding-top to add some space below the fixed header
+  padding-bottom: 20px; // Give some padding at the bottom
+  overflow: auto; // Scrollable content
+  margin: 0 auto; // Center the container if necessary
+  max-width: 1200px; // Max width for large screens, adjust as needed
+  width: 100%; // Full width on small screens
+  box-sizing: border-box; // Include padding in the element's total width and height
+`;
 const Header = styled.div`
   position: fixed;
   top: 0;
@@ -174,7 +202,16 @@ const BookingPage = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [refreshCounter, setRefreshCounter] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [view, setView] = useState("bookings");
 
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!isDrawerOpen);
+  };
+  const handleBack = () => {
+    setView("bookings");
+  };
   useEffect(() => {
     if (!roomType) return;
 
@@ -260,208 +297,254 @@ const BookingPage = () => {
     setBookingDialogOpen(true);
   };
 
+  const bookRoomUpdate = (event) => {
+    console.log("Received notification:", event);
+    setNotifications((prevNotifications) => [...prevNotifications, event]);
+    setNotificationCount((prevCount) => prevCount + 1);
+  };
+
+  useNotificationListener(bookRoomUpdate);
+
+  const handleBackToBookings = () => {
+    setView("bookings");
+  };
+  const handleNotificationClick = () => {
+    setView("notifications");
+    setNotificationCount(0);
+  };
+  const renderContent = () => {
+    switch (view) {
+      case "notifications":
+        return (
+          <NotificationTableWrapper>
+            <NotificationTable notifications={notifications} />
+          </NotificationTableWrapper>
+        ); // Component to render list of notifications
+      case "bookings":
+      default:
+        return (
+          <Container
+            maxWidth="lg"
+            sx={{
+              marginTop: "120px",
+              boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.25)",
+              backgroundColor: "rgba(255, 255, 255, 0.85)",
+              padding: 4,
+              borderRadius: "8px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <Typography
+              variant="h4"
+              component="h1"
+              sx={{ textAlign: "center", width: "100%", marginBottom: 2 }}
+            >
+              Book Rooms
+            </Typography>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              width="100%"
+              flexDirection="row"
+              flexWrap="wrap"
+            >
+              {[
+                {
+                  name: "Party Room",
+                  image: partyRoomImage,
+                  description:
+                    "A big room perfect for celebrating events with 30+ people.",
+                },
+                {
+                  name: "Study Room",
+                  image: studyRoomImage,
+                  description:
+                    "A quiet space designed for focused studying and concentration.",
+                },
+                {
+                  name: "Hangout Room",
+                  image: hangoutRoomImage,
+                  description:
+                    "A cozy area where you can relax, chat, and hang out with your buddies.",
+                },
+              ].map((option) => (
+                <Box
+                  onClick={() => handleRoomTypeSelection(option.name)}
+                  sx={{
+                    width: "30%",
+                    maxWidth: "300px",
+                    minHeight: "400px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    textAlign: "center",
+                    "&:hover": { boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)" },
+                    cursor: "pointer",
+                    background: "#fff",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    margin: 1,
+                  }}
+                >
+                  <img
+                    src={option.image}
+                    alt={option.name}
+                    style={{
+                      width: "100%",
+                      height: "200px",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <Typography variant="h6" sx={{ my: 2 }}>
+                    {option.name}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ mx: 2, mb: 2, color: "rgba(0, 0, 0, 0.7)" }}
+                  >
+                    {option.description}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+            {roomType && (
+              <Box sx={{ width: "100%", mt: 4 }}>
+                <Typography variant="h5" sx={{ mb: 2 }}>
+                  Available Times for {roomType}
+                </Typography>
+                <Calendar onChange={handleDateChange} value={date} />
+                <Typography sx={{ mt: 2 }}>
+                  Selected Date: {date.toDateString()}
+                </Typography>
+                {rooms.length > 0 ? (
+                  rooms.map((room) => (
+                    <div key={room.id}>
+                      <Typography variant="h6">{room.name}</Typography>
+                      {room.availableTimes.length ? (
+                        room.availableTimes.map((time, index) => (
+                          <Button
+                            key={index}
+                            onClick={() =>
+                              handleOpenBookingDialog(room.id, time)
+                            }
+                          >
+                            {time} (Book Now)
+                          </Button>
+                        ))
+                      ) : (
+                        <Typography>No available times</Typography>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <Typography>No rooms available</Typography>
+                )}
+              </Box>
+            )}
+            <Dialog
+              open={bookingDialogOpen}
+              onClose={() => setBookingDialogOpen(false)}
+            >
+              <DialogTitle>Book Your Time</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Please confirm your booking times within the selected time
+                  slot.
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="start_time"
+                  label="Start Time"
+                  type="time"
+                  fullWidth
+                  variant="standard"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                />
+                <TextField
+                  margin="dense"
+                  id="end_time"
+                  label="End Time"
+                  type="time"
+                  fullWidth
+                  variant="standard"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setBookingDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() =>
+                    handleCreateBooking(selectedRoomId, startTime, endTime)
+                  }
+                  color="primary"
+                >
+                  Confirm Booking
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#F2EFEA",
+                color: "black",
+                marginTop: 3,
+                padding: "10px 30px",
+                fontSize: "1rem",
+                "&:hover": {
+                  backgroundColor: "#e0ded4",
+                },
+              }}
+              onClick={() => navigate("/cancel-booking")}
+            >
+              My Bookings
+            </Button>
+          </Container>
+        );
+    }
+  };
+
   return (
     <div>
       <Header>
         <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
         <AppName>Book Rooms</AppName>
-        <IconButton
-          color="inherit"
-          onClick={() => setDrawerOpen(!isDrawerOpen)}
-          sx={{ marginLeft: "auto" }}
-        >
-          <NotificationsIcon />
-        </IconButton>
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-          onClick={() => setDrawerOpen(!isDrawerOpen)}
-          sx={{ marginLeft: "20px" }}
-        >
-          <MenuBookOutlined />
-        </IconButton>
+        <RightIconsContainer>
+          <IconButton onClick={handleNotificationClick}>
+            <Badge badgeContent={notificationCount} color="warning">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <IconButton onClick={handleDrawerToggle}>
+            <MenuIcon />
+          </IconButton>
+        </RightIconsContainer>
+
         <Navbar
           isDrawerOpen={isDrawerOpen}
           handleDrawerToggle={() => setDrawerOpen(!isDrawerOpen)}
         />
       </Header>
-      <Container
-        maxWidth="lg"
-        sx={{
-          marginTop: "120px",
-          boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.25)",
-          backgroundColor: "rgba(255, 255, 255, 0.85)",
-          padding: 4,
-          borderRadius: "8px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 2,
-        }}
-      >
-        <Typography
-          variant="h4"
-          component="h1"
-          sx={{ textAlign: "center", width: "100%", marginBottom: 2 }}
-        >
-          Book Rooms
-        </Typography>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          width="100%"
-          flexDirection="row"
-          flexWrap="wrap"
-        >
-          {[
-            {
-              name: "Party Room",
-              image: partyRoomImage,
-              description:
-                "A big room perfect for celebrating events with 30+ people.",
-            },
-            {
-              name: "Study Room",
-              image: studyRoomImage,
-              description:
-                "A quiet space designed for focused studying and concentration.",
-            },
-            {
-              name: "Hangout Room",
-              image: hangoutRoomImage,
-              description:
-                "A cozy area where you can relax, chat, and hang out with your buddies.",
-            },
-          ].map((option) => (
-            <Box
-              onClick={() => handleRoomTypeSelection(option.name)}
-              sx={{
-                width: "30%",
-                maxWidth: "300px",
-                minHeight: "400px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                borderRadius: "10px",
-                overflow: "hidden",
-                textAlign: "center",
-                "&:hover": { boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)" },
-                cursor: "pointer",
-                background: "#fff",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                margin: 1,
-              }}
-            >
-              <img
-                src={option.image}
-                alt={option.name}
-                style={{ width: "100%", height: "200px", objectFit: "cover" }}
-              />
-              <Typography variant="h6" sx={{ my: 2 }}>
-                {option.name}
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ mx: 2, mb: 2, color: "rgba(0, 0, 0, 0.7)" }}
-              >
-                {option.description}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-        {roomType && (
-          <Box sx={{ width: "100%", mt: 4 }}>
-            <Typography variant="h5" sx={{ mb: 2 }}>
-              Available Times for {roomType}
-            </Typography>
-            <Calendar onChange={handleDateChange} value={date} />
-            <Typography sx={{ mt: 2 }}>
-              Selected Date: {date.toDateString()}
-            </Typography>
-            {rooms.length > 0 ? (
-              rooms.map((room) => (
-                <div key={room.id}>
-                  <Typography variant="h6">{room.name}</Typography>
-                  {room.availableTimes.length ? (
-                    room.availableTimes.map((time, index) => (
-                      <Button
-                        key={index}
-                        onClick={() => handleOpenBookingDialog(room.id, time)}
-                      >
-                        {time} (Book Now)
-                      </Button>
-                    ))
-                  ) : (
-                    <Typography>No available times</Typography>
-                  )}
-                </div>
-              ))
-            ) : (
-              <Typography>No rooms available</Typography>
-            )}
-          </Box>
+      <ContentContainer>
+        {view === "notifications" && (
+          <IconButton
+            onClick={handleBack}
+            sx={{ position: "absolute", top: 110, left: 30 }}
+          >
+            <ArrowBack />
+          </IconButton>
         )}
-        <Dialog
-          open={bookingDialogOpen}
-          onClose={() => setBookingDialogOpen(false)}
-        >
-          <DialogTitle>Book Your Time</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Please confirm your booking times within the selected time slot.
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="start_time"
-              label="Start Time"
-              type="time"
-              fullWidth
-              variant="standard"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-            />
-            <TextField
-              margin="dense"
-              id="end_time"
-              label="End Time"
-              type="time"
-              fullWidth
-              variant="standard"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setBookingDialogOpen(false)}>Cancel</Button>
-            <Button
-              onClick={() =>
-                handleCreateBooking(selectedRoomId, startTime, endTime)
-              }
-              color="primary"
-            >
-              Confirm Booking
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "#F2EFEA",
-            color: "black",
-            marginTop: 3,
-            padding: "10px 30px",
-            fontSize: "1rem",
-            "&:hover": {
-              backgroundColor: "#e0ded4",
-            },
-          }}
-          onClick={() => navigate("/cancel-booking")}
-        >
-          Cancel My Booking
-        </Button>
-      </Container>
+        {renderContent()}
+      </ContentContainer>
     </div>
   );
 };

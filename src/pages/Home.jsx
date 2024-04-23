@@ -3,7 +3,7 @@ import { Container, Grid, Typography, Button, Box, IconButton, Slide, Card, Card
 import { MenuBookOutlined } from '@mui/icons-material';
 import Navbar from '../components/NavBar.js';
 import backgroundImage from '../assets/background.gif';
-import communityImage from '../assets/community.png';
+import communicationImage from '../assets/communication.png';
 import marketplaceImage from '../assets/marketplace.png';
 import workOrderImage from '../assets/workorder.png';
 import { ArrowBack } from '@mui/icons-material';
@@ -92,7 +92,7 @@ const HomePage = () => {
               Transforming the resident experience with seamless communication and resource sharing.
             </Typography>
             <Typography variant="body1" paragraph sx={{ fontFamily: 'Open Sans, sans-serif' }}>
-              Our platform offers a unified solution to enhance community engagement and streamline resource sharing among residents.
+              Our platform offers a unified solution to enhance communication engagement and streamline resource sharing among residents.
             </Typography>
           </Box>
         </Slide>
@@ -111,10 +111,10 @@ const HomePage = () => {
       ) : (
         <Grid container spacing={3} justifyContent="center" sx={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
           {[
-            { name: "Community Board", path: "/community-board", description: "A central place for residents to post discussions, share information, and stay connected with their neighbors.", image: communityImage },
-            { name: "Marketplace", path: "/marketplace", description: "An organized platform for buying and selling goods within the community, promoting sustainability and convenience.", image: marketplaceImage },
+            { name: "Communitcation Board", path: "/communication-board", description: "A central place for residents to post discussions, share information, and stay connected with their neighbors.", image: communicationImage },
+            { name: "Marketplace", path: "/marketplace", description: "An organized platform for buying and selling goods within the communication, promoting sustainability and convenience.", image: marketplaceImage },
             { name: "Work Order", path: "/work-order", description: "Efficiently report and track maintenance issues within your apartment or building, ensuring quick and effective resolution.", image: workOrderImage },
-            { name: "Booking", path: "/booking", description: "Easily browse, book, and manage reservations for community amenities like event spaces, meeting rooms, and more.", image: bookingImage }
+            { name: "Booking", path: "/booking", description: "Easily browse, book, and manage reservations for communication amenities like event spaces, meeting rooms, and more.", image: bookingImage }
           ].map((feature, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Card sx={{ maxWidth: 345, background: 'rgba(255,255,255,0.8)', margin: 'auto' }}>
