@@ -56,7 +56,7 @@ const MarketPlaceHomePage = () => {
     }, []);
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-5" style={{ marginTop: '85px' }}>
             <Button
                 variant="contained"
                 onClick={() => navigate('/marketplace/publish')}
@@ -64,8 +64,9 @@ const MarketPlaceHomePage = () => {
                     backgroundColor: '#A67B5B',
                     color: '#ffffff',
                     '&:hover': {
-                        backgroundColor: '#94684f'
-                    }
+                        backgroundColor: '#94684f',
+                    },
+                    marginTop: '85px'
                 }}>
                 Publish Goods
             </Button>

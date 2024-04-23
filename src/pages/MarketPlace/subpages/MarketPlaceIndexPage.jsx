@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ResidentMeLogo from "../../../assets/logo.png";
+import MarketIcon from '../../../assets/market-logo.png';
 import { Card, Row, Col, Container, Image } from 'react-bootstrap';
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -15,15 +16,15 @@ function MarketPlaceIndexPage() {
     };
 
     return (
-        <div style={{ background: 'linear-gradient(180deg, #F5F5DC 0%, #FFE4C4 100%)', minHeight: '100vh' }}>
-            <Container style={{ marginTop: '0px', padding: '20px' }}>
+        <div style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFACD 100%)', minHeight: '100vh' }}>
+            <Container style={{ marginTop: '85px', padding: '20px' }}>
                 <Box display="flex" justifyContent="space-between" alignItems="center" style={{ marginBottom: '24px' }}>
                     <Typography variant="h4" component="h1" gutterBottom style={{ fontFamily: 'Merriweather, serif', fontWeight: 'bold', color: '#654321' }}>
                     </Typography>
                 </Box>
                 <Row style={{ padding: '16px', marginBottom: '32px' }}>
                     <Col sm={6}>
-                        <Image style={{ width: 200, height: 200, borderRadius: '50%', objectFit: 'cover' }} src={ResidentMeLogo} />
+                        <Image style={{ width: 200, height: 200, borderRadius: '50%', objectFit: 'cover' }} src={MarketIcon} />
                     </Col>
                     <Col sm={5}>
                         <h1 style={{ fontWeight: '600', color: '#8B4513', fontSize: '28px', fontFamily: 'Georgia, serif' }}>ResidentMe Communication</h1>

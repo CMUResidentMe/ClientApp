@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, Avatar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import MarketIcon from '../../../assets/market-logo.png';
+import ResidentMeLogo from "../../../assets/logo.png";
 import {useNavigate} from "react-router-dom";
 import MarketPlaceNav from "./MarketPlaceNav.jsx";
 import NavBar from "../../../components/NavBar.js";
@@ -10,7 +10,28 @@ import NotificationTable from '../../Notification/NotificationTable.jsx';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import { Box } from '@mui/system';
+import useNotificationListener from "../../../notification/NotificationListener.js";
 import HomeIcon from '@mui/icons-material/Home'; 
+import styled from "@emotion/styled";
+
+const ToolBar = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 20px;
+  padding: 20px;
+  padding-left: 2%;
+  padding-right: 2%;
+  height: 40px;
+  background-color: #f2efea;
+  color: #746352;
+  z-index: 1100;
+`;
+
 
 const HeaderBar = () => {
     const navigate = useNavigate();
@@ -30,6 +51,14 @@ const HeaderBar = () => {
         }
     };
 
+    const receiveMessages = (event) => {
+        console.log("Received notification:", event);
+        setNotifications(prevNotifications => [event, ...prevNotifications]);
+        setNotificationCount(prevCount => prevCount + 1);
+    };
+
+    useNotificationListener(receiveMessages);
+
     useEffect(() => {
         if (isNotificationOpen) {
             document.body.style.overflow = 'hidden';
@@ -44,55 +73,48 @@ const HeaderBar = () => {
 
     return (
         <React.Fragment>
-            <AppBar position="static" sx={{ backgroundColor: '#d2b48c' }}>
-                <Toolbar>
-                    <img onClick={() => navigate('/marketplace')} className={'me-2'} width={40} src={MarketIcon} alt="Market Logo" />
+                <ToolBar>
+                    <img onClick={() => navigate('/marketplace')} className={'me-2'} width={40} src={ResidentMeLogo} />
                     <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{
-                            flexGrow: 1,
-                            fontFamily: "'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif",
-                            fontSize: '1.25rem',
-                            fontWeight: 'bold',
-                            color: '#8B4513',
-                            letterSpacing: '0.1em'
+                        style={{
+                            fontSize: '1.5rem', // Larger size
+                            fontWeight: 'bold'  // Bolder text
                         }}
                     >
-                        ResidentMe - MarketPlace
+                        MarketPlace
                     </Typography>
+
                     {currentUserPrivilege === "resident" && (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <IconButton color="inherit" onClick={handleNotificationClick}>
+                            <IconButton onClick={handleNotificationClick}>
                                 <Badge badgeContent={notificationCount} color="secondary">
                                     <NotificationsIcon />
                                 </Badge>
                             </IconButton>
                             <MarketPlaceNav sx={{ marginRight: 60 }} />
-                            <IconButton color="inherit" aria-label="menu" sx={{ marginLeft: 1, marginRight: 2 }} onClick={() => setDrawerOpen(!isDrawerOpen)}>
+                            <IconButton aria-label="menu" sx={{ marginLeft: 1, marginRight: 2 }} onClick={() => setDrawerOpen(!isDrawerOpen)}>
                                 <MenuIcon />
                             </IconButton>
                             <NavBar isDrawerOpen={isDrawerOpen} handleDrawerToggle={() => setDrawerOpen(!isDrawerOpen)} />
                         </Box>
                     )}
                     {currentUserPrivilege === "manager" && (
-                        <IconButton color="inherit" onClick={handleBackManager}>
+                        <IconButton onClick={handleBackManager}>
                             <HomeIcon />
                         </IconButton>
                     )}
-                </Toolbar>
-            </AppBar>
+                </ToolBar>
             {isNotificationOpen && (
                 <Box sx={{
                     width: '100%',
                     maxWidth: '1500px',
-                    marginTop: '65px', 
+                    marginTop: '40px', 
                     backgroundColor: "white",
                     zIndex: 1200,
                     position: 'fixed', 
                     left: 0,
                     top: 0,  
-                    height: 'calc(100vh - 64px)',  
+                    height: 'calc(100vh - 40px)',  
                     minHeight: '100%', 
                     overflow: 'auto'
                 }}>

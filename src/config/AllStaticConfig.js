@@ -11,5 +11,6 @@ const staticInitObject = {
   replyDeleted: "replyDeleted",
   BookingApproved: "BookingApproved",
   BookingDeclined: "BookingDeclined",
+  OrderGoods: "order-goods"
 };
 export default staticInitObject;

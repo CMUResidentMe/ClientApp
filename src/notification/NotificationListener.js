@@ -11,6 +11,10 @@ export default function useNotificationListener(workorderUpdateCB) {
 
     socketManager
       .getIo()
+      .on(staticInitObject.OrderGoods, handleNotification);
+
+    socketManager
+      .getIo()
       .on(staticInitObject.workorderCreated, handleNotification);
     socketManager
       .getIo()
@@ -64,6 +68,9 @@ export default function useNotificationListener(workorderUpdateCB) {
       socketManager
         .getIo()
         .off(staticInitObject.BookingDeclined, handleNotification);
+      socketManager
+        .getIo()
+        .off(staticInitObject.OrderGoods, handleNotification);
     };
   }, [workorderUpdateCB]);
 }
