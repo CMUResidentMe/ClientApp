@@ -25,6 +25,12 @@ export default function useNotificationListener(workorderUpdateCB) {
     socketManager.getIo().on(staticInitObject.postDeleted, handleNotification);
     socketManager.getIo().on(staticInitObject.replyCreated, handleNotification);
     socketManager.getIo().on(staticInitObject.replyDeleted, handleNotification);
+    socketManager
+      .getIo()
+      .on(staticInitObject.BookingApproved, handleNotification);
+    socketManager
+      .getIo()
+      .on(staticInitObject.BookingDeclined, handleNotification);
     // TODO: add more events to listen to.
 
     return () => {
@@ -52,7 +58,12 @@ export default function useNotificationListener(workorderUpdateCB) {
       socketManager
         .getIo()
         .off(staticInitObject.replyDeleted, handleNotification);
-      // TODO: add more events to destroy.
+      socketManager
+        .getIo()
+        .off(staticInitObject.BookingApproved, handleNotification);
+      socketManager
+        .getIo()
+        .off(staticInitObject.BookingDeclined, handleNotification);
     };
   }, [workorderUpdateCB]);
 }
