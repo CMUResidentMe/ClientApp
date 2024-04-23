@@ -19,6 +19,8 @@ import Navbar from "../../components/NavBar.js";
 import styled from "@emotion/styled";
 import { GraphQLClient, gql } from "graphql-request";
 import staticInitObject from "../../config/AllStaticConfig.js";
+// Kafka
+import { socketManager } from "../../notification/socketManager.js";
 
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 const token = localStorage.getItem("token");
@@ -111,34 +113,49 @@ const ManagerPage = () => {
   const [rooms, setRooms] = useState([]);
   const [partyRooms, setPartyRooms] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
-  const fetchPartyRooms = () => {
-    client
-      .request(GET_UNCONFIRMED_PARTY_ROOMS)
-      .then((data) => {
-        // Filter out confirmed bookings from each room's bookedTimes array
-        const filteredRooms = data.unconfirmedPartyRooms.map((room) => ({
-          ...room,
-          bookedTimes: room.bookedTimes.filter((bt) => !bt.is_confirmed),
-        }));
-
-        // Set the filtered rooms to state
-        setPartyRooms(filteredRooms);
-
-        console.log("Unconfirmed party rooms fetched", filteredRooms);
-      })
-      .catch((error) =>
-        console.error("Error fetching unconfirmed party rooms:", error)
-      );
-  };
 
   useEffect(() => {
+    // Connect to WebSocket
+    socketManager.connect(token);
+    // Set up notification listeners
+    socketManager.getIo().on("BookingApproved", (notification) => {
+      console.log("Booking approval notification:", notification);
+    });
+    socketManager.getIo().on("BookingDeclined", (notification) => {
+      console.log("Booking decline notification:", notification);
+    });
+
+    // Fetch initial data
     client
       .request(GET_ALL_ROOMS_QUERY)
       .then((data) => setRooms(data.allRooms))
       .catch((error) => console.error("Error fetching rooms:", error));
 
     fetchPartyRooms();
+
+    // Clean up on unmount
+    return () => {
+      socketManager.disconnect();
+      socketManager.getIo().off("BookingApproved");
+      socketManager.getIo().off("BookingDeclined");
+    };
   }, [refreshData]);
+
+  const fetchPartyRooms = () => {
+    client
+      .request(GET_UNCONFIRMED_PARTY_ROOMS)
+      .then((data) => {
+        const filteredRooms = data.unconfirmedPartyRooms.map((room) => ({
+          ...room,
+          bookedTimes: room.bookedTimes.filter((bt) => !bt.is_confirmed),
+        }));
+        setPartyRooms(filteredRooms);
+        console.log("Unconfirmed party rooms fetched", filteredRooms);
+      })
+      .catch((error) =>
+        console.error("Error fetching unconfirmed party rooms:", error)
+      );
+  };
 
   const handleDeleteRoom = (room_id) => {
     if (window.confirm("Are you sure you want to delete this room?")) {
