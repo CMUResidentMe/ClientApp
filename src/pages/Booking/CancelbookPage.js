@@ -25,16 +25,23 @@ const Header = styled.div`
   right: 0;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   padding: 20px;
-  height: 60px;
+  padding-left: 14%;
+  padding-right: 14%;
+  height: 100px;
   background-color: #f2efea;
   color: #746352;
   z-index: 1000;
 `;
-
+const CenterContainer = styled.div`
+  display: flex;
+  flex-grow: 1; // This allows the center container to grow and use available space
+  justify-content: center; // Center content within the container
+  align-items: center;
+`;
 const Logo = styled.img`
-  height: 50px;
+  height: 80px;
 `;
 
 const AppName = styled.h1`
@@ -119,14 +126,9 @@ const CancelBookingPage = () => {
     <>
       <Header>
         <Logo src={ResidentMeLogo} alt="ResidentMe Logo" />
-        <AppName>Cancel Booking</AppName>
-        <IconButton color="inherit">
-          <NotificationsIcon />
-        </IconButton>
-        <IconButton color="inherit">
-          <MenuBookOutlined />
-        </IconButton>
-        <Navbar />
+        <CenterContainer>
+          <AppName>Cancel Booking</AppName>
+        </CenterContainer>
       </Header>
       <Container style={{ paddingTop: "140px", marginTop: "100px" }}>
         {" "}
