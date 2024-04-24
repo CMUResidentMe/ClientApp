@@ -40,9 +40,14 @@ const RegisterPage = (props) => {
   const [error, setError] = useState("");
   let title = "ResidentMe";
   let isResident = true;
-  if(props.privilege === "admin"){
+  let isStaff = false;
+  if(props.privilege === PrivilegeType.manager){
+    title = "Manager";
+    isResident = false;
+  } else if(props.privilege === PrivilegeType.staff){
     title = "Staff";
     isResident = false;
+    isStaff = true;
   }
 
   const handleChange = (e) => {
@@ -78,7 +83,7 @@ const RegisterPage = (props) => {
     try {
       const data = await request(graphqlAPI, REGISTER_MUTATION, variables);
       // If the registration is successful, data should contain the success message
-      if (props.privilege === "admin") {
+      if (props.privilege === PrivilegeType.manager) {
         navigate("/manager-home");  // Redirect admin to the ManagerHome after registering a staff
       } else {
         navigate("/");  // Redirect residents to the main page after registering themselves
@@ -94,7 +99,7 @@ const RegisterPage = (props) => {
 
   let backLink = "/";
   let backLinkText = "Back to Login";
-  if (props.privilege === "admin") {
+  if (props.privilege === PrivilegeType.manager) {
     backLink = "/manager-home";  // Assuming this is the correct route for the Manager Home
     backLinkText = "Back to Homepage";
   }
