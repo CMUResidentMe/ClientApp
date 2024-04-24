@@ -25,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 import ResidentMeLogo from "../../assets/logo.png";
 // Kafka
 import { socketManager } from "../../notification/socketManager.js";
-
+// Configuration for API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
 const token = localStorage.getItem("token");
 const headers = {
@@ -78,7 +78,7 @@ const RightIconsContainer = styled.div`
   align-items: center;
 `;
 
-// GraphQL Queries and Mutations
+// GraphQL queries and mutations
 const GET_ALL_ROOMS_QUERY = gql`
   query GetAllRooms {
     allRooms {
@@ -131,13 +131,13 @@ const DECLINE_BOOKING_MUTATION = gql`
 `;
 
 const ManagerPage = () => {
-  const [rooms, setRooms] = useState([]);
-  const [partyRooms, setPartyRooms] = useState([]);
-  const [refreshData, setRefreshData] = useState(false);
+  const [rooms, setRooms] = useState([]);// State to store room data
+  const [partyRooms, setPartyRooms] = useState([]);// State for party rooms specifically
+  const [refreshData, setRefreshData] = useState(false); // Trigger for refreshing data
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Connect to WebSocket
+    // Connect to websocket for real-time data
     socketManager.connect(token);
     // Set up notification listeners
     socketManager.getIo().on("BookingApproved", (notification) => {
@@ -178,7 +178,8 @@ const ManagerPage = () => {
         console.error("Error fetching unconfirmed party rooms:", error)
       );
   };
-
+  // Handlers for deleting, approving, and declining room bookings
+  
   const handleDeleteRoom = (room_id) => {
     if (window.confirm("Are you sure you want to delete this room?")) {
       client

@@ -33,7 +33,9 @@ import { useNavigate } from "react-router-dom";
 import NotificationTable from "../Notification/NotificationTable.jsx";
 import useNotificationListener from "../../notification/NotificationListener.js";
 const HeaderHeight = "100px";
-const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
+const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL; // URL for the GraphQL API
+
+// Styled components for UI elements
 const RightIconsContainer = styled.div`
   display: flex;
   align-items: center;
@@ -83,7 +85,7 @@ const AppName = styled.h1`
   font-weight: bold;
   margin-left: 15px;
 `;
-
+// GraphQL queries to fetch and mutate room data
 const GET_ROOMS_BY_TYPE = gql`
   query GetRoomsByType($room_type: String!) {
     roomsByType(room_type: $room_type) {
@@ -131,6 +133,7 @@ const CREATE_BOOKING_MUTATION = gql`
 `;
 
 const calculateAvailableTimes = (bookedTimes, selectedDate) => {
+  //This function calculates the available times for booking a room based on the booked times and the selected date.
   // Ensure we are working with the start of the day for comparison to ignore time part
   const dayStart = new Date(selectedDate.setHours(0, 0, 0, 0));
   const dayEnd = new Date(selectedDate.setHours(23, 59, 59, 999));
@@ -192,7 +195,7 @@ const calculateAvailableTimes = (bookedTimes, selectedDate) => {
         .padStart(2, "0")}`
   );
 };
-
+// Main component for room booking page
 const BookingPage = () => {
   const navigate = useNavigate();
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -207,13 +210,15 @@ const BookingPage = () => {
   const [notifications, setNotifications] = useState([]);
   const [notificationCount, setNotificationCount] = useState(0);
   const [view, setView] = useState("bookings");
-
+  // Drawer toggle handling
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
   };
+  // Navigate back to bookings list
   const handleBack = () => {
     setView("bookings");
   };
+  // Fetch room types and update state
   useEffect(() => {
     if (!roomType) return;
 
@@ -234,7 +239,7 @@ const BookingPage = () => {
       })
       .catch((error) => console.error("Error fetching rooms:", error));
   }, [roomType, date, refreshCounter]);
-
+  // Handle booking creation based on user input
   const handleCreateBooking = async () => {
     const token = localStorage.getItem("token");
     const headers = {
@@ -277,7 +282,7 @@ const BookingPage = () => {
       }
     }
   };
-
+  // Room type selection handler
   const handleRoomTypeSelection = (type) => {
     const typeMap = {
       "Party Room": "party",
@@ -286,11 +291,11 @@ const BookingPage = () => {
     };
     setRoomType(typeMap[type]);
   };
-
+  // Date change handler for the calendar component
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
-
+  // Open booking dialog
   const handleOpenBookingDialog = (room_id, time) => {
     setSelectedRoomId(room_id);
     const [start, end] = time.split(" - ");
@@ -298,22 +303,24 @@ const BookingPage = () => {
     setEndTime(end);
     setBookingDialogOpen(true);
   };
-
+  // Updates the state with new notifications received and increments the notification count
   const bookRoomUpdate = (event) => {
     console.log("Received notification:", event);
     setNotifications((prevNotifications) => [...prevNotifications, event]);
-    setNotificationCount((prevCount) => prevCount + 1);
+    setNotificationCount((prevCount) => prevCount + 1); // Increment the notification count state
   };
-
+  // Subscribe to notification updates when the component mounts and unsubscribe on unmount
   useNotificationListener(bookRoomUpdate);
 
   const handleBackToBookings = () => {
     setView("bookings");
   };
+  // Handles the action to switch the view to the notifications page
   const handleNotificationClick = () => {
-    setView("notifications");
-    setNotificationCount(0);
+    setView("notifications"); // Set the current view to show notifications
+    setNotificationCount(0); // Reset notification count upon viewing notifications
   };
+  // Dynamically render content based on the current view state
   const renderContent = () => {
     switch (view) {
       case "notifications":
