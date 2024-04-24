@@ -118,7 +118,7 @@ const MarketPlaceProductDetailPage = () => {
                     <Button onClick={() => setOpenOrderForm(false)} color="inherit">
                         Cancel
                     </Button>
-                    <Button onClick={handleOrder} color="primary">
+                    <Button onClick={handleOrder} style={{ backgroundColor: '#A67B5B', color: '#ffffff', '&:hover': {backgroundColor: '#94684f'}}} >
                         Express Interest
                     </Button>
                 </DialogActions>
@@ -158,7 +158,7 @@ const MarketPlaceProductDetailPage = () => {
                         <Button
                             onClick={() => setOpenOrderForm(true)}
                             startIcon={<ShoppingBasketIcon />}
-                            variant="contained" color="primary" className={'mt-5'}>
+                            variant="contained" style={{ backgroundColor: '#A67B5B', color: '#ffffff', '&:hover': {backgroundColor: '#94684f'}}} className={'mt-5'}>
                             Express Interest
                         </Button>
                     )}

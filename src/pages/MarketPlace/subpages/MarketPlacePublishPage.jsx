@@ -137,7 +137,7 @@ const MarketPlacePublishPage = () => {
                             <img width={200} src={formik.values.image}/>
                         )}
                     </Box>
-                    <Button component={'label'} variant="contained" startIcon={<InsertPhotoIcon />}>
+                    <Button component={'label'} variant="contained" startIcon={<InsertPhotoIcon />} style={{ backgroundColor: '#A67B5B', color: '#ffffff', '&:hover': {backgroundColor: '#94684f'}}} >
                         <input onChange={handlePickerImage} accept={'image/*'} type={'file'} hidden/>
                         Upload Image
                     </Button>
@@ -181,7 +181,7 @@ const MarketPlacePublishPage = () => {
                     />
                     {!loading && (
                         <Button
-                            color="primary"
+                            style={{ backgroundColor: '#A67B5B', color: '#ffffff', '&:hover': {backgroundColor: '#94684f'}}}
                             variant="contained"
                             fullWidth
                             type="submit"
