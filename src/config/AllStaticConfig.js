@@ -1,6 +1,7 @@
 const staticInitObject = {
   NOTIFICATION_SERVER_URL: "http://localhost:2008/",
   APIGATEWAY_SERVER_URL: "http://localhost:8000/graphql/",
+  APIGATEWAY_ROOT_URL: "http://localhost:8000",
   workorderCreated: "workorderCreated",
   workorderChanged: "workorderChanged",
   workorderDeleted: "workorderDeleted",
