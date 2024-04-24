@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload } from 'antd';
+import staticInitObject from "../../config/AllStaticConfig.js";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -69,8 +70,9 @@ const ImageUpload = (props) => {
   return (
     <>
       <Upload
+        name="file"
         disabled={props.freezeForStaff}
-        action="http://localhost:2009/workorder/upload"
+        action={`${staticInitObject.APIGATEWAY_ROOT_URL}/workorder/upload`}
         headers={{ authorization: localStorage.getItem('token') }}
         listType="picture-card"
         fileList={fileList}
