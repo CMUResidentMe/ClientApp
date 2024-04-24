@@ -25,6 +25,7 @@ import {message} from "antd";
 import {useNavigate, useParams} from "react-router-dom";
 import {GET_GOODS_BY_ID} from "../graphql/queries.js";
 
+// Define a validation schema using Yup for form validation, specifying requirements for various fields.
 const validationSchema = Yup.object({
     title: Yup.string().required('Title is required'),
     description: Yup.string().required('Description is required'),
@@ -33,15 +34,23 @@ const validationSchema = Yup.object({
     contact: Yup.string().required('Contact information is required'),
 });
 
+// MarketPlaceUpdatePage is a React functional component designed for updating existing product listings.
 const MarketPlaceUpdatePage = () => {
+    // useNavigate hook from React Router for programmatically navigating between views.
     const navigate = useNavigate();
+
+    // useMutation hook from Apollo Client for the update operation.
     const [update, { data: updateResult, loading: updateLoading, error: updateError }] = useMutation(UPDATE_SECOND_HANDLE_GOODS);
 
+    // Retrieving the product ID from URL parameters.
     const {goodsId} = useParams();
+
+    // useQuery hook to fetch product details by ID to populate the form for updating.
     const {loading, error, data} = useQuery(GET_GOODS_BY_ID, {
         variables: {id: goodsId}
     });
 
+    // useFormik hook to manage form state and handle form submission.
     const formik = useFormik({
         initialValues: {
             title: '',
@@ -62,42 +71,46 @@ const MarketPlaceUpdatePage = () => {
                     id: goodsId
                 }
             }).then(() => {
-                message.success('Update success');
-                navigate(-1);
+                message.success('Update success'); // Display a success message upon successful update.
+                navigate(-1); // Navigate back to the previous page.
             })
         },
     });
 
+    // useEffect to pre-fill the form with existing product data when available.
     useEffect(() => {
         if (data && data.getGoodsById) {
             formik.setValues(data.getGoodsById);
         }
     }, [data]);
 
+    // Function to handle field blurs to manage form validation.
     const handleBlur = (e) => {
         formik.handleBlur(e);
     };
 
+    // Function to convert a file to a base64 encoded string.
     const convertBase64 = (file) => {
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file);
             fileReader.onload = () => {
-                resolve(fileReader.result);
+                resolve(fileReader.result); // Resolve with the base64 string of the file.
             };
             fileReader.onerror = (error) => {
-                reject(error);
+                reject(error); // Reject the promise if there is an error during file reading.
             };
         });
     };
 
+    // Function to handle file selection and convert the selected file to base64.
     const handlePickerImage = async (e) => {
         const file = e.target.files[0];
         if (!file) {
-            return;
+            return; // Do nothing if no file is selected.
         }
-        const base64 = await convertBase64(file);
-        formik.setFieldValue('image', base64);
+        const base64 = await convertBase64(file); // Convert the file to base64.
+        formik.setFieldValue('image', base64); // Update the form's image field with the base64 string.
     };
 
     return (

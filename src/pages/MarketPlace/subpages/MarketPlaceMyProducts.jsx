@@ -10,30 +10,45 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {DELETE_GOODS} from "../graphql/mutations.js";
 import {Modal} from 'antd';
-export default function MarketPlaceMyProducts() {
-    const navigate = useNavigate();
-    const [deleteGoods] = useMutation(DELETE_GOODS);
-    const { refetch, loading, error, data = [] } = useQuery(GET_GOODS_OF_USER);
-    const [products, setProducts] = useState([]);
-    useEffect(() => {
-        if (Array.isArray(data.getGoodsByUser)) {
-            console.log(data)
-            setProducts(data.getGoodsByUser)
-        }
-    }, [data]);
 
+
+export default function MarketPlaceMyProducts() {
+    // useNavigate hook from React Router for programmatically navigating between views.
+    const navigate = useNavigate();
+
+    // useMutation hook from Apollo Client to execute the DELETE_GOODS mutation.
+    const [deleteGoods] = useMutation(DELETE_GOODS);
+
+    // useQuery hook to fetch user's products, with handling for loading states, errors, and automatic refetching.
+    const { refetch, loading, error, data = [] } = useQuery(GET_GOODS_OF_USER);
+    
+    // useState hook to maintain the state of products listed by the user.
+    const [products, setProducts] = useState([]);
+
+    // useEffect to process fetched data and update the products state.
+    useEffect(() => {
+        // Checking if the fetched data array is valid before updating state to prevent errors.
+        if (Array.isArray(data.getGoodsByUser)) {
+            console.log(data)  // Logs the fetched data for debugging purposes.
+            setProducts(data.getGoodsByUser)  // Setting the fetched goods to the products state.
+        }
+    }, [data]);  // Data dependency to trigger re-execution of the effect when data changes.
+
+    // Function to handle the delete action for a product.
     const handleClickDelete = async (id) => {
+        // Modal dialog to confirm deletion, using Ant Design's Modal component.
         Modal.confirm({
-            title: 'Are you sure to delete this product?',
-            content: 'This action cannot be undone',
+            title: 'Are you sure to delete this product?',  // Modal title.
+            content: 'This action cannot be undone',  // Warning message about deletion.
             onOk: async () => {
+                // Executing the delete mutation when user confirms the action.
                 await deleteGoods({
                     variables: {
                         id: id
                     }
                 });
-                message.success('Delete success')
-                await refetch();
+                message.success('Delete success')  // Display success message on successful deletion.
+                await refetch();  // Refetching the goods to update the UI post deletion.
             }
         })
     }

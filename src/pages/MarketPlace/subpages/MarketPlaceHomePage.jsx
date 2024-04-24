@@ -21,37 +21,44 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import {useNavigate} from "react-router-dom";
 import { Subject, Subscription } from 'rxjs';
 const dataSource = new Subject();
+// MarketPlaceHomePage is a React functional component for the marketplace's homepage.
 const MarketPlaceHomePage = () => {
 
+    // Use the useQuery hook from Apollo to fetch all goods, managing loading states and errors automatically.
     const { loading, error, data = [] } = useQuery(GET_ALL_GOODS);
 
+    // useState hooks to manage the state of search keyword, selected category, and products list.
     const [keyword, setKeyword] = useState('');
     const [category, setCategory] = useState('');
     const [products, setProducts] = useState([]);
 
+    // Filter the products list based on the keyword and category selected by the user.
     const filteredProducts = products.filter(
         (product) =>
             product.title.toLowerCase().includes(keyword.toLowerCase()) &&
             (category === '' || product.category === category)
     );
 
+    // Hook to navigate programmatically between routes.
     const navigate = useNavigate();
 
+    // useEffect to update the products state when new data is fetched from the server.
     useEffect(() => {
         if (Array.isArray(data.getAllGoods)) {
-            console.log(data)
-            setProducts(data.getAllGoods)
+            console.log(data)  // Logs the fetched data for debugging.
+            setProducts(data.getAllGoods)  // Sets the fetched goods into the products state.
         }
     }, [data]);
 
-     // Observer Design Pattern
+    // Observer Design Pattern implementation using useState and useEffect to manage data subscriptions.
     const [datas, setDatas] = useState('');
     const [subscription, setSubscription] = useState(null);
     useEffect(() => {
-
+        // Subscribe to a data source and update state with new data when received.
         const sub = dataSource.subscribe(newData => setDatas(newData));
         setSubscription(sub);
 
+        // Cleanup function to unsubscribe when the component unmounts.
         return () => sub.unsubscribe();
     }, []);
 

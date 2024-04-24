@@ -8,46 +8,64 @@ import {GET_GOODS_BY_ID, IS_GOODS_OWNER} from "../graphql/queries.js";
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import {ORDER_GOODS} from "../graphql/mutations.js";
 import {message} from "antd";
+
+
 const MarketPlaceProductDetailPage = () => {
+    // State to store the current product details.
     const [product, setProduct] = useState(null);
+
+    // Retrieving the product ID from the URL parameters.
     const { goodsId } = useParams();
+
+    // State to control the visibility of the order form.
     const [openOrderForm, setOpenOrderForm] = useState(false);
+
+    // State to check if the current user is the owner of the product.
     const [isOwner, setIsOwner] = useState(true);
+
+    // useQuery hook to fetch product details by ID, setting variables for the query dynamically.
     const {loading, error, data} = useQuery(GET_GOODS_BY_ID, {
         variables: {id: goodsId}
     });
+
+    // useQuery hook to check if the current user is the owner of the goods, ignoring unused destructuring assignment variables.
     const {_, __, data: isGoodsOwnerData} = useQuery(IS_GOODS_OWNER, {
         variables: {
             goodsId
         }
     });
 
+    // useEffect to set ownership status based on fetched data.
     useEffect(() => {
         if (isGoodsOwnerData) {
-            console.log(isGoodsOwnerData)
+            console.log(isGoodsOwnerData) // Log the ownership data for debugging.
             setIsOwner(isGoodsOwnerData.isGoodsOwner);
         }
     }, [isGoodsOwnerData]);
-    const [order, {data: orderData, loading:orderLoading, error: orderError}] = useMutation(ORDER_GOODS);
+
+    // useMutation hook for placing an order, capturing loading, data, and error states for the mutation.
+    const [order, {data: orderData, loading: orderLoading, error: orderError}] = useMutation(ORDER_GOODS);
+
+    // useEffect to update the product state when data is available.
     useEffect(() => {
         if (data && data.getGoodsById) setProduct(data.getGoodsById);
     }, [data]);
 
-
+    // State for managing buyer's contact and trade place information.
     const [contactOfBuyer, setContactOfBuyer] = useState('');
     const [tradePlace, setTradePlace] = useState('');
 
+    // Function to handle the submission of an order.
     const handleOrder = () => {
         if (!contactOfBuyer.trim()) {
-            message.warning('Please enter your contact information');
+            message.warning('Please enter your contact information'); // Warning if contact info is empty.
             return
         }
         if (!tradePlace.trim()) {
-            message.warning('Please enter the trade place');
+            message.warning('Please enter the trade place'); // Warning if trade place is empty.
             return
-
         }
-        setOpenOrderForm(false);
+        setOpenOrderForm(false); // Close the order form upon submission.
         order({
             variables: {
                 goodsId,
@@ -55,19 +73,20 @@ const MarketPlaceProductDetailPage = () => {
                 tradePlace
             }
         }).then(() => {
-            message.success('You have express your interest successfully');
-            setContactOfBuyer('');
-            setTradePlace('');
+            message.success('You have expressed your interest successfully'); // Success message post order.
+            setContactOfBuyer(''); // Reset contact info.
+            setTradePlace(''); // Reset trade place info.
         })
     };
 
-
+    // Conditional rendering for when the product details are not yet available.
     if (!product) {
         return <div className={'mt-5 d-flex justify-content-center'}>
             <Spinner />
         </div>;
     }
 
+    // Destructuring product details for ease of access in the component.
     const {
         title,
         description,
