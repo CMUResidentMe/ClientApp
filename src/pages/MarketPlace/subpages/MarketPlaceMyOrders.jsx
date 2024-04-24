@@ -6,27 +6,30 @@ import {Spinner} from "react-bootstrap";
 import {Empty} from "antd";
 
 
+// Exporting a functional component named MarketPlaceMyOrders
 export default function MarketPlaceMyOrders() {
 
+    // Using Apollo's useQuery hook to fetch user's orders using the GET_ORDERS_BY_USER query.
     const { loading, error, data } = useQuery(GET_ORDERS_BY_USER);
+
+    // useState to store the orders fetched from the server.
     const [orders, setOrders] = useState([]);
 
-
+    // useEffect to handle the lifecycle of the component related to fetching data.
     useEffect(() => {
-        console.log(data)
+        console.log(data)  // Logging the fetched data for debugging purposes.
+        // Check if data is available and is an array before setting it to state to avoid errors.
         if (data && Array.isArray(data.getOrdersByUser)) {
-            setOrders(data.getOrdersByUser)
+            setOrders(data.getOrdersByUser)  // Updating the orders state with the fetched data.
         }
-    }, [data]);
+    }, [data]);  // Dependency array includes data to trigger effect on data change.
 
+    // Conditional rendering to show a spinner while the data is loading.
     if (loading) return (
         <div className={'d-flex justify-content-center mt-5'}>
             <Spinner />
         </div>
     )
-
-
-
 
     return (
         <div className={'container mt-5'} style={{ marginLeft: '80px', marginTop: '180px' }}>

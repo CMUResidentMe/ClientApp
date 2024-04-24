@@ -19,7 +19,7 @@ import {PUBLISH_SECOND_HANDLE_GOODS} from "../graphql/mutations.js";
 import {Spinner} from "react-bootstrap";
 import {message} from "antd";
 import {useNavigate} from "react-router-dom";
-
+// Define a validation schema using Yup for form validation to ensure that all fields meet the required conditions.
 const validationSchema = Yup.object({
     title: Yup.string().required('Title is required'),
     description: Yup.string().required('Description is required'),
@@ -28,9 +28,15 @@ const validationSchema = Yup.object({
     contact: Yup.string().required('Contact information is required'),
 });
 
+// MarketPlacePublishPage is a React functional component for handling the publishing of goods on a marketplace.
 const MarketPlacePublishPage = () => {
+    // useMutation hook for executing the PUBLISH_SECOND_HANDLE_GOODS mutation.
     const [publish, { data, loading, error }] = useMutation(PUBLISH_SECOND_HANDLE_GOODS);
+
+    // useNavigate hook for programmatically navigating between routes.
     const navigate = useNavigate();
+
+    // useFormik hook to manage form state and handle form submission.
     const formik = useFormik({
         initialValues: {
             title: '',
@@ -47,42 +53,46 @@ const MarketPlacePublishPage = () => {
             publish({
                 variables: values
             }).then(r => {
-                message.success('Publish success');
-                formik.resetForm();
-                navigate('/marketplace/playground')
+                message.success('Publish success');  // Show success message on successful publish.
+                formik.resetForm();  // Reset the form after successful submission.
+                navigate('/marketplace/playground')  // Redirect to the playground page.
             });
         },
     });
 
+    // Handle field blur events to trigger validation and manage field touch state.
     const handleBlur = (e) => {
         formik.handleBlur(e);
         const { name } = e.target;
         if (formik.touched[name] && formik.errors[name]) {
-
+            // Potential error handling or UI feedback could be implemented here.
         }
     };
 
+    // Function to convert a file to a base64 encoded string.
     const convertBase64 = (file) => {
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file);
             fileReader.onload = () => {
-                resolve(fileReader.result);
+                resolve(fileReader.result);  // Resolve the promise with the base64 string on successful read.
             };
             fileReader.onerror = (error) => {
-                reject(error);
+                reject(error);  // Reject the promise if an error occurs during file read.
             };
         });
     };
 
+    // Handle image selection, converting the selected file to base64 and updating the form field.
     const handlePickerImage = async (e) => {
         const file = e.target.files[0];
         if (!file) {
-            return;
+            return;  // If no file is selected, do nothing.
         }
-        const base64 = await convertBase64(file);
-        formik.setFieldValue('image', base64);
+        const base64 = await convertBase64(file);  // Convert the file to base64.
+        formik.setFieldValue('image', base64);  // Update the form's image field with the base64 string.
     };
+
 
     return (
         <div className={'container mt-5'} style={{ marginLeft: '80px', marginTop: '180px' }} >
