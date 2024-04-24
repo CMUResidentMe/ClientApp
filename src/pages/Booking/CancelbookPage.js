@@ -12,13 +12,15 @@ import {
   Notifications as NotificationsIcon,
   MenuBookOutlined,
 } from "@mui/icons-material";
-import Navbar from "../../components/NavBar.js";
+import Navbar from "../../components/NavBar.js"; // Custom navigation bar component
 import ResidentMeLogo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { GraphQLClient, gql } from "graphql-request";
 import staticInitObject from "../../config/AllStaticConfig.js";
 
-const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
+const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL; // API endpoint URL
+
+// Styled components for layout and formatting.
 const Header = styled.div`
   position: fixed;
   top: 0;
@@ -56,13 +58,14 @@ const StyledPaper = styled(Paper)`
   padding: 20px;
 `;
 
+// Component definition
 const CancelBookingPage = () => {
   const navigate = useNavigate();
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState([]); // State to hold booking data
 
   useEffect(() => {
     const fetchBookings = async () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token"); // Retrieve auth token.
       const headers = {
         authorization: token,
       };
@@ -82,7 +85,7 @@ const CancelBookingPage = () => {
             room_name
           }
         }
-      `;
+      `; // GraphQL query to fetch bookings.
 
       try {
         const data = await client.request(query);
@@ -109,13 +112,13 @@ const CancelBookingPage = () => {
           id
         }
       }
-    `;
+    `; // GraphQL mutation to cancel a booking.
 
     try {
       await client.request(mutation, { room_id, booking_id });
       setBookings(
         bookings.filter((booking) => booking.booking_id !== booking_id)
-      );
+      ); // Update state to remove the canceled booking.
       alert("Booking canceled successfully");
     } catch (error) {
       console.error("Error cancelling booking:", error);
