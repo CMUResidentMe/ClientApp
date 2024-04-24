@@ -43,7 +43,7 @@ const NotificationTable = ({ notifications }) => {
   const getDisplayType = (type) => notificationTypeMapping[type] || type;
 
   const rows = notifications.filter(noti => {
-    if(!(noti.notificationID in notiSet)){
+    if(!notiSet.has(noti.notificationID)){
       notiSet.add(noti.notificationID);
       return noti;
     }

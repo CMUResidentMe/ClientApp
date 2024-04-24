@@ -11,9 +11,9 @@ import bookingImage from '../assets/booking.png';
 import { useNavigate } from 'react-router-dom';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationTable from './Notification/NotificationTable.jsx';
-import useNotificationListener from '../notification/NotificationListener.js';
 import { socketManager } from "../notification/socketManager.js";
 import styled from '@emotion/styled';
+import staticInitObject from "../config/AllStaticConfig.js";
 
 const HomePage = () => {
   const [view, setView] = useState('home');
@@ -25,9 +25,27 @@ const HomePage = () => {
 
   useEffect(() => {
     socketManager.connect(localStorage.getItem("token"));
-  }, []);
+    socketManager.onConnect(() => {
+      console.log('NotificationListener is initialized');
+      socketManager.getIo().on(staticInitObject.workorderCreated, notiUpdateCB);
+      socketManager.getIo().on(staticInitObject.workorderChanged, notiUpdateCB);
+      socketManager.getIo().on(staticInitObject.workorderDeleted, notiUpdateCB);
+      socketManager.getIo().on(staticInitObject.threadDeleted, notiUpdateCB);
+      socketManager.getIo().on(staticInitObject.postCreated, notiUpdateCB);
+      socketManager.getIo().on(staticInitObject.postDeleted, notiUpdateCB);
+      socketManager.getIo().on(staticInitObject.replyCreated, notiUpdateCB);
+      socketManager.getIo().on(staticInitObject.replyDeleted, notiUpdateCB);
+      console.log("emit ResidentME");
+      socketManager.getIo().emit("ResidentME", {"mesaage": "I has connected"});
+    });
+  }, [notifications]);
 
 
+  const notiUpdateCB = (event) => {
+    console.log("Received notification:", event);
+    setNotifications(prevNotifications => [event, ...prevNotifications]);
+    setNotificationCount(prevCount => prevCount + 1);
+  };
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);
   };
@@ -35,14 +53,6 @@ const HomePage = () => {
   const handleCardClick = (path) => {
     navigate(path);
   };
-
-  const workorderUpdateCB = (event) => {
-    console.log("Received notification:", event);
-    setNotifications(prevNotifications => [event, ...prevNotifications]);
-    setNotificationCount(prevCount => prevCount + 1);
-  };
-
-  useNotificationListener(workorderUpdateCB);
 
   const handleNotificationClick = () => {
     setView('notifications');

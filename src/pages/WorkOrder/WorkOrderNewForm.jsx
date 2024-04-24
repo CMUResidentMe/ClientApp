@@ -93,21 +93,6 @@ const WorkOrderNewForm = ({ onSubmissionSuccess }) => {
         setModalOpen(false);
         onSubmissionSuccess();
       }, 4000);
-      /*
-      await createMutation({
-        variables: workOrderData,
-        onCompleted: (data) => {
-          console.log("Submission successful", data);
-          setModalOpen(true);
-          setTimeout(() => {
-            setModalOpen(false);
-            onSubmissionSuccess();
-          }, 4000);
-        },
-        onError: (error) => {
-          console.error("Submission error", error);
-        }
-      });*/
     } catch (error) {
       console.error("Error in submission", error);
     }
@@ -186,7 +171,6 @@ const WorkOrderNewForm = ({ onSubmissionSuccess }) => {
               value={workOrderData.preferredTime}
               onChange={handleChange}
               style={styles.input}
-              min={today}
             />
           </div>
         </div>

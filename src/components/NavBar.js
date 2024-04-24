@@ -19,11 +19,16 @@ import {
 } from "@mui/icons-material";
 import logo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import { socketManager } from "../notification/socketManager.js";
 
 const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    if(socketManager.getIo() != null){
+      socketManager.getIo().emit("UnResidentME", {"mesaage": "I disonnected"});
+    }
+    socketManager.disconnect();
     localStorage.removeItem("token");
     navigate("/");
   };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconButton, Badge } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
@@ -7,11 +7,12 @@ import NotificationTable from './../Notification/NotificationTable.jsx';
 import Navbar from '../../components/NavBar.js';
 import OpenWorkOrdersStaffTable from './OpenWorkOrdersTableStaff.jsx';
 import AssignedWorkOrdersStaffTable from './AssignedWorkOrdersTableStaff.jsx';
-import { socketManager } from "../../notification/socketManager.js";
 import ResidentMeLogo from "../../assets/logo.png";
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import newOrderIcon from '../../assets/newWorkOrder.png';
 import currentOrdersIcon from '../../assets/currentWorkOrder.png';
+import { socketManager } from "../../notification/socketManager.js";
+import staticInitObject from "../../config/AllStaticConfig.js";
 import useNotificationListener from '../../notification/NotificationListener.js';
 
 const StyledServiceLink = styled('div')`
@@ -88,8 +89,6 @@ const AppName = styled.h1`
   margin-left: 15px;
 `;
 
-socketManager.connect(localStorage.getItem("token"));
-
 const StaffWKPage = () => {
   const [view, setView] = useState('landing');
   const [notifications, setNotifications] = React.useState([]);
@@ -102,8 +101,22 @@ const StaffWKPage = () => {
     setNotificationCount(prevCount => prevCount + 1);
   };
 
-
-  useNotificationListener(workorderUpdateCB);
+  useEffect(() => {
+    socketManager.connect(localStorage.getItem("token"));
+    socketManager.onConnect(() => {
+      console.log('NotificationListener is initialized');
+      socketManager.getIo().on(staticInitObject.workorderCreated, workorderUpdateCB);
+      socketManager.getIo().on(staticInitObject.workorderChanged, workorderUpdateCB);
+      socketManager.getIo().on(staticInitObject.workorderDeleted, workorderUpdateCB);
+      socketManager.getIo().on(staticInitObject.threadDeleted, workorderUpdateCB);
+      socketManager.getIo().on(staticInitObject.postCreated, workorderUpdateCB);
+      socketManager.getIo().on(staticInitObject.postDeleted, workorderUpdateCB);
+      socketManager.getIo().on(staticInitObject.replyCreated, workorderUpdateCB);
+      socketManager.getIo().on(staticInitObject.replyDeleted, workorderUpdateCB);
+      console.log("emit ResidentME");
+      socketManager.getIo().emit("ResidentME", {"mesaage": "I has connected"});
+    });
+  }, [notifications]);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!isDrawerOpen);

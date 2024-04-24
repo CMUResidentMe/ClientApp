@@ -46,7 +46,7 @@ const LoginPage = () => {
       localStorage.setItem("token", data.login.token); // Save the token
       localStorage.setItem("username", data.login.username);
       localStorage.setItem("privilege", data.login.privilege);
-      socketManager.connect(localStorage.getItem("token"));
+      //socketManager.connect(localStorage.getItem("token"));
 
       if (data.login.privilege == "resident") {
         history("/home");

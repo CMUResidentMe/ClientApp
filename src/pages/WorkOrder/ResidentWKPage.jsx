@@ -11,7 +11,6 @@ import NotificationTable from '../Notification/NotificationTable.jsx';
 import newOrderIcon from '../../assets/newWorkOrder.png';
 import currentOrdersIcon from '../../assets/currentWorkOrder.png';
 import ResidentMeLogo from "../../assets/logo.png";
-import { socketManager } from "../../notification/socketManager.js";
 import useNotificationListener from '../../notification/NotificationListener.js';
 
 const StyledServiceLink = styled('div')`
@@ -87,9 +86,6 @@ const AppName = styled.h1`
   font-weight: bold;
   margin-left: 15px;
 `;
-
-socketManager.connect(localStorage.getItem("token"));
-
 const ResidentWKPage = () => {
   const [view, setView] = useState('landing');
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -103,7 +99,7 @@ const ResidentWKPage = () => {
 
   //selected workOrder
   const [currentWK, setCurrentWK] = React.useState(undefined);
-  
+
   const workorderUpdateCB = (event) => {
     console.log("Received notification:", event);
     setNotifications(prevNotifications => [event, ...prevNotifications]);
