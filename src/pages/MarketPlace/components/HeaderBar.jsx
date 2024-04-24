@@ -87,7 +87,7 @@ const HeaderBar = () => {
                     {currentUserPrivilege === "resident" && (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton onClick={handleNotificationClick}>
-                                <Badge badgeContent={notificationCount} color="secondary">
+                                <Badge badgeContent={notificationCount} color="warning">
                                     <NotificationsIcon />
                                 </Badge>
                             </IconButton>
