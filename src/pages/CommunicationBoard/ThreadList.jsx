@@ -87,6 +87,7 @@ const ThreadList = ({ onThreadSelect }) => {
     try {
       await client.request(CREATE_THREAD_MUTATION, { title, content });
       await fetchThreads();
+      window.scrollTo(0, 0)
     } catch (error) {
       console.error("Error creating thread:", error);
     }
