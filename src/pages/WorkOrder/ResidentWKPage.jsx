@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconButton, Badge } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
@@ -88,7 +88,7 @@ const AppName = styled.h1`
   margin-left: 15px;
 `;
 
-socketManager.connect(localStorage.getItem("token"));
+//socketManager.connect(localStorage.getItem("token"));
 
 const ResidentWKPage = () => {
   const [view, setView] = useState('landing');
@@ -103,6 +103,11 @@ const ResidentWKPage = () => {
 
   //selected workOrder
   const [currentWK, setCurrentWK] = React.useState(undefined);
+
+  useEffect(() => {
+    console.log("socket io connect in ResidentWKPage")
+    socketManager.connect(localStorage.getItem("token"));
+  }, []);
   
   const workorderUpdateCB = (event) => {
     console.log("Received notification:", event);
