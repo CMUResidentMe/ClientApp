@@ -42,6 +42,7 @@ query workOrdersByStatus($status: WorkStatus!) {
       firstName
       lastName
       username
+      roomNumber
     }
     workType
     priority
