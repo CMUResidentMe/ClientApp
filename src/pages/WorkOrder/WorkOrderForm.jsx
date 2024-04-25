@@ -249,7 +249,6 @@ const WorkOrderForm = ({ currentWK, closeModal }) => {
               value={workOrderData.preferredTime} 
               onChange={handleChange} 
               style={styles.input} 
-              min={today}
             />
           </div>
           <div style={styles.inputGroup}>
