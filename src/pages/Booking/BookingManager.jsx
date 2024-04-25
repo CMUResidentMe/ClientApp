@@ -131,9 +131,14 @@ const DECLINE_BOOKING_MUTATION = gql`
 `;
 
 const ManagerPage = () => {
+  const [openCreate, setOpenCreate] = useState(false);
   const [rooms, setRooms] = useState([]);// State to store room data
   const [partyRooms, setPartyRooms] = useState([]);// State for party rooms specifically
   const [refreshData, setRefreshData] = useState(false); // Trigger for refreshing data
+  const [roomDetails, setRoomDetails] = useState({
+    name: "",
+    room_type: "",  
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -178,8 +183,31 @@ const ManagerPage = () => {
         console.error("Error fetching unconfirmed party rooms:", error)
       );
   };
-  // Handlers for deleting, approving, and declining room bookings
-  
+  // Handlers for creating, deleting, approving, and declining room bookings
+  const handleOpenCreate = () => setOpenCreate(true);
+  const handleCloseCreate = () => setOpenCreate(false);
+  const handleCreateRoom = () => {
+    console.log("Creating room with details:", roomDetails);
+    const { name, room_type } = roomDetails;
+    const CREATE_ROOM_MUTATION = gql`
+    mutation CreateRoom($name: String!, $room_type: String!) {
+      createRoom(name: $name, room_type: $room_type) {
+        id
+        name
+        room_type
+      }
+    }
+  `;
+    client.request(CREATE_ROOM_MUTATION, { name, room_type })
+    .then(room => {
+      console.log("Room created successfully:", room);
+      setRefreshData(prev => !prev); // Refresh data to show new room
+      handleCloseCreate(); // Close the creation dialog
+    })
+    .catch(error => {
+      console.error("Failed to create room:", error);
+    });
+  };
   const handleDeleteRoom = (room_id) => {
     if (window.confirm("Are you sure you want to delete this room?")) {
       client
@@ -239,6 +267,54 @@ const ManagerPage = () => {
         </RightIconsContainer>
       </Header>
       <ContentContainer>
+      <Button
+        variant="contained"
+        startIcon={<AddBox />}
+        onClick={handleOpenCreate}
+        sx={{
+          mb: 2,
+          backgroundColor: '#746352', // Set the button color
+          ':hover': {
+            backgroundColor: '#5e483e' // Darken the button on hover for better UX
+          },
+          justifyContent: 'left' 
+        }}
+      >
+        Create New Room
+      </Button>
+        <Dialog open={openCreate} onClose={handleCloseCreate}>
+          <DialogTitle>Create New Room</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please enter details for the new room.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Room Name"
+              type="text"
+              fullWidth
+              variant="standard"
+              onChange={(e) =>
+                setRoomDetails({ ...roomDetails, name: e.target.value })
+              }
+            />
+            <TextField
+              margin="dense"
+              label="Room Type"
+              type="text"
+              fullWidth
+              variant="standard"
+              onChange={(e) =>
+                setRoomDetails({ ...roomDetails, room_type: e.target.value })
+              }
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseCreate}>Cancel</Button>
+            <Button onClick={handleCreateRoom}>Create</Button>
+          </DialogActions>
+        </Dialog>
         <Container maxWidth="lg">
           <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
             Delete Rooms
