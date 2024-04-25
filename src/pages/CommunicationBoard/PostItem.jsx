@@ -33,11 +33,6 @@ const actionButtonStyle = {
 
 // GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
-const token = localStorage.getItem("token");
-const headers = {
-  authorization: token,
-};
-const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL mutation to create a reply
 const CREATE_REPLY_MUTATION = gql`
@@ -64,6 +59,12 @@ const PostItem = ({ id, content, userId, userName, createdAt, fetchPosts }) => {
   const [refetchReplies, setRefetchReplies] = useState(() => () => {}); // state to refetch replies
   const [open, setOpen] = useState(false); // state to show/hide delete confirmation dialog
 
+  const token = localStorage.getItem("token");
+  const headers = {
+    authorization: token,
+  };
+  const client = new GraphQLClient(graphqlAPI, { headers });
+  
   // Check if the current user can delete the post
   const currentUser = localStorage.getItem("username");
   const currentUserPrivilege = localStorage.getItem("privilege");

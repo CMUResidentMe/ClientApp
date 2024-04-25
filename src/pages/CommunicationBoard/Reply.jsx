@@ -18,11 +18,6 @@ import { gql, GraphQLClient } from "graphql-request";
 
 // GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
-const token = localStorage.getItem("token");
-const headers = {
-  authorization: token,
-};
-const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL mutation to delete a reply
 const DELETE_REPLY_MUTATION = gql`
@@ -39,6 +34,12 @@ const Reply = ({ id, content, userName, createdAt, fetchReplies }) => {
   const currentUserPrivilege = localStorage.getItem("privilege");
   const canDelete =
     currentUser === userName || currentUserPrivilege === "manager";
+
+  const token = localStorage.getItem("token");
+  const headers = {
+    authorization: token,
+  };
+  const client = new GraphQLClient(graphqlAPI, { headers });
 
   const handleDeleteClick = (e) => {
     e.stopPropagation();

@@ -21,11 +21,6 @@ const actionButtonStyle = {
 
 // GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
-const token = localStorage.getItem("token");
-const headers = {
-  authorization: token,
-};
-const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL query to get replies by post
 const GET_REPLIES_QUERY = gql`
@@ -45,6 +40,12 @@ const ReplyList = ({ postId, setRefetchReplies }) => {
   const [page, setPage] = useState(0); // state to store page number
   const pageSize = 10; // number of replies per page
   const [hasMore, setHasMore] = useState(true); // state to check if there are more replies
+
+  const token = localStorage.getItem("token");
+  const headers = {
+    authorization: token,
+  };
+  const client = new GraphQLClient(graphqlAPI, { headers });
 
   // Function to fetch replies by post
   const fetchReplies = useCallback(async () => {

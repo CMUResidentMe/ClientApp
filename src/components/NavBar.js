@@ -25,6 +25,8 @@ const Navbar = ({ isDrawerOpen, handleDrawerToggle }) => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("privilege");
     navigate("/");
   };
 

@@ -21,11 +21,6 @@ const actionButtonStyle = {
 
 // GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
-const token = localStorage.getItem("token");
-const headers = {
-  authorization: token,
-};
-const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL query to get threads
 const GET_THREADS_QUERY = gql`
@@ -61,6 +56,12 @@ const ThreadList = ({ onThreadSelect }) => {
   const pageSize = 10; // number of threads per page
   const [hasMore, setHasMore] = useState(false); // state to check if there are more threads
 
+  const token = localStorage.getItem("token");
+  const headers = {
+    authorization: token,
+  };
+  const client = new GraphQLClient(graphqlAPI, { headers });
+
   // Function to fetch threads
   const fetchThreads = useCallback(async () => {
     try {
@@ -95,6 +96,12 @@ const ThreadList = ({ onThreadSelect }) => {
 
   return (
     <Box>
+      {/* Refresh button to refetch threads */}
+      <Box mt={2} width="100%" display="flex" justifyContent="center">
+        <IconButton color="white" onClick={fetchThreads} aria-label="refresh">
+            <RefreshIcon />
+        </IconButton>
+      </Box>
       {/* Render the list of threads */}
       {threads.map((thread) => (
         <ThreadItem
@@ -121,12 +128,6 @@ const ThreadList = ({ onThreadSelect }) => {
             Load More
           </Button>
         )}
-      </Box>
-      {/* Refresh button to refetch threads */}
-      <Box mt={2} width="100%" display="flex" justifyContent="center">
-        <IconButton color="white" onClick={fetchThreads} aria-label="refresh">
-            <RefreshIcon />
-        </IconButton>
       </Box>
       <Box marginTop={5}>
         <InputArea type="thread" onSubmit={handleCreateThread} />

@@ -18,11 +18,6 @@ import { gql, GraphQLClient } from "graphql-request";
 
 // GraphQL API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
-const token = localStorage.getItem("token");
-const headers = {
-  authorization: token,
-};
-const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL mutation to delete a thread
 const DELETE_THREAD_MUTATION = gql`
@@ -41,6 +36,12 @@ const ThreadItem = ({
   fetchThreads,
 }) => {
   const [open, setOpen] = useState(false); // state to show/hide delete confirmation dialog
+
+  const token = localStorage.getItem("token");
+  const headers = {
+    authorization: token,
+  };
+  const client = new GraphQLClient(graphqlAPI, { headers });
 
   // Check if the current user can delete the thread
   const currentUser = localStorage.getItem("username");

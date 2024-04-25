@@ -7,6 +7,9 @@ import { Button, Box, IconButton } from "@mui/material";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import staticInitObject from "../../config/AllStaticConfig.js";
 
+// GraphQL API endpoint
+const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
+
 // Styled components for the header and its children
 const actionButtonStyle = {
   backgroundColor: "#746352",
@@ -19,14 +22,6 @@ const actionButtonStyle = {
     backgroundColor: "#5a4938",
   },
 };
-
-// GraphQL API endpoint
-const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
-const token = localStorage.getItem("token");
-const headers = {
-  authorization: token,
-};
-const client = new GraphQLClient(graphqlAPI, { headers });
 
 // GraphQL query to get posts by thread
 const GET_POSTS_QUERY = gql`
@@ -65,6 +60,13 @@ const PostList = ({
   const [page, setPage] = useState(0); // state to store page number
   const pageSize = 10; // number of posts per page
   const [hasMore, setHasMore] = useState(false); // state to store whether there are more posts to fetch
+
+  const token = localStorage.getItem("token");
+  const username = localStorage.getItem("username");
+  const headers = {
+    authorization: token,
+  };
+  const client = new GraphQLClient(graphqlAPI, { headers });
 
   // Function to fetch posts by thread
   const fetchPosts = useCallback(async () => {

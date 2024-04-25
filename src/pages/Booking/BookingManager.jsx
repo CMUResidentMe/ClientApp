@@ -27,11 +27,7 @@ import ResidentMeLogo from "../../assets/logo.png";
 import { socketManager } from "../../notification/socketManager.js";
 // Configuration for API endpoint
 const graphqlAPI = staticInitObject.APIGATEWAY_SERVER_URL;
-const token = localStorage.getItem("token");
-const headers = {
-  authorization: token,
-};
-const client = new GraphQLClient(graphqlAPI, { headers });
+
 
 const HeaderHeight = "60px";
 
@@ -131,6 +127,7 @@ const DECLINE_BOOKING_MUTATION = gql`
 `;
 
 const ManagerPage = () => {
+  
   const [openCreate, setOpenCreate] = useState(false);
   const [rooms, setRooms] = useState([]);// State to store room data
   const [partyRooms, setPartyRooms] = useState([]);// State for party rooms specifically
@@ -140,6 +137,11 @@ const ManagerPage = () => {
     room_type: "",  
   });
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const headers = {
+    authorization: token,
+  };
+  const client = new GraphQLClient(graphqlAPI, { headers });
 
   useEffect(() => {
     // Connect to websocket for real-time data
