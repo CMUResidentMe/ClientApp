@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconButton, Badge } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
@@ -88,7 +88,7 @@ const AppName = styled.h1`
   margin-left: 15px;
 `;
 
-socketManager.connect(localStorage.getItem("token"));
+//socketManager.connect(localStorage.getItem("token"));
 
 const StaffWKPage = () => {
   const [view, setView] = useState('landing');
@@ -102,6 +102,10 @@ const StaffWKPage = () => {
     setNotificationCount(prevCount => prevCount + 1);
   };
 
+  useEffect(() => {
+    console.log("socket io connect in StaffWKPage")
+    socketManager.connect(localStorage.getItem("token"));
+  }, []);
 
   useNotificationListener(workorderUpdateCB);
 
